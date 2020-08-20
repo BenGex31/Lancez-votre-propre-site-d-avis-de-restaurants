@@ -4,5 +4,5 @@ class Map {
         this.longitude = longitude;
         this.latitude = latitude;
     }
-    
 }
+const init = new Map();

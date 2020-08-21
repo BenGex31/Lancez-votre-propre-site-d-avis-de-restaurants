@@ -1,8 +1,10 @@
 class Map {
-    constructor(name, longitude, latitude) {
-        this.name = name;
-        this.longitude = longitude;
+    constructor(latitude, longitude) {
         this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    initMap() {
+        
     }
 }
-const init = new Map();

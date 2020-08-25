@@ -1,3 +1,4 @@
-.restaurantsList, .location {
-    border: 1em solid black;
+#map {
+    height: 400px;
+    width: 100%;
 }

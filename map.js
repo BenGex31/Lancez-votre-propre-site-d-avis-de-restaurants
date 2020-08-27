@@ -1,9 +1,9 @@
 class Map {
-    constructor(lat, lng) {
+    constructor(lat, long) {
         this.lat = lat;
-        this.lng = lng;
-        this.zoom = 10;
-        this.location = {lat: this.lat, lng: this.lng};
+        this.long = long;
+        this.zoom = 12;
+        this.location = {lat: this.lat, lng: this.long};
     }
     
     initMap() {

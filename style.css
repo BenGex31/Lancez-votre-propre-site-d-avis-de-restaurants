@@ -4,7 +4,7 @@ body {
 
 /* Barre de navigation*/
 header {
-    margin-bottom: 4em;
+    margin-bottom: 0.5em;
 }
 
 .navbar {
@@ -42,29 +42,22 @@ h3 {
 
 .restaurantName {
     color: #4a69bd;
+    cursor: pointer;
 }
 
-.restaurantAddress, .titleComment {
+.restaurantAddress {
+    margin-bottom: 0.5em;
+}
+
+.restaurantAddress, .review {
     font-size: small;
-}
-
-.titleComment {
-    font-weight: bolder;
-    color: #e58e26;
-}
-
-.stars1, .stars2 {
-    font-size: smaller;
-    margin-bottom: 0;
-}
-
-.comment1, .comment2 {
-    font-size: smaller;
-    font-style: italic;
-    color: grey;
 }
 
 .location h3 {
     margin-bottom: 2em;
     color: #0c2461;
+}
+
+.btn-info {
+    margin-bottom: 0.5em;
 }

@@ -13,7 +13,7 @@
 
     <script type="text/javascript" src="rating.js" defer></script>
     <script type="text/javascript" src="restaurant.js" defer></script>
-    <script type="text/javascript" src="map.js" defer></script>
+    <script type="text/javascript" src="myMap.js" defer></script>
     <script type="text/javascript" src="main.js" defer></script>
   
     <title>La Bonne Fourchette - Site d'avis de restaurants</title>
@@ -40,14 +40,13 @@
             </div>
           </nav>
       </header>
-      <h3>Liste des restaurants</h3>
+      <div id="map"></div>
+      <div class="accordion" id="accordionRestaurant"></div>
       <section>
-        <div id="restaurantsList">
-          <div id="map"></div>
-        </div>
+        <div id="restaurantsList"></div>
       </section>
 
-    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc&callback=initMap"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"></script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

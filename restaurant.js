@@ -30,6 +30,8 @@ for (let restaurant in restaurants) {
     let buttonClose = document.createElement("button");
     let span = document.createElement("span");
     let newDivModalBody = document.createElement("div");
+    let newDivImg = document.createElement("div");
+    let img = document.createElement("img");
     let newDivComment = document.createElement("div");
     let author1 = document.createElement('h1');
     let author2 = document.createElement('h1');
@@ -105,8 +107,13 @@ for (let restaurant in restaurants) {
     span.setAttribute("aria-hidden", "true");
     span.innerHTML = "&times;";
 
+    newDivModalTitle.appendChild(img);
+    img.setAttribute("src", "https://maps.googleapis.com/maps/api/streetview?size=300x250&location=" + restaurants[restaurant].lat + "," + restaurants[restaurant].long + "&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc");
+    img.setAttribute("class", "streetView");
+
     newDivModalContent.appendChild(newDivModalBody);
     newDivModalBody.setAttribute("class", "modal-body");
+
     newDivModalBody.appendChild(newDivComment);
 
     newDivComment.setAttribute("class", "authorComment");

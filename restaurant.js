@@ -64,14 +64,14 @@ for (let restaurant in restaurants) {
     newDiv.appendChild(review);
     review.classList.add("review" + restaurants[restaurant].id);
     review.innerHTML = averageRatings + " / 5";
-    review.style.color = "#e58e26";
-    //review.style.fontWeight = "bolder";
+    review.style.color = "green";
+    review.style.fontWeight = "bolder";
     review.style.fontSize = "small";
     newDiv.appendChild(button);
     button.innerHTML = "Consultez les avis";
     button.setAttribute("id", restaurants[restaurant].name + restaurants[restaurant].id);
     button.setAttribute("type", "button");
-    button.setAttribute("class", "btn btn-info");
+    button.setAttribute("class", "btn btn-info btn-sm");
     button.setAttribute("data-toggle", "modal");
     button.setAttribute("data-target", "#" + restaurants[restaurant].name + "ModalScrollable");
     button.style.fontSize = "small";

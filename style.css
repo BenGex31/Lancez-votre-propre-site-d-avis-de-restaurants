@@ -1,14 +1,32 @@
 body {
     background-color: #82ccdd;
+    font-family: 'Quicksand', sans-serif;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Indie Flower', cursive;
 }
 
 /* Barre de navigation*/
 header {
+    padding-top: 5px;
     margin-bottom: 0.5em;
+    background-color: #fa983a;
 }
 
-.navbar {
-    background-color: #fa983a;
+header h1 {
+    color: #0c2461;
+}
+
+header h2 {
+    font-size: 1.2em;
+    font-style: italic;
+    color: grey;
+}
+
+.fa-utensils {
+    margin-right: 20px;
+    color: #4a69bd;
 }
 
 h3 {
@@ -20,7 +38,7 @@ h3 {
 
 /* Google Maps*/
 #map {
-    height: 800px;
+    height: 850px;
     width: 70%;
     border: 1px solid black;
     background-color: grey;
@@ -65,6 +83,7 @@ h3 {
 
 .modal-title {
     color: #0c2461;
+    font-weight: bolder;
 }
 
 .modal-header {
@@ -97,7 +116,7 @@ h3 {
 
 .stars {
     font-size: small;
-    color: #e58e26;
+    color: green;
 }
 
 .modal-footer {

@@ -71,6 +71,15 @@ h3 {
     background-color: #82ccdd;
 }
 
+.modal-header .close {
+    padding: 1rem 1rem;
+    margin-left: 12em;
+}
+
+.streetView {
+    float: left;
+}
+
 .modal-body {
     background-color: lightgrey;
 }

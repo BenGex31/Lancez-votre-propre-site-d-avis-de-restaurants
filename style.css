@@ -20,13 +20,14 @@ h3 {
 
 /* Google Maps*/
 #map {
-    height: 600px;
+    height: 800px;
     width: 70%;
     border: 1px solid black;
     background-color: grey;
     float: right;
     margin-right: 1em;
     margin-bottom: 1em;
+    border-radius: 5px;
 }
 
 /* Section liste restaurants*/
@@ -38,11 +39,11 @@ h3 {
     padding-top: 1em;
     padding-right: 1em;
     width: 27%;
+    border-radius: 5px;
 }
 
 .restaurantName {
     color: #4a69bd;
-    cursor: pointer;
 }
 
 .restaurantAddress {
@@ -60,4 +61,36 @@ h3 {
 
 .btn-info {
     margin-bottom: 0.5em;
+}
+
+.modal-title {
+    color: #0c2461;
+}
+
+.modal-header {
+    background-color: #82ccdd;
+}
+
+.modal-body {
+    background-color: lightgrey;
+}
+
+.author {
+    font-size: medium;
+    color: #4a69bd;
+}
+
+.comment {
+    font-size: small;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+.stars {
+    font-size: small;
+    color: #e58e26;
+}
+
+.modal-footer {
+    background-color: #fa983a;
 }

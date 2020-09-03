@@ -7,7 +7,7 @@ h1, h2, h3, h4, h5 {
     font-family: 'Indie Flower', cursive;
 }
 
-/* Barre de navigation*/
+/* Header*/
 header {
     padding-top: 5px;
     margin-bottom: 0.5em;
@@ -36,6 +36,19 @@ h3 {
     color: #0c2461;
 }
 
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+    #reload {
+        margin-bottom: 1em;
+    }
+
+    #search {
+        margin-bottom: 1em;
+    }
+}
+
 /* Google Maps*/
 #map {
     height: 850px;
@@ -46,6 +59,15 @@ h3 {
     margin-right: 1em;
     margin-bottom: 1em;
     border-radius: 5px;
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+    #map {
+        width: 65%;
+    }
 }
 
 /* Section liste restaurants*/
@@ -121,4 +143,33 @@ h3 {
 
 .modal-footer {
     background-color: #fa983a;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+    #mainBloc {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
+    .RestaurantInfo {
+        width: 80%;
+        margin-left: 2em;
+    }
+
+    #map {
+        height: 400px;
+    }
+
+    .streetView {
+        width: 200px;
+        height: 150px;
+    }
+
+    #mainTitle {
+        text-align: center;
+    }
 }

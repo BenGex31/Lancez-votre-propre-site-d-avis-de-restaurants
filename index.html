@@ -26,13 +26,13 @@
         <div class="container-fluid">
           <div class="row align-items-center">
             <div class="col-md-4">
-              <h1><i class="fas fa-utensils"></i>La bonne Fourchette</h1>
+              <h1 id="mainTitle"><i class="fas fa-utensils"></i>La bonne Fourchette</h1>
               <h2 class="text-center">Site d'avis de restaurants où que vous soyez !</h2>
             </div>
             <div class="col-md-4 text-center">
               <button id="reload" type="button" class="btn btn-primary btn-sm">Actualiser</button>
             </div>
-            <div class="col-md-4 text-center">
+            <div id="search" class="col-md-4 text-center">
               <div class="input-group input-group-sm">
                 <select class="custom-select" id="filterRatings" aria-label="Example select with button addon">
                   <option selected>Filtrer les restaurants par note</option>
@@ -43,19 +43,18 @@
                   <option value="5">5</option>
                 </select>
                 <div class="input-group-append">
-                  <button id="filter" class="btn btn-success" type="button">Appliquer</button>
+                  <button id="buttonFilter" class="btn btn-success" type="button">Appliquer</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </header>
-      <section>
+      <div id="mainBloc">
         <div id="map"></div>
-      </section>
-      <section>
         <div id="restaurantsList"></div>
-      </section>
+      </div>
+      
 
     <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"></script>
     <!-- Optional JavaScript -->

@@ -20,7 +20,7 @@ class MyMap {
                 map: map,
                 draggable: true,
                 animation: google.maps.Animation.DROP,
-                label: restaurant.name,
+                label: restaurant.restaurantName,
                 icon: {
                     url: "img/icon-restaurant-location.png",
                     scaledSize: new google.maps.Size(50, 50),

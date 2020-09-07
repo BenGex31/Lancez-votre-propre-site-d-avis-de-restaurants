@@ -134,7 +134,7 @@ class App {
         const buttonFilter = document.getElementById("buttonFilter");
 
         buttonFilter.addEventListener("click", function() {
-            if (filterRatings.value >= 1 && filterRatings <= 5) {
+            if (filterRatings.value >= 1 && filterRatings.value <= 5) {
                 if (filterRatings.value === 1) {
                     let oneStarArray = restaurants.filter(rating => rating.ratings[0].stars <= 1 || rating.ratings[1].stars <= 1);
                     this.createListRestaurants(oneStarArray);

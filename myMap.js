@@ -2,25 +2,25 @@ class MyMap {
     constructor(lat, long) {
         this.lat = lat;
         this.long = long;
+        this.city = {lat: this.lat, lng: this.long};
+        this.map = new google.maps.Map(document.getElementById('map'), {zoom: 13, center: this.city});
     }
 
     createMap() {
-        // The location of Paris
-        let paris = {lat: 48.8565387, lng: 2.3518054};
-        // The map, centered at Paris
-        let map = new google.maps.Map(
-            document.getElementById('map'), {zoom: 13, center: paris});
-        // The marker, positioned at Paris
-        let markerParis = new google.maps.Marker({position: paris, map: map, label: "Paris"});
-        
-        // Diplay restaurant's marker on map
-        for(let restaurant of restaurants) {
+        let markerParis = new google.maps.Marker({position: this.city, map: this.map, label: "Paris"});
+        this.createMarkerRestaurants(restaurants);
+        this.geolocation();
+    }
+
+    createMarkerRestaurants(arrayRestaurant) {
+        const map = this.map;
+        for(let restaurant in arrayRestaurant) {
             let markerRestaurant = new google.maps.Marker({
-                position: {lat: restaurant.lat, lng: restaurant.long},
+                position: {lat: arrayRestaurant[restaurant].lat, lng: arrayRestaurant[restaurant].long},
                 map: map,
                 draggable: true,
                 animation: google.maps.Animation.DROP,
-                label: restaurant.restaurantName,
+                label: arrayRestaurant[restaurant].restaurantName,
                 icon: {
                     url: "img/icon-restaurant-location.png",
                     scaledSize: new google.maps.Size(50, 50),
@@ -29,13 +29,16 @@ class MyMap {
                 }
             });
         }
-        
+    }
+
+    geolocation() {
+        const map = this.map;
         let infoWindow = new google.maps.InfoWindow;
 
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-            let pos = {
+            const pos = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
@@ -51,7 +54,7 @@ class MyMap {
                     origin: new google.maps.Point(0, 0),
                     anchor: new google.maps.Point(0, 0)
                 }
-            })
+            });
 
             map.setCenter(pos);
             }, function() {

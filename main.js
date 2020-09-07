@@ -1,6 +1,6 @@
 window.onload = function() {
-    const map = new MyMap();
-    map.createMap();
+  const map = new MyMap(48.8565387, 2.3518054);
+  map.createMap();
 }
 
 $(function(){

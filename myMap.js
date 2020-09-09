@@ -8,7 +8,6 @@ class MyMap {
 
     createMap() {
         let markerParis = new google.maps.Marker({position: this.city, map: this.map, label: "Paris"});
-        this.createMarkerRestaurants(restaurants);
         this.geolocation();
     }
 

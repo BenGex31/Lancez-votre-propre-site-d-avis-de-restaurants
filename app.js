@@ -1,8 +1,7 @@
 class App {
-
-    constructor() {
-        this.displayRestaurants();
-    }
+    /*constructor() {
+        this.filterRestaurants();
+    }*/
 
     createListRestaurants(arrayRestaurant) {
         for (let restaurant in arrayRestaurant) {
@@ -24,6 +23,7 @@ class App {
             let newDivModalFooter = document.createElement("div");
             let buttonFooter = document.createElement("button");
             let address = document.createElement("p");
+            let iconPosition = document.createElement("i");
             let review = document.createElement("h6");
             let restaurantName = document.createElement("h5");
             let ListRestaurants = document.getElementById("restaurantsList");
@@ -40,6 +40,9 @@ class App {
 
             address.classList.add("restaurantAddress");
             address.innerHTML = arrayRestaurant[restaurant].address;
+            address.appendChild(iconPosition);
+            iconPosition.classList.add("fas");
+            iconPosition.classList.add("fa-map-marker-alt");
             newDiv.appendChild(review);
 
             review.setAttribute("id", "review" + arrayRestaurant[restaurant].id);
@@ -129,50 +132,56 @@ class App {
     }
 
     clearListRestaurants() {
-        $("#restaurantsList").removeClass("RestaurantInfo");
+        $("#restaurantsList").html("");
     }
 
     filterRestaurants() {
         const filterRatings = document.getElementById("filterRatings");
 
-        const emptyArray = restaurants.filter(average => average.averageRatings < 0);
         const oneStarArray = restaurants.filter(average => average.averageRatings >= 0 && average.averageRatings <= 1);
         const twoStarArray = restaurants.filter(average => average.averageRatings >= 1 && average.averageRatings <= 2);
         const threeStarArray = restaurants.filter(average => average.averageRatings >= 2 && average.averageRatings <= 3);
         const fourStarArray = restaurants.filter(average => average.averageRatings >= 3 && average.averageRatings <= 4);
         const fiveStarArray = restaurants.filter(average => average.averageRatings >= 4 && average.averageRatings <= 5);
-        console.log(emptyArray);
+
+        const map = new MyMap(48.8565387, 2.3518054);
+        map.createMap();
         
         switch(filterRatings.value) {
             case "1":
                 this.clearListRestaurants();
                 this.createListRestaurants(oneStarArray);
+                map.createMarkerRestaurants(oneStarArray);
                 break;
             case "2":
                 this.clearListRestaurants();
                 this.createListRestaurants(twoStarArray);
+                map.createMarkerRestaurants(twoStarArray);
                 break;
             case "3":
                 this.clearListRestaurants();
                 this.createListRestaurants(threeStarArray);
+                map.createMarkerRestaurants(threeStarArray);
                 break;
             case "4":
                 this.clearListRestaurants();
                 this.createListRestaurants(fourStarArray);
+                map.createMarkerRestaurants(fourStarArray);
                 break;
             case "5":
                 this.clearListRestaurants();
                 this.createListRestaurants(fiveStarArray);
+                map.createMarkerRestaurants(fiveStarArray);
                 break;
             default:
                 this.clearListRestaurants();
-                this.createListRestaurants(restaurants);
+                this.displayRestaurants();
+                map.createMarkerRestaurants(restaurants);
         }
     }
 }
 
 const buttonFilter = document.getElementById("buttonFilter");
-const filterRatings = document.getElementById("filterRatings");
 
 const filter = new App();
 

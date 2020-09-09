@@ -1,5 +1,9 @@
 class App {
 
+    constructor() {
+        this.displayRestaurants();
+    }
+
     createListRestaurants(arrayRestaurant) {
         for (let restaurant in arrayRestaurant) {
             let newDiv = document.createElement("div");
@@ -28,20 +32,22 @@ class App {
             ListRestaurants.appendChild(newDiv);
             newDiv.classList.add("RestaurantInfo");
             newDiv.appendChild(restaurantName);
+
             restaurantName.classList.add("restaurantName");
             restaurantName.setAttribute("id", arrayRestaurant[restaurant].restaurantName);
             restaurantName.innerHTML = arrayRestaurant[restaurant].id + ". " + arrayRestaurant[restaurant].restaurantName;
             newDiv.appendChild(address);
+
             address.classList.add("restaurantAddress");
             address.innerHTML = arrayRestaurant[restaurant].address;
             newDiv.appendChild(review);
+
             review.setAttribute("id", "review" + arrayRestaurant[restaurant].id);
-
-            this.displayAverageRatings(arrayRestaurant[restaurant], review);
-
+            review.innerHTML = arrayRestaurant[restaurant].averageRatings + " / 5"
             review.style.color = "green";
             review.style.fontWeight = "bolder";
             review.style.fontSize = "small";
+            
             newDiv.appendChild(button);
             button.innerHTML = "Consultez les avis";
             button.setAttribute("id", arrayRestaurant[restaurant].restaurantName + arrayRestaurant[restaurant].id);
@@ -118,64 +124,58 @@ class App {
         }
     }
 
-    displayAverageRatings(restaurant, review) {
-        let totalStars = restaurant.ratings.reduce(function(sum, ratings){
-            return sum + ratings.stars;
-         }, 0);
-
-        let averageRatings = (totalStars / restaurant.ratings.length);
-        review.innerHTML = averageRatings + " / 5";
-    }
-
     displayRestaurants() {
         this.createListRestaurants(restaurants);
+    }
+
+    clearListRestaurants() {
+        $("#restaurantsList").removeClass("RestaurantInfo");
     }
 
     filterRestaurants() {
         const filterRatings = document.getElementById("filterRatings");
 
-        for(let restaurant in restaurants) {
-            let totalStars = restaurants[restaurant].ratings.reduce(function(sum, ratings){
-               return sum + ratings.stars;
-            }, 0);
+        const emptyArray = restaurants.filter(average => average.averageRatings < 0);
+        const oneStarArray = restaurants.filter(average => average.averageRatings >= 0 && average.averageRatings <= 1);
+        const twoStarArray = restaurants.filter(average => average.averageRatings >= 1 && average.averageRatings <= 2);
+        const threeStarArray = restaurants.filter(average => average.averageRatings >= 2 && average.averageRatings <= 3);
+        const fourStarArray = restaurants.filter(average => average.averageRatings >= 3 && average.averageRatings <= 4);
+        const fiveStarArray = restaurants.filter(average => average.averageRatings >= 4 && average.averageRatings <= 5);
+        console.log(emptyArray);
         
-            let averageRatings = (totalStars / restaurants[restaurant].ratings.length);
-
-            if(averageRatings >= 0 && averageRatings <= 1) {
-                
-            }
-        }
-
-        if (filterRatings.value >= 1 && filterRatings.value <= 5) {
-            if (filterRatings.value === 1) {
-                let oneStarArray = restaurants.filter(rating => rating.ratings[0].stars <= 1 || rating.ratings[1].stars <= 1);
+        switch(filterRatings.value) {
+            case "1":
+                this.clearListRestaurants();
                 this.createListRestaurants(oneStarArray);
-            }
-            if (filterRatings.value === 2) {
-                let twoStarArray = restaurants.filter(rating => rating.ratings[0].stars <= 2 || rating.ratings[1].stars <= 2);
+                break;
+            case "2":
+                this.clearListRestaurants();
                 this.createListRestaurants(twoStarArray);
-            }
-            if (filterRatings.value === 3) {
-                let threeStarArray = restaurants.filter(rating => rating.ratings[0].stars <= 3 || rating.ratings[1].stars <= 3);
+                break;
+            case "3":
+                this.clearListRestaurants();
                 this.createListRestaurants(threeStarArray);
-            }
-            if (filterRatings.value === 4) {
-                let fourStarArray = restaurants.filter(rating => rating.ratings[0].stars <= 4 || rating.ratings[1].stars <= 4);
+                break;
+            case "4":
+                this.clearListRestaurants();
                 this.createListRestaurants(fourStarArray);
-            }
-            if (filterRatings.value === 5) {
-                let fiveStarArray = restaurants.filter(rating => rating.ratings[0].stars <= 5 || rating.ratings[1].stars <= 5);
+                break;
+            case "5":
+                this.clearListRestaurants();
                 this.createListRestaurants(fiveStarArray);
-            }
+                break;
+            default:
+                this.clearListRestaurants();
+                this.createListRestaurants(restaurants);
         }
     }
 }
 
-const app = new App();
-app.displayRestaurants();
-
 const buttonFilter = document.getElementById("buttonFilter");
+const filterRatings = document.getElementById("filterRatings");
+
 const filter = new App();
-buttonFilter.addEventListener("change", function() {
+
+buttonFilter.addEventListener("click", function(){
     filter.filterRestaurants();
 });

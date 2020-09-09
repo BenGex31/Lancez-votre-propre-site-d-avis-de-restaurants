@@ -107,8 +107,6 @@ const restaurants = [
     }
 ];
 
-const ratings = [];
-
 for(let restaurant in restaurants) {
    let totalStars = restaurants[restaurant].ratings.reduce(function(sum, ratings){
       return sum + ratings.stars;
@@ -116,14 +114,9 @@ for(let restaurant in restaurants) {
 
    let averageRatings = (totalStars / restaurants[restaurant].ratings.length);
 
-   ratings.push({
-      idRestaurant : restaurants[restaurant].id,
-      restaurantName : restaurants[restaurant].restaurantName,
-      averageRatings : averageRatings,
-      sumRatings : totalStars,
-      numberRatings : restaurants[restaurant].ratings.length,
-   });
+   restaurants[restaurant].averageRatings = averageRatings;
+   restaurants[restaurant].sumStars = totalStars;
+   restaurants[restaurant].numberRatings = restaurants[restaurant].ratings.length;
 }
 
 console.log(restaurants);
-console.log(ratings);

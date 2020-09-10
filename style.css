@@ -21,19 +21,12 @@ header h1 {
 header h2 {
     font-size: 1.2em;
     font-style: italic;
-    color: grey;
+    color: darkgreen;
 }
 
 .fa-utensils {
     margin-right: 20px;
     color: #4a69bd;
-}
-
-h3 {
-    text-align: left;
-    margin-left: 1em;
-    margin-bottom: 1em;
-    color: #0c2461;
 }
 
 #reload {
@@ -42,6 +35,40 @@ h3 {
 
 #search {
     margin-bottom: 1em;
+}
+
+/* Météo */
+
+#restaurantMeteo {
+    margin-bottom: 1em;
+}
+
+#restaurantImg {
+    margin-bottom: 1em;
+}
+
+#titleMeteo h3 {
+    margin-top: 1em;
+    margin-left: 1em;
+    margin-bottom: 1em;
+    color: darkblue;
+    font-weight: bolder;
+}
+
+#infoWeather {
+    padding-top: 1em;
+    background-color: whitesmoke;
+    border : 1px solid #0c2461;
+    border-radius: 5px;
+}
+
+#infoWeather h4 {
+    color: #0c2461;
+}
+
+.fa-sun {
+    margin-right: 5px;
+    color: #e9cb2e;
 }
 
 /* Google Maps*/

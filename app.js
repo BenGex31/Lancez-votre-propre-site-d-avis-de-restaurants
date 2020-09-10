@@ -1,8 +1,5 @@
 class App {
-    /*constructor() {
-        this.filterRestaurants();
-    }*/
-
+    
     createListRestaurants(arrayRestaurant) {
         for (let restaurant in arrayRestaurant) {
             let newDiv = document.createElement("div");

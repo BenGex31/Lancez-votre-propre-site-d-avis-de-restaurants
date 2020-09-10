@@ -18,6 +18,7 @@
     <script type="text/javascript" src="restaurant.js" defer></script>
     <script type="text/javascript" src="myMap.js" defer></script>
     <script type="text/javascript" src="app.js" defer></script>
+    <script type="text/javascript" src="weather.js" defer></script>
     <script type="text/javascript" src="main.js" defer></script>
   
     <title>La Bonne Fourchette - Site d'avis de restaurants</title>
@@ -26,14 +27,14 @@
       <header>
         <div class="container-fluid">
           <div class="row align-items-center">
-            <div class="col-md-4">
+            <div class="col-lg-4">
               <h1 id="mainTitle"><i class="fas fa-utensils"></i>La bonne Fourchette</h1>
               <h2 class="text-center">Site d'avis de restaurants où que vous soyez !</h2>
             </div>
-            <div class="col-md-4 text-center">
+            <div class="col-lg-4 text-center">
               <button id="reload" type="button" class="btn btn-primary btn-sm">Actualiser</button>
             </div>
-            <div id="search" class="col-md-4 text-center">
+            <div id="search" class="col-lg-4 text-center">
               <div class="input-group input-group-sm">
                 <select class="custom-select" id="filterRatings" type="number" aria-label="Example select with button addon">
                   <option selected>Toutes notes moyennes confondues</option>
@@ -52,14 +53,22 @@
         </div>
       </header>
       <div class="container-fluid">
-        <div class="row text-center">
-          <div id="infoMeteo" class="col-sm-12"></div>
+        <div class="container-fluid">
+          <div id="restaurantMeteo" class="row justify-content-center align-items-center">
+            <div id="titleMeteo" class="col-lg-4 text-center">
+              <h3><i class="fas fa-sun"></i>Une bonne météo pour un bon resto !</h3>
+            </div>
+            <div id="restaurantImg" class="col-lg-4 text-center">
+              <img class="img-fluid img-thumbnail" src="img/auberge-du-soleil-restaurant.png" alt="RestaurantSun">
+            </div>
+            <div id="infoWeather" class="col-lg-4 text-center"></div>
+          </div>
         </div>
         <div class="row">
           <div class="col-sm-3">
             <div id="restaurantsList"></div>
           </div>
-          <div class="col-sm-9">
+          <div class="col-sm-9 text-center">
             <div id="map"></div>
           </div>
         </div>

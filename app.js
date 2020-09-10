@@ -46,7 +46,7 @@ class App {
             newDiv.appendChild(review);
 
             review.setAttribute("id", "review" + arrayRestaurant[restaurant].id);
-            review.innerHTML = arrayRestaurant[restaurant].averageRatings + " / 5"
+            review.innerHTML = "Note moyenne : " + arrayRestaurant[restaurant].averageRatings + " / 5"
             review.style.color = "green";
             review.style.fontWeight = "bolder";
             review.style.fontSize = "small";

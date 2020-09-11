@@ -21,24 +21,23 @@
     <script type="text/javascript" src="weather.js" defer></script>
     <script type="text/javascript" src="main.js" defer></script>
   
-    <title>La Bonne Fourchette - Site d'avis de restaurants</title>
+    <title>Etape 1 - La Bonne Fourchette - Site d'avis de restaurants</title>
   </head>
   <body>
       <header>
-        <div class="container">
+        <div class="container-fluid">
           <div class="row align-items-center">
-            <div class="col-lg-6">
+            <div class="col-lg-7">
               <h1 id="mainTitle"><i class="fas fa-utensils"></i>La bonne Fourchette</h1>
               <h2 class="text-center">Site d'avis de restaurants où que vous soyez !</h2>
             </div>
-            <div class="col-lg-6 text-center">
+            <div class="col-lg-5 text-center">
               <button id="reload" type="button" class="btn btn-primary btn-sm">Actualiser</button>
             </div>
           </div>
         </div>
       </header>
       <div class="container-fluid">
-        <div class="container-fluid">
           <div id="restaurantMeteo" class="row justify-content-center align-items-center">
             <div id="titleMeteo" class="col-lg-4 text-center">
               <h3><i class="fas fa-sun"></i>Une bonne météo pour un bon resto !</h3>
@@ -48,7 +47,6 @@
             </div>
             <div id="infoWeather" class="col-lg-4 text-center"></div>
           </div>
-        </div>
         <div class="row">
           <div id="search" class="col-lg-3 text-center">
             <div class="input-group input-group-sm">
@@ -64,6 +62,9 @@
                 <button id="buttonFilter" class="btn btn-success" type="button">Appliquer</button>
               </div>
             </div>
+          </div>
+          <div class="col-lg-9 text-center">
+            <button id="geolocation" type="button" class="btn btn-danger"><i class="fas fa-search-location"></i>Autour de vous</button>
           </div>
         </div>
         <div class="row">

@@ -10,7 +10,7 @@ h1, h2, h3, h4, h5 {
 /* Header*/
 header {
     padding-top: 5px;
-    margin-bottom: 0.5em;
+    margin-bottom: 0;
     background-color: #fa983a;
 }
 
@@ -37,10 +37,17 @@ header h2 {
     margin-bottom: 1em;
 }
 
+.fa-search-location {
+    margin-right: 1em;
+}
+
 /* Météo */
 
 #restaurantMeteo {
+    margin-top: 0;
     margin-bottom: 1em;
+    background-color: #e55039;
+    padding-right: 1em;
 }
 
 #restaurantImg {
@@ -48,6 +55,7 @@ header h2 {
 }
 
 #restaurantImg img {
+    margin-top: 1em;
     width: 380px;
     height: 260px;
 }
@@ -62,7 +70,7 @@ header h2 {
 
 #infoWeather {
     padding-top: 1em;
-    background-color: whitesmoke;
+    background-color: #82ccdd;
     border : 1px solid #0c2461;
     border-radius: 5px;
 }
@@ -88,6 +96,14 @@ header h2 {
     border-radius: 5px;
 }
 
+#bodyContent {
+    margin-top: 1em;
+}
+
+#geolocation {
+    margin-bottom: 1em;
+}
+
 /* Liste restaurants*/
 .RestaurantInfo {
     border: 1px solid #0c2461;
@@ -108,6 +124,7 @@ header h2 {
 
 .fa-map-marker-alt {
     margin-left: 5px;
+    margin-right: 5px;
     color: #eb2f06;
 }
 

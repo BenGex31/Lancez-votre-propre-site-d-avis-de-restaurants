@@ -27,6 +27,23 @@ class MyMap {
                     anchor: new google.maps.Point(0, 0)
                 }
             });
+
+            const contentString =
+            '<h1 id="firstHeading" class="restaurantName text-left">' + arrayRestaurant[restaurant].restaurantName + '</h1>' + 
+            '<div class="text-left">' +
+            '<img class"streetView" src="https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + arrayRestaurant[restaurant].lat + "," + arrayRestaurant[restaurant].long + '&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc">' +
+            '</div>' +
+            '<div id="bodyContent">' +
+            '<p><i class="fas fa-map-marker-alt"></i>' + arrayRestaurant[restaurant].address + '</p>' +
+            '</div>';
+
+            const infoWindow = new google.maps.InfoWindow({
+                content : contentString
+            });
+
+            markerRestaurant.addListener("click", () => {
+                infoWindow.open(map, markerRestaurant);
+            });
         }
     }
 
@@ -34,7 +51,9 @@ class MyMap {
         const map = this.map;
         let infoWindow = new google.maps.InfoWindow;
 
-        // Try HTML5 geolocation.
+        let geolocation = document.getElementById("geolocation");
+        geolocation.addEventListener("click", function(){
+            // Try HTML5 geolocation.
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
             const pos = {
@@ -71,5 +90,6 @@ class MyMap {
                                 'Erreur: Votre navigateur ne prend pas en charge la géolocalisation.');
         infoWindow.open(map);
         }
+        });
     }
 }

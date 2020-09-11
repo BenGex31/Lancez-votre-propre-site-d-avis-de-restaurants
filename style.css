@@ -47,6 +47,11 @@ header h2 {
     margin-bottom: 1em;
 }
 
+#restaurantImg img {
+    width: 380px;
+    height: 260px;
+}
+
 #titleMeteo h3 {
     margin-top: 1em;
     margin-left: 1em;

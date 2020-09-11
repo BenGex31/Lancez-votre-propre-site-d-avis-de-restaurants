@@ -1,5 +1,5 @@
 class Weather {
-    
+
     askWeather() {
         let infoWeather = document.getElementById("infoWeather");
         let cityName = document.createElement("h4");
@@ -68,3 +68,6 @@ class Weather {
         }
     }
 }
+
+const weather = new Weather();
+weather.askWeather();

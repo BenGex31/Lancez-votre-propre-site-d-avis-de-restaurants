@@ -10,52 +10,93 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
 
     <script src="https://kit.fontawesome.com/35a79302cd.js" crossorigin="anonymous"></script>
 
-    <script type="text/javascript" src="rating.js" defer></script>
     <script type="text/javascript" src="restaurant.js" defer></script>
     <script type="text/javascript" src="myMap.js" defer></script>
+    <script type="text/javascript" src="app.js" defer></script>
+    <script type="text/javascript" src="weather.js" defer></script>
     <script type="text/javascript" src="main.js" defer></script>
   
     <title>La Bonne Fourchette - Site d'avis de restaurants</title>
   </head>
   <body>
       <header>
-        <div class="container-fluid">
+        <div class="container">
           <div class="row align-items-center">
-            <div class="col-md-4">
-              <h1><i class="fas fa-utensils"></i>La bonne Fourchette</h1>
+            <div class="col-lg-6">
+              <h1 id="mainTitle"><i class="fas fa-utensils"></i>La bonne Fourchette</h1>
               <h2 class="text-center">Site d'avis de restaurants où que vous soyez !</h2>
             </div>
-            <div class="col-md-4 text-center">
+            <div class="col-lg-6 text-center">
               <button id="reload" type="button" class="btn btn-primary btn-sm">Actualiser</button>
-            </div>
-            <div class="col-md-4 text-center">
-              <div class="input-group input-group-sm">
-                <select class="custom-select" id="filterRatings" aria-label="Example select with button addon">
-                  <option selected>Filtrer les restaurants par note</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
-                <div class="input-group-append">
-                  <button id="filter" class="btn btn-success" type="button">Appliquer</button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </header>
-      <section>
-        <div id="map"></div>
-      </section>
-      <section>
-        <div id="restaurantsList"></div>
-      </section>
+      <div class="container-fluid">
+        <div class="container-fluid">
+          <div id="restaurantMeteo" class="row justify-content-center align-items-center">
+            <div id="titleMeteo" class="col-lg-4 text-center">
+              <h3><i class="fas fa-sun"></i>Une bonne météo pour un bon resto !</h3>
+            </div>
+            <div id="restaurantImg" class="col-lg-4 text-center">
+              <img class="img-fluid img-thumbnail" src="img/auberge-du-soleil-restaurant.png" alt="RestaurantSun">
+            </div>
+            <div id="infoWeather" class="col-lg-4 text-center"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div id="search" class="col-lg-3 text-center">
+            <div class="input-group input-group-sm">
+              <select class="custom-select" id="filterRatings" type="number" aria-label="Example select with button addon">
+                <option selected>Toutes notes moyennes confondues</option>
+                <option value="1">Entre 0 et 1</option>
+                <option value="2">Entre 1 et 2</option>
+                <option value="3">Entre 2 et 3</option>
+                <option value="4">Entre 3 et 4</option>
+                <option value="5">Entre 4 et 5</option>
+              </select>
+              <div class="input-group-append">
+                <button id="buttonFilter" class="btn btn-success" type="button">Appliquer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3">
+            <div id="restaurantsList"></div>
+          </div>
+          <div class="col-sm-9 text-center">
+            <div id="map"></div>
+          </div>
+        </div>
+        <!--<div id="mainBloc">
+          
+          
+        </div>-->
+      <footer>
+        <div class="container-fluid">
+          <div class="row text-center justify-content-center align-items-center">
+            <div class="col-md-4">
+              <p><a href="https://jquery.com/">Jquery <img id="Jquery" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSp36REVSr1zbbjSoCzQFW67cvfhg2z-x3QLzETxT7Veko6S6FF&s" alt="Jquery"></a></p>
+              <p><a href="https://getbootstrap.com/">Bootstrap<i class="fab fa-bootstrap"></i></a></p>
+            </div>
+            <div class="col-md-4">
+              <p>Formation <a class="openclassrooms" href="https://openclassrooms.com/">OpenClassRooms</a></p>
+              <p><a class="openclassrooms" href="https://openclassrooms.com/fr/paths/60-developpeur-dapplication-frontend">Parcours Développeur FrontEnd</a></p>
+              <p>Projet 7 : Lancez votre propre site d'avis de restaurants</p>
+            </div>
+            <div class="col-md-4">
+              <p>Benjamin DESOLE  <i class="fab fa-linkedin"></i>  <a class="linkedin" href="https://www.linkedin.com/in/benjamin-desole-333003b9/">LinkedIn</a></p>
+              <img class="QR-code" src="img/frame.png" alt="QR code">
+            </div>
+          </div>
+        </div>
+      </footer>
 
     <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"></script>
     <!-- Optional JavaScript -->

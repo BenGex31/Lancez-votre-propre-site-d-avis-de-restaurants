@@ -21,13 +21,14 @@ class App {
             let buttonFooter = document.createElement("button");
             let address = document.createElement("p");
             let iconPosition = document.createElement("i");
-            let review = document.createElement("h6");
+            let review = document.createElement("p");
             let restaurantName = document.createElement("h5");
+            let restaurantNameH6 = document.createElement("h6");
             let ListRestaurants = document.getElementById("restaurantsList");
             let button = document.createElement("button");
         
             ListRestaurants.appendChild(newDiv);
-            newDiv.classList.add("RestaurantInfo");
+            newDiv.setAttribute("id", "RestaurantInfo" + arrayRestaurant[restaurant].restaurantName);
             newDiv.appendChild(restaurantName);
 
             restaurantName.classList.add("restaurantName");
@@ -77,7 +78,8 @@ class App {
         
             newDivModalTitle.setAttribute("class", "modal-title");
             newDivModalTitle.setAttribute("id", arrayRestaurant[restaurant].restaurantName + "ModalScrollableTitle");
-            newDivModalTitle.innerHTML = "Restaurant : " + arrayRestaurant[restaurant].restaurantName;
+            newDivModalTitle.appendChild(restaurantNameH6);
+            restaurantNameH6.innerHTML = "Restaurant : " + arrayRestaurant[restaurant].restaurantName;
             newDivModalTitle.appendChild(buttonClose);
         
             buttonClose.setAttribute("class", "close");
@@ -94,24 +96,13 @@ class App {
         
             newDivModalContent.appendChild(newDivModalBody);
             newDivModalBody.setAttribute("class", "modal-body");
-        
-            newDivModalBody.appendChild(newDivComment);
-        
-            newDivComment.appendChild(newPcommentAuthor1);
-            newPcommentAuthor1.setAttribute("class", "comment");
-            newPcommentAuthor1.innerHTML = arrayRestaurant[restaurant].ratings[0].comment;
-        
-            newDivComment.appendChild(note1);
-            note1.setAttribute("class", "stars");
-            note1.innerHTML = "Note : " + arrayRestaurant[restaurant].ratings[0].stars + " / 5";
-        
-            newDivComment.appendChild(newPcommentAuthor2);
-            newPcommentAuthor2.setAttribute("class", "comment");
-            newPcommentAuthor2.innerHTML = arrayRestaurant[restaurant].ratings[1].comment;
-        
-            newDivComment.appendChild(note2);
-            note2.setAttribute("class", "stars");
-            note2.innerHTML = "Note : " + arrayRestaurant[restaurant].ratings[1].stars + " / 5";
+            newDivModalBody.setAttribute("id", "modal-body-consult-" + arrayRestaurant[restaurant].restaurantName);
+
+            for (let i = 0; i < arrayRestaurant[restaurant].ratings.length; i++) {
+                $('<div>').prependTo($("#modal-body-consult-" + arrayRestaurant[restaurant].restaurantName)).attr("id", "consultRating" + arrayRestaurant[restaurant].restaurantName);
+                $('<p>').prependTo($("#consultRating" + arrayRestaurant[restaurant].restaurantName)).addClass("comment").html(arrayRestaurant[restaurant].ratings[i].comment);
+                $('<p>').appendTo($('#consultRating' + arrayRestaurant[restaurant].restaurantName)).addClass("stars").html("Note : " + arrayRestaurant[restaurant].ratings[i].stars + " / 5");
+            }
         
             newDivModalContent.appendChild(newDivModalFooter);
             newDivModalFooter.setAttribute("class", "modal-footer");
@@ -124,8 +115,41 @@ class App {
         }
     }
 
+    createButtonWriteReview(arrayRestaurant) {
+        for (let restaurant of arrayRestaurant) {
+            $('<button>').appendTo($('#RestaurantInfo' + restaurant.restaurantName)).html("Rédiger un avis").attr({type: "button", class: "btn btn-primary btn-sm", id: "buttonWriteReview" + restaurant.restaurantName}).attr("data-toggle", "modal").attr("data-target", "#writeReview" + restaurant.restaurantName);
+            $('<div>').insertAfter($('#buttonWriteReview' + restaurant.restaurantName)).attr({class: 'modal fade', id: "writeReview" + restaurant.restaurantName, tabindex: "-1"}).attr('aria-labelledby', "writeReview" + restaurant.restaurantName + "Label").attr('aria-hidden', 'true');
+            $('<div>').appendTo($('#writeReview' + restaurant.restaurantName)).attr({class: "modal-dialog", id: "modal-dialog-writeReview" + restaurant.restaurantName});
+            $('<div>').appendTo($('#modal-dialog-writeReview' + restaurant.restaurantName)).attr({class: "modal-content", id: "modal-content-writeReview" + restaurant.restaurantName});
+            $('<div>').appendTo($('#modal-content-writeReview' + restaurant.restaurantName)).attr({class: "modal-header", id: "modal-header-writeReview" + restaurant.restaurantName});
+            $('<h6>').appendTo($("#modal-header-writeReview" + restaurant.restaurantName)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "writeReview" + restaurant.restaurantName + "Label"}).html("Restaurant : " + restaurant.restaurantName);
+            $('<button>').appendTo($("#modal-header-writeReview" + restaurant.restaurantName)).attr({type: "button", class: "close", id: "buttonCloseWriteReview" + restaurant.restaurantName}).attr('data-dismiss', 'modal').attr('aria-label', 'Close');
+            $('<span>').appendTo($("#buttonCloseWriteReview" + restaurant.restaurantName)).attr('aria-hidden', 'true').html("&times;");
+            $('<div>').appendTo($("#modal-content-writeReview" + restaurant.restaurantName)).attr({class: "modal-body", id: "modal-body-writeReview" + restaurant.restaurantName});
+            $('<h5>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Votre avis compte aussi !").css({color: "darkgreen", fontWeight: "bolder"}).addClass("text-center animate__animated animate__flash animate__delay-1s");
+            $('<form>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).addClass("formReview" + restaurant.restaurantName);
+            $('<p>').appendTo($(".formReview" + restaurant.restaurantName)).html('Sélectionner une note entre 1 et 5 :').addClass('selectionRating' + restaurant.restaurantName).css("font-size", "small");
+            
+            for(let i = 1; i <= 5; i++) {
+                $('<input>').appendTo($(".selectionRating" + restaurant.restaurantName)).attr({type: "radio", name: "rating", value: i, id: "rating" + i + restaurant.restaurantName}).css("margin-top", "0.5em");
+                $('<label>').insertAfter($('#rating' + i + restaurant.restaurantName)).attr("for", "rating" + i + restaurant.restaurantName).html(i).css("margin-left", "0.5em");
+                $('<br>').insertBefore($("#rating" + i + restaurant.restaurantName));
+            }
+            
+            $('<form>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).addClass("formComment" + restaurant.restaurantName);
+            $('<div>').appendTo($(".formComment" + restaurant.restaurantName)).attr({class: "form-group", id: "form-group" +restaurant.restaurantName});
+            $('<label>').appendTo($("#form-group" +restaurant.restaurantName)).attr("for", "FormControlTextarea" + restaurant.restaurantName).html("Ecrire votre commentaire :").css("font-size", "small");
+            $('<textarea>').appendTo($("#form-group" +restaurant.restaurantName)).attr({class: "form-control", id: "FormControlTextarea" + restaurant.restaurantName, col: "3", rows: "3"});
+
+            $('<div>').appendTo($("#modal-content-writeReview" + restaurant.restaurantName)).attr({class: "modal-footer", id: "modal-footer-writeReview" + restaurant.restaurantName});
+            $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.restaurantName)).attr({type: "button", class: "btn btn-secondary btn-sm"}).attr('data-dismiss', 'modal').html("Fermer");
+            $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.restaurantName)).attr({type: "button", class: "btn btn-primary btn-sm", id: "publishReview" + restaurant.restaurantName}).html("Publier un avis");
+        }
+    }
+
     displayRestaurants() {
         this.createListRestaurants(restaurants);
+        this.createButtonWriteReview(restaurants);
     }
 
     clearListRestaurants() {
@@ -148,26 +172,31 @@ class App {
             case "1":
                 this.clearListRestaurants();
                 this.createListRestaurants(oneStarArray);
+                this.createButtonWriteReview(oneStarArray);
                 map.createMarkerRestaurants(oneStarArray);
                 break;
             case "2":
                 this.clearListRestaurants();
                 this.createListRestaurants(twoStarArray);
+                this.createButtonWriteReview(twoStarArray);
                 map.createMarkerRestaurants(twoStarArray);
                 break;
             case "3":
                 this.clearListRestaurants();
                 this.createListRestaurants(threeStarArray);
+                this.createButtonWriteReview(threeStarArray);
                 map.createMarkerRestaurants(threeStarArray);
                 break;
             case "4":
                 this.clearListRestaurants();
                 this.createListRestaurants(fourStarArray);
+                this.createButtonWriteReview(fourStarArray);
                 map.createMarkerRestaurants(fourStarArray);
                 break;
             case "5":
                 this.clearListRestaurants();
                 this.createListRestaurants(fiveStarArray);
+                this.createButtonWriteReview(fiveStarArray);
                 map.createMarkerRestaurants(fiveStarArray);
                 break;
             default:

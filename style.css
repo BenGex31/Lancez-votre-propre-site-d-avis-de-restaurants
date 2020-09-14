@@ -3,7 +3,7 @@ body {
     font-family: 'Quicksand', sans-serif;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Indie Flower', cursive;
 }
 
@@ -105,7 +105,7 @@ header h2 {
 }
 
 /* Liste restaurants*/
-.RestaurantInfo {
+div[id^="RestaurantInfo"] {
     border: 1px solid #0c2461;
     margin-bottom: 0.5em;
     padding-left: 1em;
@@ -137,8 +137,12 @@ header h2 {
     color: #0c2461;
 }
 
-.btn-info {
+.btn-info, .btn-primary {
     margin-bottom: 0.5em;
+}
+
+.btn-info {
+    margin-right: 1em;
 }
 
 .modal-title {
@@ -167,6 +171,7 @@ header h2 {
     font-size: small;
     font-style: italic;
     margin-bottom: 0;
+    font-weight: bolder;
 }
 
 .stars {

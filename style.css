@@ -31,6 +31,7 @@ header h2 {
 
 #reload {
     margin-bottom: 1em;
+    border: 0.5px solid grey;
 }
 
 #search {
@@ -102,9 +103,21 @@ header h2 {
 
 #geolocation {
     margin-bottom: 1em;
+    font-size: small;
+    border: 0.5px solid grey;
 }
 
 /* Liste restaurants*/
+
+#filterRatings {
+    font-size: small;
+}
+
+#buttonFilter {
+    font-size: small;
+    border: 0.5px solid grey;
+}
+
 div[id^="RestaurantInfo"] {
     border: 1px solid #0c2461;
     margin-bottom: 0.5em;
@@ -137,11 +150,11 @@ div[id^="RestaurantInfo"] {
     color: #0c2461;
 }
 
-.btn-info, .btn-primary {
+.btn-warning, .btn-primary {
     margin-bottom: 0.5em;
 }
 
-.btn-info {
+.btn-warning {
     margin-right: 1em;
 }
 

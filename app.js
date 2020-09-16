@@ -1,7 +1,4 @@
 class App {
-    constructor() {
-        
-    }
     
     createListRestaurants(arrayRestaurant) {
         for (let restaurant in arrayRestaurant) {
@@ -26,7 +23,8 @@ class App {
             let button = document.createElement("button");
         
             ListRestaurants.appendChild(newDiv);
-            newDiv.setAttribute("id", "RestaurantInfo" + arrayRestaurant[restaurant].restaurantName);
+            newDiv.setAttribute("id", arrayRestaurant[restaurant].restaurantName);
+            newDiv.classList.add("restaurantInfo");
             newDiv.appendChild(restaurantName);
 
             restaurantName.classList.add("restaurantName");
@@ -58,8 +56,9 @@ class App {
             button.style.color = "black";
             button.style.border = "0.5px solid black";
             button.style.fontWeight = "bolder";
+            button.style.backgroundColor = "#f8c291";
             newDiv.appendChild(newDivModalFade);
-        
+
             newDivModalFade.setAttribute("class", "modal fade");
             newDivModalFade.setAttribute("id", arrayRestaurant[restaurant].restaurantName + "ModalScrollable");
             newDivModalFade.setAttribute("tabindex", "-1");
@@ -99,9 +98,9 @@ class App {
             newDivModalBody.setAttribute("id", "modal-body-consult-" + arrayRestaurant[restaurant].restaurantName);
 
             for (let i = 0; i < arrayRestaurant[restaurant].ratings.length; i++) {
-                $('<div>').prependTo($("#modal-body-consult-" + arrayRestaurant[restaurant].restaurantName)).attr("id", "consultRating" + arrayRestaurant[restaurant].restaurantName);
-                $('<p>').prependTo($("#consultRating" + arrayRestaurant[restaurant].restaurantName)).addClass("comment").html(arrayRestaurant[restaurant].ratings[i].comment);
-                $('<p>').appendTo($('#consultRating' + arrayRestaurant[restaurant].restaurantName)).addClass("stars").html("Note : " + arrayRestaurant[restaurant].ratings[i].stars + " / 5");
+                $('<div>').prependTo($("#modal-body-consult-" + arrayRestaurant[restaurant].restaurantName)).attr("id", "consultRating" + i + arrayRestaurant[restaurant].restaurantName);
+                $('<p>').prependTo($("#consultRating" + i + arrayRestaurant[restaurant].restaurantName)).attr({id: "comment" + i + arrayRestaurant[restaurant].restaurantName, class: "comment"}).html(arrayRestaurant[restaurant].ratings[i].comment);
+                $('<p>').appendTo($('#consultRating'+ i + arrayRestaurant[restaurant].restaurantName)).attr({id: "stars" + i + arrayRestaurant[restaurant].restaurantName, class: "stars"}).html("Note : " + arrayRestaurant[restaurant].ratings[i].stars + " / 5");
             }
         
             newDivModalContent.appendChild(newDivModalFooter);
@@ -118,7 +117,7 @@ class App {
 
     createButtonWriteReview(arrayRestaurant) {
         for (let restaurant of arrayRestaurant) {
-            $('<button>').appendTo($('#RestaurantInfo' + restaurant.restaurantName)).html("Rédiger un avis").attr({type: "button", class: "btn btn-primary btn-sm", id: "buttonWriteReview" + restaurant.restaurantName}).attr("data-toggle", "modal").attr("data-target", "#writeReview" + restaurant.restaurantName).css({fontSize: "small", border: "0.5px solid grey", fontWeight: "bolder"});
+            $('<button>').appendTo($('#' + restaurant.restaurantName)).html("Rédiger un avis").attr({type: "button", class: "btn btn-primary btn-sm", id: "buttonWriteReview" + restaurant.restaurantName}).attr("data-toggle", "modal").attr("data-target", "#writeReview" + restaurant.restaurantName).css({fontSize: "small", border: "0.5px solid grey", fontWeight: "bolder", backgroundColor: "darkseagreen", color: "black"});
             $('<div>').insertAfter($('#buttonWriteReview' + restaurant.restaurantName)).attr({class: 'modal fade', id: "writeReview" + restaurant.restaurantName, tabindex: "-1"}).attr('aria-labelledby', "writeReview" + restaurant.restaurantName + "Label").attr('aria-hidden', 'true');
             $('<div>').appendTo($('#writeReview' + restaurant.restaurantName)).attr({class: "modal-dialog", id: "modal-dialog-writeReview" + restaurant.restaurantName});
             $('<div>').appendTo($('#modal-dialog-writeReview' + restaurant.restaurantName)).attr({class: "modal-content", id: "modal-content-writeReview" + restaurant.restaurantName});
@@ -130,7 +129,7 @@ class App {
             $('<h5>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Votre avis compte aussi !").css({color: "darkgreen", fontWeight: "bolder"}).addClass("text-center animate__animated animate__flash animate__delay-1s").css("margin-bottom", "1em");
             $('<div>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).attr({class: "input-group mb-3", id: "input-group" + restaurant.restaurantName});
             $('<div>').appendTo($("#input-group" + restaurant.restaurantName)).attr({class: "input-group-prepend", id: "input-group-prepend" + restaurant.restaurantName});
-            $('<label>').appendTo($("#input-group-prepend" + restaurant.restaurantName)).attr({class: "input-group-text", for: "inputGroupSelect" + restaurant.restaurantName}).html("Sélectionner votre note entre 1 et 5 : ").css("background-color", "#78e08f").css("font-size", "small");
+            $('<label>').appendTo($("#input-group-prepend" + restaurant.restaurantName)).attr({class: "input-group-text", for: "inputGroupSelect" + restaurant.restaurantName}).html("Sélectionner votre note entre 1 et 5 : ").css("background-color", "#f8c291").css("font-size", "small");
             $('<select>').appendTo($("#input-group" + restaurant.restaurantName)).attr({class: "custom-select", id: "inputGroupSelect" + restaurant.restaurantName, type: "number"}).css("font-size", "small");
             $('<option>').appendTo($("#inputGroupSelect" + restaurant.restaurantName)).attr("value", "").html("Faites votre choix");
 
@@ -143,9 +142,9 @@ class App {
             $('<label>').appendTo($("#form-group" +restaurant.restaurantName)).attr("for", "FormControlTextarea" + restaurant.restaurantName).html("Ecrire votre commentaire :").css("font-size", "small");
             $('<textarea>').appendTo($("#form-group" +restaurant.restaurantName)).attr({class: "form-control", id: "FormControlTextarea" + restaurant.restaurantName, col: "3", rows: "3"});
             $('<div>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).attr("id", "resultReview" + restaurant.restaurantName);
-            $('<p>').appendTo($("#resultReview" + restaurant.restaurantName)).attr("id", "resultRating" + restaurant.restaurantName).html("Votre note : ").css({fontSize: "small", color: "#28a745", fontWeight: "bolder"});
+            $('<p>').appendTo($("#resultReview" + restaurant.restaurantName)).attr("id", "resultRating" + restaurant.restaurantName).html("Votre note : ").css({fontSize: "small", fontWeight: "bolder"});
             $('<span>').appendTo($("#resultRating" + restaurant.restaurantName)).attr("id", "spanResultRating"+ restaurant.restaurantName).css({fontSize: "small", fontStyle: "italic", color: "black"});
-            $('<p>').appendTo($("#resultReview" + restaurant.restaurantName)).attr("id", "resultComment" + restaurant.restaurantName).html("Votre commentaire : ").css({fontSize: "small", color: "#28a745", fontWeight: "bolder"});
+            $('<p>').appendTo($("#resultReview" + restaurant.restaurantName)).attr("id", "resultComment" + restaurant.restaurantName).html("Votre commentaire : ").css({fontSize: "small", fontWeight: "bolder"});
             $('<span>').appendTo($("#resultComment" + restaurant.restaurantName)).attr("id", "spanResultComment" + restaurant.restaurantName).css({fontSize: "small", fontStyle: "italic", color: "black"});
 
             $("#inputGroupSelect" + restaurant.restaurantName).change(function(event){
@@ -231,17 +230,43 @@ class App {
         for (let restaurant of restaurants) {
             let inputGroupSelectRestaurant = document.getElementById("inputGroupSelect" + restaurant.restaurantName);
             let FormControlTextareaRestaurant = document.getElementById("FormControlTextarea" + restaurant.restaurantName);
+            let restaurantsName = document.getElementById(restaurant.restaurantName);
 
-            $("#publishReview" + restaurant.restaurantName).click(function(){
-                $("#inputGroupSelect" + restaurant.restaurantName, "#FormControlTextarea" + restaurant.restaurantName).change(function(number, texte){
-                    restaurant.ratings.push({
-                        stars: number.target.value,
-                        comment: texte.target.value
-                    })
-                });
+            $("#publishReview" + restaurant.restaurantName).on("click", function(){
+                debugger;
+                if (restaurantsName.id === restaurant.restaurantName) {
+                    console.log(restaurantsName.id);
+                    $("#inputGroupSelect" + restaurant.restaurantName).change(function(number){
+                        $("#FormControlTextarea" + restaurant.restaurantName).change(function(text){
+                            restaurant.ratings.push({
+                                stars: parseInt(number.target.value),
+                                comment: text.target.value
+                            });
+                        });
+                    });
+                    $("#modal-body-consult-" + restaurant.restaurantName).html("");
+                }
+
+                for (let i = 0; i < restaurant.ratings.length; i++) {
+                    $('<div>').prependTo($("#modal-body-consult-" + restaurant.restaurantName)).attr("id", "consultRating" + i + restaurant.restaurantName);
+                    $('<p>').prependTo($("#consultRating" + i + restaurant.restaurantName)).addClass("comment").html(restaurant.ratings[i].comment);
+                    $('<p>').appendTo($('#consultRating'+ i + restaurant.restaurantName)).addClass("stars").html("Note : " + restaurant.ratings[i].stars + " / 5");
+                }
+
+                $("#publishReview" + restaurant.restaurantName).attr("disabled", "true");
+                $('<p>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Votre avis a bien été enregistré !").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
+                $('<p>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Merci de bien vouloir cliquer sur Fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
+
+                let totalStars = restaurant.ratings.reduce(function(sum, ratings){
+                    return sum + ratings.stars;
+                    }, 0);
                 
-                $('<p>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Votre avis a bien été enregistré !").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder"});
-                $('<p>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Merci de bien vouloir cliquer sur Fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder"});
+                let averageRatings = (totalStars / restaurant.ratings.length);
+            
+                restaurant.averageRatings = averageRatings;
+                restaurant.sumStars = totalStars;
+                restaurant.numberRatings = restaurant.ratings.length;
+                $("#review" + restaurant.id).html("Note moyenne : " + Math.floor(restaurant.averageRatings) + " / 5");
             });
 
             $("#modal-footer-writeReview" + restaurant.restaurantName +  " .btn-secondary").click(function(){
@@ -250,6 +275,7 @@ class App {
                 FormControlTextareaRestaurant.value = "";
                 $("#spanResultComment" + restaurant.restaurantName).html("");
                 $('.alertMessage').remove();
+                $("#publishReview" + restaurant.restaurantName).removeAttr("disabled");
             });
         }
     }

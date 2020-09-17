@@ -114,7 +114,7 @@ for(let restaurant in restaurants) {
 
    let averageRatings = (totalStars / restaurants[restaurant].ratings.length);
 
-   restaurants[restaurant].averageRatings = averageRatings;
+   restaurants[restaurant].averageRatings = averageRatings.toFixed(1);
    restaurants[restaurant].sumStars = totalStars;
    restaurants[restaurant].numberRatings = restaurants[restaurant].ratings.length;
 }

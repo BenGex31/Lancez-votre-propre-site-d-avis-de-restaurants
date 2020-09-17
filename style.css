@@ -136,6 +136,7 @@ a #buttonFilter {
 .restaurantMap {
     background-color: #3c6382;
     padding-top: 0.5em;
+    padding-bottom: 0.5em;
     margin-top: 1em;
     border: 5px ridge #82ccdd;
     border-radius: 10px;

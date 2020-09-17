@@ -1,9 +1,9 @@
 body {
-    background-color: #82ccdd;
+    background-color: whitesmoke;
     font-family: 'Quicksand', sans-serif;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Indie Flower', cursive;
 }
 
@@ -11,26 +11,30 @@ h1, h2, h3, h4, h5 {
 header {
     padding-top: 5px;
     margin-bottom: 0;
-    background-color: #fa983a;
+    background-color: #0a3d62;
+    border-bottom: 5px solid black;
 }
 
 header h1 {
-    color: #0c2461;
+    color: #82ccdd;
 }
 
 header h2 {
     font-size: 1.2em;
     font-style: italic;
-    color: darkgreen;
+    color: #82ccdd;
 }
 
 .fa-utensils {
     margin-right: 20px;
-    color: #4a69bd;
+    color: #b5b5bd;
 }
 
 #reload {
     margin-bottom: 1em;
+    border: 0.5px solid black;
+    background-color: #82ccdd;
+    color: black;
 }
 
 #search {
@@ -46,8 +50,9 @@ header h2 {
 #restaurantMeteo {
     margin-top: 0;
     margin-bottom: 1em;
-    background-color: #e55039;
+    background-color: #3c6382;
     padding-right: 1em;
+    border-bottom: 5px solid black;
 }
 
 #restaurantImg {
@@ -64,7 +69,7 @@ header h2 {
     margin-top: 1em;
     margin-left: 1em;
     margin-bottom: 1em;
-    color: darkblue;
+    color: #82ccdd;
     font-weight: bolder;
 }
 
@@ -81,14 +86,14 @@ header h2 {
 
 .fa-sun {
     margin-right: 5px;
-    color: #e9cb2e;
+    color: #f6b93b;
 }
 
 /* Google Maps*/
 #map {
     height: 800px;
     width: 95%;
-    border: 1px solid black;
+    border: 3px inset #0c2461;
     background-color: grey;
     float: right;
     margin-right: 1em;
@@ -102,20 +107,52 @@ header h2 {
 
 #geolocation {
     margin-bottom: 1em;
+    font-size: small;
+    border: 0.5px solid black;
+    background-color: #3c6382;
+    color: whitesmoke;
 }
 
 /* Liste restaurants*/
-.RestaurantInfo {
-    border: 1px solid #0c2461;
+
+#filterRatings {
+    font-size: small;
+    border: 1px solid black;
+    height: 33px;
+}
+
+a #buttonFilter {
+    font-size: small;
+    border: 0.5px solid black;
+    background-color: #3c6382;
+    color: whitesmoke;
+}
+
+.sectionFilter {
+    background: url('img/groupe-amis-prendre-photo-telephone-portable-avant-dejeuner-vue-dessusResized.png') no-repeat top left;
+    height: 300px;
+}
+
+.restaurantMap {
+    background-color: #3c6382;
+    padding-top: 0.5em;
+    margin-top: 1em;
+    border: 5px ridge #82ccdd;
+    border-radius: 10px;
+}
+
+.restaurantInfo {
+    border: 3px inset #0c2461;
     margin-bottom: 0.5em;
     padding-left: 1em;
     padding-top: 1em;
     padding-right: 1em;
     border-radius: 5px;
+    background-color: #60a3bc;
 }
 
 .restaurantName {
-    color: #4a69bd;
+    color: #0a3d62;
 }
 
 .restaurantAddress {
@@ -125,7 +162,7 @@ header h2 {
 .fa-map-marker-alt {
     margin-left: 5px;
     margin-right: 5px;
-    color: #eb2f06;
+    color: orangered;
 }
 
 .restaurantAddress, .review {
@@ -137,17 +174,17 @@ header h2 {
     color: #0c2461;
 }
 
-.btn-info {
+.btn-warning, .btn-primary {
     margin-bottom: 0.5em;
 }
 
-.modal-title {
-    color: #0c2461;
-    font-weight: bolder;
+.btn-warning {
+    margin-right: 1em;
 }
 
-.modal-header {
-    background-color: #82ccdd;
+.modal-title {
+    color: #6a89cc;
+    font-weight: bolder;
 }
 
 .modal-header .close {
@@ -160,13 +197,14 @@ header h2 {
 }
 
 .modal-body {
-    background-color: lightgrey;
+    background-color: #82ccdd;
 }
 
 .comment {
     font-size: small;
     font-style: italic;
     margin-bottom: 0;
+    font-weight: bolder;
 }
 
 .stars {
@@ -175,7 +213,7 @@ header h2 {
 }
 
 .modal-footer {
-    background-color: #fa983a;
+    background-color: darkseagreen;
 }
 
 /* Footer */
@@ -183,11 +221,12 @@ header h2 {
 footer {
     margin-top: 2em;
     padding-top: 1em;
-    background-color: darkseagreen;
+    background-color:  #0a3d62;
+    border-top: 5px solid black;
   }
   
   footer p {
-    color: darkblue;
+    color: whitesmoke;
     font-weight: bolder;
   }
   
@@ -212,6 +251,5 @@ footer {
   .QR-code {
     width: 100px;
     height: 100px;
-    border: 1px inset #0E76A8;
     margin-bottom: 1em;
   }

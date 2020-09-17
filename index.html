@@ -21,11 +21,11 @@
     <script type="text/javascript" src="weather.js" defer></script>
     <script type="text/javascript" src="main.js" defer></script>
   
-    <title>Etape 1 - La Bonne Fourchette - Site d'avis de restaurants</title>
+    <title>Etape 2 - La Bonne Fourchette - Site d'avis de restaurants</title>
   </head>
   <body>
       <header>
-        <div class="container-fluid">
+        <div class="container">
           <div class="row align-items-center">
             <div class="col-lg-7">
               <h1 id="mainTitle"><i class="fas fa-utensils"></i>La bonne Fourchette</h1>
@@ -47,34 +47,38 @@
             </div>
             <div id="infoWeather" class="col-lg-4 text-center"></div>
           </div>
-        <div class="row">
-          <div id="search" class="col-lg-3 text-center">
-            <div class="input-group input-group-sm">
-              <select class="custom-select" id="filterRatings" type="number" aria-label="Example select with button addon">
-                <option selected>Toutes notes moyennes confondues</option>
-                <option value="1">Entre 0 et 1</option>
-                <option value="2">Entre 1 et 2</option>
-                <option value="3">Entre 2 et 3</option>
-                <option value="4">Entre 3 et 4</option>
-                <option value="5">Entre 4 et 5</option>
-              </select>
-              <div class="input-group-append">
-                <button id="buttonFilter" class="btn btn-success" type="button">Appliquer</button>
+          <div class="container">
+            <div class="row align-items-center justify-content-end sectionFilter">
+              <div id="search" class="col-lg-6">
+                <div class="input-group input-group-sm">
+                  <select class="custom-select" id="filterRatings" type="number" aria-label="Example select with button addon">
+                    <option selected>Toutes notes moyennes confondues</option>
+                    <option value="1">Entre 0 et 1</option>
+                    <option value="2">Entre 1 et 2</option>
+                    <option value="3">Entre 2 et 3</option>
+                    <option value="4">Entre 3 et 4</option>
+                    <option value="5">Entre 4 et 5</option>
+                  </select>
+                  <div class="input-group-append">
+                    <a href="#restaurantsList"><button id="buttonFilter" class="btn btn-success" type="button">Appliquer</button></a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 text-center">
+                <a href="#map"><button id="geolocation" type="button" class="btn btn-danger btn-sm"><i class="fas fa-search-location"></i>Autour de vous</button></a>
               </div>
             </div>
           </div>
-          <div class="col-lg-9 text-center">
-            <button id="geolocation" type="button" class="btn btn-danger"><i class="fas fa-search-location"></i>Autour de vous</button>
+          <div class="container-fluid">
+            <div class="row restaurantMap">
+              <div class="col-sm-3">
+                <div id="restaurantsList"></div>
+              </div>
+              <div class="col-sm-9 text-center">
+                <div id="map"></div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-3">
-            <div id="restaurantsList"></div>
-          </div>
-          <div class="col-sm-9 text-center">
-            <div id="map"></div>
-          </div>
-        </div>
       </div>
       <footer>
         <div class="container-fluid">

@@ -233,17 +233,12 @@ class App {
             let restaurantsName = document.getElementById(restaurant.restaurantName);
 
             $("#publishReview" + restaurant.restaurantName).on("click", function(){
-                //debugger;
                 if (restaurant.restaurantName === restaurantsName.id) {
                     console.log(restaurantsName.id);
-                    $("#inputGroupSelect" + restaurant.restaurantName).change(function(number){
-                        $("#FormControlTextarea" + restaurant.restaurantName).change(function(text){
-                            restaurant.ratings.push({
-                                stars: parseInt(number.target.value),
-                                comment: text.target.value
-                            });
+                        restaurant.ratings.push({
+                            stars: parseInt(inputGroupSelectRestaurant.value),
+                            comment: FormControlTextareaRestaurant.value
                         });
-                    });
                     $("#modal-body-consult-" + restaurant.restaurantName).html("");
                 }
 
@@ -263,10 +258,10 @@ class App {
                 
                 let averageRatings = (totalStars / restaurant.ratings.length);
             
-                restaurant.averageRatings = averageRatings;
+                restaurant.averageRatings = averageRatings.toFixed(1);
                 restaurant.sumStars = totalStars;
                 restaurant.numberRatings = restaurant.ratings.length;
-                $("#review" + restaurant.id).html("Note moyenne : " + Math.floor(restaurant.averageRatings) + " / 5");
+                $("#review" + restaurant.id).html("Note moyenne : " + restaurant.averageRatings + " / 5");
             });
 
             $("#modal-footer-writeReview" + restaurant.restaurantName +  " .btn-secondary").click(function(){

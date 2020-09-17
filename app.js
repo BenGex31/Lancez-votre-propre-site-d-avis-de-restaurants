@@ -12,22 +12,19 @@ class App {
             let span = document.createElement("span");
             let newDivModalBody = document.createElement("div");
             let img = document.createElement("img");
-            let newDivComment = document.createElement("div");
-            let newPcommentAuthor1 = document.createElement('p');
-            let newPcommentAuthor2 = document.createElement('p');
-            let note1 = document.createElement('p');
-            let note2 = document.createElement('p');
             let newDivModalFooter = document.createElement("div");
             let buttonFooter = document.createElement("button");
             let address = document.createElement("p");
             let iconPosition = document.createElement("i");
-            let review = document.createElement("h6");
+            let review = document.createElement("p");
             let restaurantName = document.createElement("h5");
+            let restaurantNameH6 = document.createElement("h6");
             let ListRestaurants = document.getElementById("restaurantsList");
             let button = document.createElement("button");
         
             ListRestaurants.appendChild(newDiv);
-            newDiv.classList.add("RestaurantInfo");
+            newDiv.setAttribute("id", arrayRestaurant[restaurant].restaurantName);
+            newDiv.classList.add("restaurantInfo");
             newDiv.appendChild(restaurantName);
 
             restaurantName.classList.add("restaurantName");
@@ -44,7 +41,7 @@ class App {
 
             review.setAttribute("id", "review" + arrayRestaurant[restaurant].id);
             review.innerHTML = "Note moyenne : " + arrayRestaurant[restaurant].averageRatings + " / 5"
-            review.style.color = "green";
+            review.style.color = "#0a3d62";
             review.style.fontWeight = "bolder";
             review.style.fontSize = "small";
             
@@ -52,13 +49,16 @@ class App {
             button.innerHTML = "Consultez les avis";
             button.setAttribute("id", arrayRestaurant[restaurant].restaurantName + arrayRestaurant[restaurant].id);
             button.setAttribute("type", "button");
-            button.setAttribute("class", "btn btn-info btn-sm");
+            button.setAttribute("class", "btn btn-warning btn-sm");
             button.setAttribute("data-toggle", "modal");
             button.setAttribute("data-target", "#" + arrayRestaurant[restaurant].restaurantName + "ModalScrollable");
             button.style.fontSize = "small";
             button.style.color = "black";
+            button.style.border = "0.5px solid black";
+            button.style.fontWeight = "bolder";
+            button.style.backgroundColor = "#82ccdd";
             newDiv.appendChild(newDivModalFade);
-        
+
             newDivModalFade.setAttribute("class", "modal fade");
             newDivModalFade.setAttribute("id", arrayRestaurant[restaurant].restaurantName + "ModalScrollable");
             newDivModalFade.setAttribute("tabindex", "-1");
@@ -77,7 +77,8 @@ class App {
         
             newDivModalTitle.setAttribute("class", "modal-title");
             newDivModalTitle.setAttribute("id", arrayRestaurant[restaurant].restaurantName + "ModalScrollableTitle");
-            newDivModalTitle.innerHTML = "Restaurant : " + arrayRestaurant[restaurant].restaurantName;
+            newDivModalTitle.appendChild(restaurantNameH6);
+            restaurantNameH6.innerHTML = "Restaurant : " + arrayRestaurant[restaurant].restaurantName;
             newDivModalTitle.appendChild(buttonClose);
         
             buttonClose.setAttribute("class", "close");
@@ -87,31 +88,20 @@ class App {
         
             span.setAttribute("aria-hidden", "true");
             span.innerHTML = "&times;";
-        
+
             newDivModalTitle.appendChild(img);
             img.setAttribute("src", "https://maps.googleapis.com/maps/api/streetview?size=300x250&location=" + arrayRestaurant[restaurant].lat + "," + arrayRestaurant[restaurant].long + "&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc");
             img.setAttribute("class", "streetView");
         
             newDivModalContent.appendChild(newDivModalBody);
             newDivModalBody.setAttribute("class", "modal-body");
-        
-            newDivModalBody.appendChild(newDivComment);
-        
-            newDivComment.appendChild(newPcommentAuthor1);
-            newPcommentAuthor1.setAttribute("class", "comment");
-            newPcommentAuthor1.innerHTML = arrayRestaurant[restaurant].ratings[0].comment;
-        
-            newDivComment.appendChild(note1);
-            note1.setAttribute("class", "stars");
-            note1.innerHTML = "Note : " + arrayRestaurant[restaurant].ratings[0].stars + " / 5";
-        
-            newDivComment.appendChild(newPcommentAuthor2);
-            newPcommentAuthor2.setAttribute("class", "comment");
-            newPcommentAuthor2.innerHTML = arrayRestaurant[restaurant].ratings[1].comment;
-        
-            newDivComment.appendChild(note2);
-            note2.setAttribute("class", "stars");
-            note2.innerHTML = "Note : " + arrayRestaurant[restaurant].ratings[1].stars + " / 5";
+            newDivModalBody.setAttribute("id", "modal-body-consult-" + arrayRestaurant[restaurant].restaurantName);
+
+            for (let i = 0; i < arrayRestaurant[restaurant].ratings.length; i++) {
+                $('<div>').prependTo($("#modal-body-consult-" + arrayRestaurant[restaurant].restaurantName)).attr("id", "consultRating" + i + arrayRestaurant[restaurant].restaurantName);
+                $('<p>').prependTo($("#consultRating" + i + arrayRestaurant[restaurant].restaurantName)).attr({id: "comment" + i + arrayRestaurant[restaurant].restaurantName, class: "comment"}).html(arrayRestaurant[restaurant].ratings[i].comment);
+                $('<p>').appendTo($('#consultRating'+ i + arrayRestaurant[restaurant].restaurantName)).attr({id: "stars" + i + arrayRestaurant[restaurant].restaurantName, class: "stars"}).html("Note : " + arrayRestaurant[restaurant].ratings[i].stars + " / 5");
+            }
         
             newDivModalContent.appendChild(newDivModalFooter);
             newDivModalFooter.setAttribute("class", "modal-footer");
@@ -120,7 +110,8 @@ class App {
             buttonFooter.setAttribute("type", "button");
             buttonFooter.setAttribute("class", "btn btn-secondary");
             buttonFooter.setAttribute("data-dismiss", "modal");
-            buttonFooter.innerHTML = "Close";
+            buttonFooter.innerHTML = "Fermer";
+            buttonFooter.style.fontSize = "small";
         }
     }
 

@@ -1,5 +1,5 @@
 body {
-    background-color: #82ccdd;
+    background-color: whitesmoke;
     font-family: 'Quicksand', sans-serif;
 }
 
@@ -11,23 +11,23 @@ h1, h2, h3, h4, h5, h6 {
 header {
     padding-top: 5px;
     margin-bottom: 0;
-    background-color: #f8c291;
+    background-color: #0a3d62;
     border-bottom: 5px solid black;
 }
 
 header h1 {
-    color: #6a89cc;
+    color: #82ccdd;
 }
 
 header h2 {
     font-size: 1.2em;
     font-style: italic;
-    color: #6a89cc;
+    color: #82ccdd;
 }
 
 .fa-utensils {
     margin-right: 20px;
-    color: #4a69bd;
+    color: #b5b5bd;
 }
 
 #reload {
@@ -50,9 +50,9 @@ header h2 {
 #restaurantMeteo {
     margin-top: 0;
     margin-bottom: 1em;
-    background-color: #f8c291;
+    background-color: #3c6382;
     padding-right: 1em;
-    border-bottom: 1px solid black;
+    border-bottom: 5px solid black;
 }
 
 #restaurantImg {
@@ -69,7 +69,7 @@ header h2 {
     margin-top: 1em;
     margin-left: 1em;
     margin-bottom: 1em;
-    color: #6a89cc;
+    color: #82ccdd;
     font-weight: bolder;
 }
 
@@ -93,7 +93,7 @@ header h2 {
 #map {
     height: 800px;
     width: 95%;
-    border: 1px solid black;
+    border: 3px inset #0c2461;
     background-color: grey;
     float: right;
     margin-right: 1em;
@@ -109,8 +109,8 @@ header h2 {
     margin-bottom: 1em;
     font-size: small;
     border: 0.5px solid black;
-    background-color: darkseagreen;
-    color: black;
+    background-color: #3c6382;
+    color: whitesmoke;
 }
 
 /* Liste restaurants*/
@@ -118,26 +118,41 @@ header h2 {
 #filterRatings {
     font-size: small;
     border: 1px solid black;
+    height: 33px;
 }
 
-#buttonFilter {
+a #buttonFilter {
     font-size: small;
     border: 0.5px solid black;
-    background-color: darkseagreen;
-    color: black;
+    background-color: #3c6382;
+    color: whitesmoke;
+}
+
+.sectionFilter {
+    background: url('img/groupe-amis-prendre-photo-telephone-portable-avant-dejeuner-vue-dessusResized.png') no-repeat top left;
+    height: 300px;
+}
+
+.restaurantMap {
+    background-color: #3c6382;
+    padding-top: 0.5em;
+    margin-top: 1em;
+    border: 5px ridge #82ccdd;
+    border-radius: 10px;
 }
 
 .restaurantInfo {
-    border: 1px solid #0c2461;
+    border: 3px inset #0c2461;
     margin-bottom: 0.5em;
     padding-left: 1em;
     padding-top: 1em;
     padding-right: 1em;
     border-radius: 5px;
+    background-color: #60a3bc;
 }
 
 .restaurantName {
-    color: #4a69bd;
+    color: #0a3d62;
 }
 
 .restaurantAddress {
@@ -147,7 +162,7 @@ header h2 {
 .fa-map-marker-alt {
     margin-left: 5px;
     margin-right: 5px;
-    color: #eb2f06;
+    color: orangered;
 }
 
 .restaurantAddress, .review {
@@ -171,8 +186,6 @@ header h2 {
     color: #6a89cc;
     font-weight: bolder;
 }
-
-
 
 .modal-header .close {
     padding: 1rem 1rem;
@@ -208,12 +221,12 @@ header h2 {
 footer {
     margin-top: 2em;
     padding-top: 1em;
-    background-color: darkseagreen;
-    border-top: 1px solid black;
+    background-color:  #0a3d62;
+    border-top: 5px solid black;
   }
   
   footer p {
-    color: darkblue;
+    color: whitesmoke;
     font-weight: bolder;
   }
   

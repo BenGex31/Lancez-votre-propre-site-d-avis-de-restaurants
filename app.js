@@ -41,7 +41,7 @@ class App {
 
             review.setAttribute("id", "review" + arrayRestaurant[restaurant].id);
             review.innerHTML = "Note moyenne : " + arrayRestaurant[restaurant].averageRatings + " / 5"
-            review.style.color = "green";
+            review.style.color = "#0a3d62";
             review.style.fontWeight = "bolder";
             review.style.fontSize = "small";
             
@@ -56,7 +56,7 @@ class App {
             button.style.color = "black";
             button.style.border = "0.5px solid black";
             button.style.fontWeight = "bolder";
-            button.style.backgroundColor = "#f8c291";
+            button.style.backgroundColor = "#82ccdd";
             newDiv.appendChild(newDivModalFade);
 
             newDivModalFade.setAttribute("class", "modal fade");
@@ -117,7 +117,7 @@ class App {
 
     createButtonWriteReview(arrayRestaurant) {
         for (let restaurant of arrayRestaurant) {
-            $('<button>').appendTo($('#' + restaurant.restaurantName)).html("Rédiger un avis").attr({type: "button", class: "btn btn-primary btn-sm", id: "buttonWriteReview" + restaurant.restaurantName}).attr("data-toggle", "modal").attr("data-target", "#writeReview" + restaurant.restaurantName).css({fontSize: "small", border: "0.5px solid grey", fontWeight: "bolder", backgroundColor: "darkseagreen", color: "black"});
+            $('<button>').appendTo($('#' + restaurant.restaurantName)).html("Rédiger un avis").attr({type: "button", class: "btn btn-primary btn-sm", id: "buttonWriteReview" + restaurant.restaurantName}).attr("data-toggle", "modal").attr("data-target", "#writeReview" + restaurant.restaurantName).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#3c6382", color: "whitesmoke"});
             $('<div>').insertAfter($('#buttonWriteReview' + restaurant.restaurantName)).attr({class: 'modal fade', id: "writeReview" + restaurant.restaurantName, tabindex: "-1"}).attr('aria-labelledby', "writeReview" + restaurant.restaurantName + "Label").attr('aria-hidden', 'true');
             $('<div>').appendTo($('#writeReview' + restaurant.restaurantName)).attr({class: "modal-dialog", id: "modal-dialog-writeReview" + restaurant.restaurantName});
             $('<div>').appendTo($('#modal-dialog-writeReview' + restaurant.restaurantName)).attr({class: "modal-content", id: "modal-content-writeReview" + restaurant.restaurantName});
@@ -233,8 +233,8 @@ class App {
             let restaurantsName = document.getElementById(restaurant.restaurantName);
 
             $("#publishReview" + restaurant.restaurantName).on("click", function(){
-                debugger;
-                if (restaurantsName.id === restaurant.restaurantName) {
+                //debugger;
+                if (restaurant.restaurantName === restaurantsName.id) {
                     console.log(restaurantsName.id);
                     $("#inputGroupSelect" + restaurant.restaurantName).change(function(number){
                         $("#FormControlTextarea" + restaurant.restaurantName).change(function(text){

@@ -233,37 +233,41 @@ class App {
             let restaurantsName = document.getElementById(restaurant.restaurantName);
 
             $("#publishReview" + restaurant.restaurantName).on("click", function(){
-                if (restaurant.restaurantName === restaurantsName.id) {
-                    console.log(restaurantsName.id);
-                        restaurant.ratings.push({
-                            stars: parseInt(inputGroupSelectRestaurant.value),
-                            comment: FormControlTextareaRestaurant.value
-                        });
-                    $("#modal-body-consult-" + restaurant.restaurantName).html("");
-                }
-
-                for (let i = 0; i < restaurant.ratings.length; i++) {
-                    $('<div>').prependTo($("#modal-body-consult-" + restaurant.restaurantName)).attr("id", "consultRating" + i + restaurant.restaurantName);
-                    $('<p>').prependTo($("#consultRating" + i + restaurant.restaurantName)).addClass("comment").html(restaurant.ratings[i].comment);
-                    $('<p>').appendTo($('#consultRating'+ i + restaurant.restaurantName)).addClass("stars").html("Note : " + restaurant.ratings[i].stars + " / 5");
-                }
-
-                $("#publishReview" + restaurant.restaurantName).attr("disabled", "true");
-                $('<p>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Votre avis a bien été enregistré !").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
-                $('<p>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Merci de bien vouloir cliquer sur Fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
-
-                let totalStars = restaurant.ratings.reduce(function(sum, ratings){
-                    return sum + ratings.stars;
-                    }, 0);
+                if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value) {
+                    if (restaurant.restaurantName === restaurantsName.id) {
+                        console.log(restaurantsName.id);
+                            restaurant.ratings.push({
+                                stars: parseInt(inputGroupSelectRestaurant.value),
+                                comment: FormControlTextareaRestaurant.value
+                            });
+                        $("#modal-body-consult-" + restaurant.restaurantName).html("");
+                    }
+    
+                    for (let i = 0; i < restaurant.ratings.length; i++) {
+                        $('<div>').prependTo($("#modal-body-consult-" + restaurant.restaurantName)).attr("id", "consultRating" + i + restaurant.restaurantName);
+                        $('<p>').prependTo($("#consultRating" + i + restaurant.restaurantName)).addClass("comment").html(restaurant.ratings[i].comment);
+                        $('<p>').appendTo($('#consultRating'+ i + restaurant.restaurantName)).addClass("stars").html("Note : " + restaurant.ratings[i].stars + " / 5");
+                    }
+    
+                    $("#publishReview" + restaurant.restaurantName).attr("disabled", "true");
+                    $('<p>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Votre avis a bien été enregistré !").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
+                    $('<p>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Merci de bien vouloir cliquer sur Fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
+    
+                    let totalStars = restaurant.ratings.reduce(function(sum, ratings){
+                        return sum + ratings.stars;
+                        }, 0);
+                    
+                    let averageRatings = (totalStars / restaurant.ratings.length);
                 
-                let averageRatings = (totalStars / restaurant.ratings.length);
-            
-                restaurant.averageRatings = averageRatings.toFixed(1);
-                restaurant.sumStars = totalStars;
-                restaurant.numberRatings = restaurant.ratings.length;
-                $("#review" + restaurant.id).html("Note moyenne : " + restaurant.averageRatings + " / 5");
+                    restaurant.averageRatings = averageRatings.toFixed(1);
+                    restaurant.sumStars = totalStars;
+                    restaurant.numberRatings = restaurant.ratings.length;
+                    $("#review" + restaurant.id).html("Note moyenne : " + restaurant.averageRatings + " / 5");
+                } else {
+                    alert("Merci de renseigner une note et un commentaire, sinon merci de cliquer sur Fermer")
+                }
             });
-
+                
             $("#modal-footer-writeReview" + restaurant.restaurantName +  " .btn-secondary").click(function(){
                 inputGroupSelectRestaurant.value = "";
                 $("#spanResultRating" + restaurant.restaurantName).html("");

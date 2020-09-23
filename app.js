@@ -182,6 +182,7 @@ class App {
 
         const map = new MyMap(48.8565387, 2.3518054);
         map.createMap();
+        console.log(map);
         
         switch(filterRatings.value) {
             case "1":
@@ -280,29 +281,32 @@ class App {
         }
     }
 
-    addRestaurantArray() {
+    addNewRestaurantArray() {
+        debugger;
         let inputRestaurantName = document.getElementById("inputRestaurantName");
         let inputRestaurantAddress = document.getElementById("inputRestaurantAddress");
         let starsRating = document.getElementById("inputGroupSelectRestaurantRating");
         let commentRating = document.getElementById("FormControlTextareaRestaurantComment");
-        //let AddRestaurantButton = document.getElementById("AddRestaurantButton");
 
-        $("#AddRestaurantButton").on("click", function(){
-            restaurants.push({
-                id: restaurants[5].id + 1,
-                restaurantName: inputRestaurantName.value,
-                address: inputRestaurantAddress.value,
-                lat: null,
-                long: null,
-                ratings: [
-                    {
-                        stars: starsRating.value,
-                        comment: commentRating.value
-                    }
-                ]
-            });
-            this.clearListRestaurants();
-            this.displayRestaurants();
+        const map = new MyMap();
+        console.log(map);
+
+        this.createNewRestaurant(inputRestaurantName, inputRestaurantAddress, map.newLat, map.newLng, starsRating, commentRating);
+    }
+
+    createNewRestaurant(name, address, lat, lng, rating, comment) {
+        restaurants.push({
+            id : restaurants.length + 1,
+            restaurantName : name.value,
+            address : address.value,
+            lat : lat,
+            long : lng,
+            ratings : [
+                {
+                    stars : rating.value,
+                    comment : comment.value
+                }
+            ]
         });
     }
 }
@@ -313,4 +317,11 @@ const filter = new App();
 
 buttonFilter.addEventListener("click", function(){
     filter.filterRestaurants();
+});
+
+const addRestaurantButton = document.getElementById("addRestaurantButton");
+const newRestaurant = new App();
+
+$("#addRestaurantButton").on("click", function(){
+    newRestaurant.addNewRestaurantArray();
 });

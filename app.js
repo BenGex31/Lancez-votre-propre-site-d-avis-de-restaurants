@@ -280,35 +280,6 @@ class App {
             });
         }
     }
-
-    addNewRestaurantArray() {
-        debugger;
-        let inputRestaurantName = document.getElementById("inputRestaurantName");
-        let inputRestaurantAddress = document.getElementById("inputRestaurantAddress");
-        let starsRating = document.getElementById("inputGroupSelectRestaurantRating");
-        let commentRating = document.getElementById("FormControlTextareaRestaurantComment");
-
-        const map = new MyMap();
-        console.log(map);
-
-        this.createNewRestaurant(inputRestaurantName, inputRestaurantAddress, map.newLat, map.newLng, starsRating, commentRating);
-    }
-
-    createNewRestaurant(name, address, lat, lng, rating, comment) {
-        restaurants.push({
-            id : restaurants.length + 1,
-            restaurantName : name.value,
-            address : address.value,
-            lat : lat,
-            long : lng,
-            ratings : [
-                {
-                    stars : rating.value,
-                    comment : comment.value
-                }
-            ]
-        });
-    }
 }
 
 const buttonFilter = document.getElementById("buttonFilter");
@@ -317,11 +288,4 @@ const filter = new App();
 
 buttonFilter.addEventListener("click", function(){
     filter.filterRestaurants();
-});
-
-const addRestaurantButton = document.getElementById("addRestaurantButton");
-const newRestaurant = new App();
-
-$("#addRestaurantButton").on("click", function(){
-    newRestaurant.addNewRestaurantArray();
 });

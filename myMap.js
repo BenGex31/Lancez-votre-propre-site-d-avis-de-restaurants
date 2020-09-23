@@ -10,7 +10,6 @@ class MyMap {
         let markerParis = new google.maps.Marker({position: this.city, map: this.map, label: "Paris"});
         this.geolocation();
         this.addMarkerRestaurant();
-        this.addRestaurantArray();
     }
 
     createMarkerRestaurants(arrayRestaurant) {
@@ -118,76 +117,62 @@ class MyMap {
             }
         });
         map.panTo(latLng);
-        this.createWindowAddRestaurant(marker, map);
+        this.createInfoWindowNewMarker(marker, map);
     }
 
-    createWindowAddRestaurant(marker, map) {
-        const modalWindow =
-        '<div id="AddContentRestaurant">' +
-            '<h4 id="titleAddRestaurant">Partagez votre expérience !</h4>' +
-            '<label id"labelAddRestaurant">Ajouter un restaurant</label>' +
-            '<form id"addFormRestaurant">' +
-                '<div class="form-row">' +
-                    '<div class="col">' +
-                        '<input id="addRestaurantName" type="text" class="form-control" placeholder="Nom du restaurant">' +
+    createInfoWindowNewMarker(marker, map) {
+        const contentString = 
+        '<div id="contentAddRestaurant">' +
+            '<div id="titleAddRestaurant">' +
+                '<h2>Partagez votre expérience</h2>' +
+            '</div>' +
+            '<div id="formBody">' +
+                '<form id="addRestaurantForm">' +
+                    '<div class="form-group row text-left" id="addRestaurantName-form-group">' +
+                        '<label for="inputRestaurantName" class="col-lg-6 col-form-label">Nom du restaurant</label>' +
+                        '<div class="col-lg-6" id="divInputRestaurantName">' +
+                            '<input type="text" class="form-control" id="inputRestaurantName">' +
+                        '</div>' +
                     '</div>' +
-                '</div>' +
-                '<br>' +
-                '<div class="form-row">' +
-                    '<div class="col">' +
-                        '<input id="addRestaurantAddress" type="text" class="form-control" placeholder="Adresse complète">' +
+                    '<div class="form-group row text-left" id="addRestaurantAddress-form-group">' +
+                        '<label for="inputRestaurantAddress" class="col-lg-6 col-form-label">Adresse du restaurant</label>' +
+                        '<div class="col-lg-6" id="divInputRestaurantAddress">' +
+                            '<input type="text" class="form-control" id="inputRestaurantAddress">' +
+                        '</div>' +
                     '</div>' +
-                '</div>' +
-                '<br>' +
-            '</form>' +
-            '<footer>' +
-                '<div class="row">' +
-                    '<div class="col d-flex justify-content-around">' +
-                        '<button id="deleteMarker" type="button" class="btn btn-secondary btn-sm">Annuler</button>' +
-                        '<button id="saveNewRestaurant" type="button" class="btn btn-primary btn-sm">Valider</button>'+
+                    '<div class="input-group mb-3" id="input-group-RestaurantRating">' +
+                        '<div class="input-group-prepend" id="input-group-prependRestaurantRating">' +
+                            '<label class="input-group-text" for="inputGroupSelectRestaurantRating">Votre note :</label>' +
+                        '</div>' +
+                        '<select class="custom-select" id="inputGroupSelectRestaurantRating" type="number">' +
+                            '<option>Faites votre choix</option>' +
+                            '<option value="1">1</option>' +
+                            '<option value="2">2</option>' +
+                            '<option value="3">3</option>' +
+                            '<option value="4">4</option>' +
+                            '<option value="5">5</option>' +
+                        '</select>' +
                     '</div>' +
-                '</div>'
-            '</footer>' +
+                    '<div class="form-group text-left" id="form-group-restaurantComment">' +
+                        '<label for="FormControlTextareaRestaurantComment">Ecrire votre commentaire</label>' +
+                        '<textarea class="form-control" id="FormControlTextareaRestaurantComment" col="3" row="3"></textarea>' +
+                    '</div>' +
+                    '<div class="row" id="divRowAddRestaurant">' +
+                        '<div class="col-md-12 text-center" id="divColAddRestaurant">' +
+                            '<button type="button" class="btn btn-primary btn-sm" id="AddRestaurantButton">Ajouter un restaurant</button>' +
+                            '<button type="button" class="btn btn-secondary btn-sm" id="cancelAddRestaurantButton">Annuler</button>' +
+                        '</div>' +
+                    '</div>' +
+                '</form>' +
+            '</div>'
         '</div>';
 
-        const infoWindow = new google.maps.InfoWindow({
-            content : modalWindow,
+        const infowindow = new google.maps.InfoWindow({
+            content: contentString
         });
 
         marker.addListener("click", () => {
-            infoWindow.open(map, marker);
-        });
-    }
-
-    addRestaurantArray(location) {
-        let restaurantNameInput = document.getElementById("addRestaurantName");
-        let restaurantAddress = document.getElementById("addRestaurantAddress");
-        let saveNewRestaurant = document.getElementById("saveNewRestaurant");
-
-        $("#saveNewRestaurant").on("click", function() {
-            if (restaurantNameInput.value === "") {
-                alert("Merci de renseigner le nom du restaurant !");
-            }
-            if (restaurantAddress.value === "") {
-                alert("Merci de renseigner l'adresse du restaurant !");
-            }
-            if (restaurantNameInput.value === "" && restaurantAddress.value === "") {
-                alert("Merci de renseigner le nom et l'adresse du restaurant !");
-            } else {
-                restaurants.push({
-                    id: restaurants[5].id + 1,
-                    restaurantName: restaurantNameInput.value,
-                    address: restaurantAddress.value,
-                    lat: location.lat(),
-                    long: location.lng(),
-                    ratings: [
-                        {
-                            stars: null,
-                            comment: ""
-                        }
-                    ]
-                });
-            }
+            infowindow.open(map, marker);
         });
     }
 }

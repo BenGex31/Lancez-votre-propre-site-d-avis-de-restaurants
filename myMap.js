@@ -106,9 +106,8 @@ class MyMap {
             console.log(event.latLng.lat());
             console.log(event.latLng.lng());
 
-            $("#cancelAddRestaurant").html("");
-            $("#divAddRestaurant").html("");
             this.createButtonAddRestaurant();
+            this.addNewRestaurantArray(event.latLng.lat(), event.latLng.lng());
         });
     }
 
@@ -126,14 +125,13 @@ class MyMap {
             }
         });
         map.panTo(latLng);
-        //this.createInfoWindowNewMarker(marker, map);
-        this.deleteNewMarker(marker);
+        this.createInfoWindowNewMarker(marker, map);
     }
 
     createButtonAddRestaurant() {
         $('<div>').insertAfter($("#map")).attr("id", "divAddRestaurant");
-        $("<button>").appendTo($("#divAddRestaurant")).attr({type:"button", class:"btn btn-primary btn-sm", id:"addRestaurant"}).attr("data-toggle", "modal").attr("data-target", "#addRestaurantModal").html("Ajouter un restaurant").css({marginTop:"1em", marginRight:"1em"});
-        $('<div>').insertAfter($("#addRestaurant")).attr({class:"modal fade", id:"addRestaurantModal", tabindex:"-1"}).attr("aria-labelledby", "addRestaurantModalLabel").attr("aria-hidden", "true");
+        //$("<button>").appendTo($("#divAddRestaurant")).attr({type:"button", class:"btn btn-primary btn-sm", id:"addRestaurant"}).attr("data-toggle", "modal").attr("data-target", "#addRestaurantModal").html("Ajouter un restaurant").css({marginTop:"1em", marginRight:"1em"});
+        $('<div>').appendTo($("#divAddRestaurant")).attr({class:"modal fade", id:"addRestaurantModal", tabindex:"-1"}).attr("aria-labelledby", "addRestaurantModalLabel").attr("aria-hidden", "true");
         $('<div>').appendTo($("#addRestaurantModal")).attr({class:"modal-dialog", id:"modal-dialog-addRestaurant"});
         $('<div>').appendTo($("#modal-dialog-addRestaurant")).attr({class:"modal-content", id:"modal-content-addRestaurant"});
         $('<div>').appendTo($("#modal-content-addRestaurant")).attr({class:"modal-header", id:"modal-header-addRestaurant"});
@@ -143,18 +141,18 @@ class MyMap {
 
         $('<form>').appendTo($("#modal-body-addRestaurant")).attr("id", "form-addRestaurant");
         $('<div>').appendTo($("#form-addRestaurant")).attr({class:"form-group row text-left", id:"addRestaurantName-form-group"});
-        $('<label>').appendTo($("#addRestaurantName-form-group")).attr({for:"inputRestaurantName", class:"col-lg-6 col-form-label"}).html("Nom du restaurant");
+        $('<label>').appendTo($("#addRestaurantName-form-group")).attr({for:"inputRestaurantName", class:"col-lg-6 col-form-label"}).html("* Nom du restaurant");
         $('<div>').appendTo($("#addRestaurantName-form-group")).attr({class:"col-lg-6", id:"divInputRestaurantName"});
         $('<input>').appendTo($("#divInputRestaurantName")).attr({type:"text", class:"form-control", id:"inputRestaurantName"});
 
         $('<div>').appendTo($("#form-addRestaurant")).attr({class:"form-group row text-left", id:"addRestaurantAddress-form-group"});
-        $('<label>').appendTo($("#addRestaurantAddress-form-group")).attr({for:"inputRestaurantAddress", class:"col-lg-6 col-form-label"}).html("Adresse du restaurant");
+        $('<label>').appendTo($("#addRestaurantAddress-form-group")).attr({for:"inputRestaurantAddress", class:"col-lg-6 col-form-label"}).html("* Adresse du restaurant");
         $('<div>').appendTo($("#addRestaurantAddress-form-group")).attr({class:"col-lg-6", id:"divInputRestaurantAddress"});
         $('<input>').appendTo($("#divInputRestaurantAddress")).attr({type:"text", class:"form-control", id:"inputRestaurantAddress"});
 
         $('<div>').appendTo($("#form-addRestaurant")).attr({class:"input-group mb-3", id:"input-group-RestaurantRating"});
         $('<div>').appendTo($("#input-group-RestaurantRating")).attr({class:"input-group-prepend", id:"input-group-prependRestaurantRating"});
-        $('<label>').appendTo($("#input-group-prependRestaurantRating")).attr({class:"input-group-text", for:"inputGroupSelectRestaurantRating"}).html("Votre note :");
+        $('<label>').appendTo($("#input-group-prependRestaurantRating")).attr({class:"input-group-text", for:"inputGroupSelectRestaurantRating"}).html("* Votre note :");
         $('<select>').appendTo($("#input-group-RestaurantRating")).attr({class:"custom-select", id:"inputGroupSelectRestaurantRating", type:"number"});
         $('<option>').appendTo($("#inputGroupSelectRestaurantRating")).html("Faites votre choix");
 
@@ -166,59 +164,18 @@ class MyMap {
         $('<label>').appendTo($("#form-group-restaurantComment")).attr({for:"FormControlTextareaRestaurantComment"}).html("Ecrire votre commentaire");
         $('<textarea>').appendTo($("#form-group-restaurantComment")).attr({class:"form-control", id:"FormControlTextareaRestaurantComment", col:"3", row:"3"});
 
-        $('<div>').appendTo($("#modal-content-addRestaurant")).attr({class:"modal-footer", id:"modal-footer-addRestaurant"});
-        $('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"button", class:"btn btn-secondary btn-sm"}).attr("data-dismiss", "modal").html("Fermer");
-        $('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"submit", class:"btn btn-primary btn-sm", id:"btnSaveAddRestaurant"}).html("Enregistrer");
+        $('<p>').appendTo($("#form-addRestaurant")).html("* champs obligatoires").addClass("text-left");
 
-        $('<button>').appendTo($("#divAddRestaurant")).attr({type:"submit", class:"btn btn-secondary btn-sm", id:"cancelAddRestaurant"}).html("Annuler").css({marginTop:"1em"});
+        $('<div>').appendTo($("#modal-content-addRestaurant")).attr({class:"modal-footer", id:"modal-footer-addRestaurant"});
+        $('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"button", class:"btn btn-secondary btn-sm", id:"btnCloseAddRestaurant"}).attr("data-dismiss", "modal").html("Fermer");
+        $('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"submit", class:"btn btn-primary btn-sm", id:"btnSaveAddRestaurant"}).html("Enregistrer");
+        $('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"submit", class:"btn btn-danger btn-sm", id:"cancelAddRestaurant"}).html("Annuler");
+        
     }
 
-    /*createInfoWindowNewMarker(marker, map) {
+    createInfoWindowNewMarker(marker, map) {
         const contentString = 
-        '<div id="contentAddRestaurant">' +
-            '<div id="titleAddRestaurant">' +
-                '<h2>Partagez votre expérience</h2>' +
-            '</div>' +
-            '<div id="formBody">' +
-                '<form id="addRestaurantForm">' +
-                    '<div class="form-group row text-left" id="addRestaurantName-form-group">' +
-                        '<label for="inputRestaurantName" class="col-lg-6 col-form-label">Nom du restaurant</label>' +
-                        '<div class="col-lg-6" id="divInputRestaurantName">' +
-                            '<input type="text" class="form-control" id="inputRestaurantName">' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="form-group row text-left" id="addRestaurantAddress-form-group">' +
-                        '<label for="inputRestaurantAddress" class="col-lg-6 col-form-label">Adresse du restaurant</label>' +
-                        '<div class="col-lg-6" id="divInputRestaurantAddress">' +
-                            '<input type="text" class="form-control" id="inputRestaurantAddress">' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="input-group mb-3" id="input-group-RestaurantRating">' +
-                        '<div class="input-group-prepend" id="input-group-prependRestaurantRating">' +
-                            '<label class="input-group-text" for="inputGroupSelectRestaurantRating">Votre note :</label>' +
-                        '</div>' +
-                        '<select class="custom-select" id="inputGroupSelectRestaurantRating" type="number">' +
-                            '<option>Faites votre choix</option>' +
-                            '<option value="1">1</option>' +
-                            '<option value="2">2</option>' +
-                            '<option value="3">3</option>' +
-                            '<option value="4">4</option>' +
-                            '<option value="5">5</option>' +
-                        '</select>' +
-                    '</div>' +
-                    '<div class="form-group text-left" id="form-group-restaurantComment">' +
-                        '<label for="FormControlTextareaRestaurantComment">Ecrire votre commentaire</label>' +
-                        '<textarea class="form-control" id="FormControlTextareaRestaurantComment" col="3" row="3"></textarea>' +
-                    '</div>' +
-                    '<div class="row" id="divRowAddRestaurant">' +
-                        '<div class="col-md-12 text-center" id="divColAddRestaurant">' +
-                            '<button type="submit" class="btn btn-primary btn-sm" id="addRestaurantButton">Ajouter un restaurant</button>' +
-                            '<button type="button" class="btn btn-secondary btn-sm" id="cancelAddRestaurantButton">Annuler</button>' +
-                        '</div>' +
-                    '</div>' +
-                '</form>' +
-            '</div>'
-        '</div>';
+        '<button class="btn btn-primary btn-sm" type="button" id="addRestaurant" data-toggle="modal" data-target="#addRestaurantModal">Ajouter un restaurant</button>';
 
         const infowindow = new google.maps.InfoWindow({
             content: contentString
@@ -227,11 +184,45 @@ class MyMap {
         marker.addListener("click", () => {
             infowindow.open(map, marker);
         });
-    }*/
+    }
 
-    deleteNewMarker(marker) {
-        $("#cancelAddRestaurantButton").on("click", function(){
-            marker.setMap(null);
+    addNewRestaurantArray(lat, lng) {
+        let inputRestaurantName = document.getElementById("inputRestaurantName");
+        let inputRestaurantAddress = document.getElementById("inputRestaurantAddress");
+        let starsRating = document.getElementById("inputGroupSelectRestaurantRating");
+        let commentRating = document.getElementById("FormControlTextareaRestaurantComment");
+        let btnSaveAddRestaurant = document.getElementById("btnSaveAddRestaurant");
+        let cancelAddRestaurant = document.getElementById("cancelAddRestaurant");
+        let btnCloseAddRestaurant = document.getElementById("btnCloseAddRestaurant");
+
+        btnSaveAddRestaurant.addEventListener("click", function() {
+            if (inputRestaurantName.value && inputRestaurantAddress.value && commentRating.value) {
+                if (starsRating.value >= 1 && starsRating <= 5) {
+                    restaurants.push({
+                        id : restaurants.length + 1,
+                        restaurantName : inputRestaurantName.value,
+                        address : inputRestaurantAddress.value,
+                        lat : lat,
+                        long : lng,
+                        ratings : [
+                            {
+                                stars : starsRating.value,
+                                comment : commentRating.value
+                            }
+                        ]
+                    });
+                }
+            } else {
+                alert("Merci de renseigner tous les champs obligatoires *");
+            }
+            console.log(restaurants);
+        });
+
+        btnCloseAddRestaurant.addEventListener("click", function() {
+            inputRestaurantName.value = "";
+            inputRestaurantAddress.value = "";
+            starsRating.value = "";
+            commentRating.value = "";
         });
     }
 }

@@ -1,5 +1,13 @@
 class Restaurant {
-   
+   constructor(id, restaurantName, address, lat, long, ratings) {
+      this.id = id;
+      this.restaurantName = restaurantName;
+      this.address = address;
+      this.lat = lat;
+      this.long = long;
+      this.ratings = ratings;
+      this.nextId = id++;
+   }
 }
 
 const restaurants = [

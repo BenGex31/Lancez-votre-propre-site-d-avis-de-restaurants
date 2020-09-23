@@ -117,11 +117,11 @@ header h2 {
     color: whitesmoke;
 }
 
-#titleAddRestaurant {
+#addRestaurantModalLabel {
     color: #6a89cc;
 }
 
-#addRestaurantForm {
+#form-addRestaurant {
     font-family: 'Quicksand', sans-serif;
 }
 
@@ -129,7 +129,7 @@ header h2 {
     font-weight: bolder;
 }
 
-#addRestaurantName, #addRestaurantAddress {
+#form-addRestaurant, #addRestaurantAddress {
     font-size: small;
 }
 
@@ -146,7 +146,7 @@ header h2 {
     font-size: small;
 }
 
-#AddRestaurantButton {
+#addRestaurantButton {
     margin-right: 1em;
     background-color: #82ccdd;
     color: black;
@@ -156,7 +156,7 @@ header h2 {
     background-color: #3c6382;
 }
 
-#AddRestaurantButton, #cancelAddRestaurantButton {
+#addRestaurantButton, #cancelAddRestaurantButton {
     border: 1px solid black;
     font-size: small;
 }

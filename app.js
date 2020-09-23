@@ -127,6 +127,7 @@ class App {
             $('<span>').appendTo($("#buttonCloseWriteReview" + restaurant.restaurantName)).attr('aria-hidden', 'true').html("&times;");
             $('<div>').appendTo($("#modal-content-writeReview" + restaurant.restaurantName)).attr({class: "modal-body", id: "modal-body-writeReview" + restaurant.restaurantName});
             $('<h5>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).html("Votre avis compte aussi !").css({color: "darkgreen", fontWeight: "bolder"}).addClass("text-center animate__animated animate__flash animate__delay-1s").css("margin-bottom", "1em");
+            
             $('<div>').appendTo($("#modal-body-writeReview" + restaurant.restaurantName)).attr({class: "input-group mb-3", id: "input-group" + restaurant.restaurantName});
             $('<div>').appendTo($("#input-group" + restaurant.restaurantName)).attr({class: "input-group-prepend", id: "input-group-prepend" + restaurant.restaurantName});
             $('<label>').appendTo($("#input-group-prepend" + restaurant.restaurantName)).attr({class: "input-group-text", for: "inputGroupSelect" + restaurant.restaurantName}).html("Sélectionner votre note entre 1 et 5 : ").css("background-color", "#f8c291").css("font-size", "small");
@@ -277,6 +278,32 @@ class App {
                 $("#publishReview" + restaurant.restaurantName).removeAttr("disabled");
             });
         }
+    }
+
+    addRestaurantArray() {
+        let inputRestaurantName = document.getElementById("inputRestaurantName");
+        let inputRestaurantAddress = document.getElementById("inputRestaurantAddress");
+        let starsRating = document.getElementById("inputGroupSelectRestaurantRating");
+        let commentRating = document.getElementById("FormControlTextareaRestaurantComment");
+        //let AddRestaurantButton = document.getElementById("AddRestaurantButton");
+
+        $("#AddRestaurantButton").on("click", function(){
+            restaurants.push({
+                id: restaurants[5].id + 1,
+                restaurantName: inputRestaurantName.value,
+                address: inputRestaurantAddress.value,
+                lat: null,
+                long: null,
+                ratings: [
+                    {
+                        stars: starsRating.value,
+                        comment: commentRating.value
+                    }
+                ]
+            });
+            this.clearListRestaurants();
+            this.displayRestaurants();
+        });
     }
 }
 

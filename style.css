@@ -89,6 +89,10 @@ header h2 {
     color: #f6b93b;
 }
 
+#mainPicture {
+    margin-bottom: 1em;
+}
+
 /* Google Maps*/
 #map {
     height: 800px;
@@ -117,11 +121,43 @@ header h2 {
     color: #6a89cc;
 }
 
+#addRestaurantForm {
+    font-family: 'Quicksand', sans-serif;
+}
+
 #labelAddRestaurant {
     font-weight: bolder;
 }
 
 #addRestaurantName, #addRestaurantAddress {
+    font-size: small;
+}
+
+#input-group-prependRestaurantRating label {
+    background-color: #f8c291;
+    font-size: small;
+}
+
+#inputGroupSelectRestaurantRating, #FormControlTextareaRestaurantComment {
+    font-size: small;
+}
+
+#inputRestaurantName, #inputRestaurantAddress {
+    font-size: small;
+}
+
+#AddRestaurantButton {
+    margin-right: 1em;
+    background-color: #82ccdd;
+    color: black;
+}
+
+#cancelAddRestaurantButton {
+    background-color: #3c6382;
+}
+
+#AddRestaurantButton, #cancelAddRestaurantButton {
+    border: 1px solid black;
     font-size: small;
 }
 

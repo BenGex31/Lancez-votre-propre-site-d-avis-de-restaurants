@@ -146,19 +146,24 @@ header h2 {
     font-size: small;
 }
 
-#addRestaurantButton {
+#addRestaurant {
     margin-right: 1em;
     background-color: #82ccdd;
     color: black;
 }
 
-#cancelAddRestaurantButton {
+#cancelAddRestaurant {
     background-color: #3c6382;
 }
 
-#addRestaurantButton, #cancelAddRestaurantButton {
+#addRestaurant, #cancelAddRestaurant, #submitNewRestaurant {
     border: 1px solid black;
     font-size: small;
+}
+
+#submitNewRestaurant {
+    color: black;
+    border: 1px solid black;
 }
 
 /* Liste restaurants*/
@@ -223,11 +228,11 @@ a #buttonFilter {
     color: #0c2461;
 }
 
-.btn-warning, .btn-primary, .btn-secondary {
+.btn-warning, .btn-primary, .btn-secondary, .btn-danger, .btn-success {
     margin-bottom: 0.5em;
 }
 
-.btn-warning {
+.btn-warning, .btn-success {
     margin-right: 1em;
 }
 

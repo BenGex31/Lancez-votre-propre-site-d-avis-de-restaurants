@@ -283,9 +283,12 @@ class App {
 }
 
 const buttonFilter = document.getElementById("buttonFilter");
-
-const filter = new App();
-
+let filter = new App();
 buttonFilter.addEventListener("click", function(){
+    filter.filterRestaurants();
+});
+
+const submitNewRestaurant = document.getElementById("submitNewRestaurant");
+submitNewRestaurant.addEventListener("click", function() {
     filter.filterRestaurants();
 });

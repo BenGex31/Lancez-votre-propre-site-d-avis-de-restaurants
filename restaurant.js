@@ -10,7 +10,7 @@ class Restaurant {
    }
 }
 
-const restaurants = [
+let restaurants = [
     {
        id:1,
        restaurantName:"Bronco",

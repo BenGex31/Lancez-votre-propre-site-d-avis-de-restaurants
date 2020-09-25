@@ -47,7 +47,7 @@ let restaurants = [
     },
     {
         id:3,
-        restaurantName:"Gabriel",
+        restaurantName:"Le Gabriel",
         address:"42 Avenue Gabriel, 75008 Paris",
         lat:48.8697092,
         long:2.313439,
@@ -64,7 +64,7 @@ let restaurants = [
     },
     {
         id:4,
-        restaurantName:"Ciel-de-Paris",
+        restaurantName:"Ciel de Paris",
         address:"Tour Maine Montparnasse, 56ème, Avenue du Maine, 75015 Paris",
         lat:48.8430359,
         long:2.3205622,
@@ -114,17 +114,3 @@ let restaurants = [
         ]
     }
 ];
-
-for(let restaurant in restaurants) {
-   let totalStars = restaurants[restaurant].ratings.reduce(function(sum, ratings){
-      return sum + ratings.stars;
-   }, 0);
-
-   let averageRatings = (totalStars / restaurants[restaurant].ratings.length);
-
-   restaurants[restaurant].averageRatings = averageRatings.toFixed(1);
-   restaurants[restaurant].sumStars = totalStars;
-   restaurants[restaurant].numberRatings = restaurants[restaurant].ratings.length;
-}
-
-console.log(restaurants);

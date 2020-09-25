@@ -147,13 +147,9 @@ header h2 {
 }
 
 #addRestaurant {
-    margin-right: 1em;
+    margin-top: 1em;
     background-color: #82ccdd;
     color: black;
-}
-
-#cancelAddRestaurant {
-    background-color: #3c6382;
 }
 
 #addRestaurant, #cancelAddRestaurant, #submitNewRestaurant {
@@ -264,6 +260,12 @@ a #buttonFilter {
 .stars {
     font-size: small;
     color: green;
+}
+
+#linkCloseAddRestaurant {
+    padding: 0;
+    margin-top: 0.5em;
+    
 }
 
 .modal-footer {

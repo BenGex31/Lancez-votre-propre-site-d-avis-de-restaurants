@@ -7,7 +7,7 @@ class MyMap {
         this.lat = lat;
         this.long = long;
         this.city = {lat: this.lat, lng: this.long};
-        this.map = new google.maps.Map(document.getElementById('map'), {zoom: 13, center: this.city});
+        this.map = new google.maps.Map(document.getElementById('map'), {zoom: 12, center: this.city});
     }
 
     createMap() {
@@ -16,14 +16,14 @@ class MyMap {
         this.addMarkerRestaurant();
     }
 
-    createMarkerRestaurants(arrayRestaurant) {
+    createMarkerRestaurants(array) {
         const map = this.map;
-        for(let restaurant in arrayRestaurant) {
+        for(let restaurant of array) {
             let markerRestaurant = new google.maps.Marker({
-                position: {lat: arrayRestaurant[restaurant].lat, lng: arrayRestaurant[restaurant].long},
+                position: {lat: restaurant.lat, lng: restaurant.long},
                 map: map,
                 animation: google.maps.Animation.DROP,
-                label: arrayRestaurant[restaurant].restaurantName,
+                label: restaurant.restaurantName,
                 icon: {
                     url: "img/icon-restaurant-location.png",
                     scaledSize: new google.maps.Size(50, 50),
@@ -35,12 +35,12 @@ class MyMap {
             this.markersArray.push(markerRestaurant);
 
             const contentString =
-            '<h1 id="firstHeading" class="restaurantName text-left">' + arrayRestaurant[restaurant].restaurantName + '</h1>' + 
+            '<h1 id="firstHeading" class="restaurantName text-left">' + restaurant.restaurantName + '</h1>' + 
             '<div class="text-left">' +
-            '<img class"streetView" src="https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + arrayRestaurant[restaurant].lat + "," + arrayRestaurant[restaurant].long + '&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc">' +
+            '<img class"streetView" src="https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + restaurant.lat + "," + restaurant.long + '&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc">' +
             '</div>' +
             '<div id="bodyContent">' +
-            '<p><i class="fas fa-map-marker-alt"></i>' + arrayRestaurant[restaurant].address + '</p>' +
+            '<p><i class="fas fa-map-marker-alt"></i>' + restaurant.address + '</p>' +
             '</div>';
 
             const infoWindow = new google.maps.InfoWindow({
@@ -51,6 +51,7 @@ class MyMap {
                 infoWindow.open(map, markerRestaurant);
             });
         }
+        console.log(this.markersArray);
     }
 
     geolocation() {
@@ -102,15 +103,17 @@ class MyMap {
     addMarkerRestaurant() {
         const map = this.map;
 
-        let infoWindow = new google.maps.InfoWindow();
-
         map.addListener("click", event => {
             this.placeMarkerRestaurantAndPanTo(event.latLng, map);
             this.newLat = event.latLng.lat();
             this.newLng = event.latLng.lng();
 
             this.createButtonAddRestaurant();
-            this.addNewRestaurantArray(event.latLng.lat(), event.latLng.lng());
+
+            const addNewRestaurantOnMap = new Restaurant();
+            addNewRestaurantOnMap.addNewRestaurantArray(event.latLng.lat(), event.latLng.lng());
+            $(".alertUpdateLink").remove();
+            $("#buttonUpdate").removeAttr("disabled");
         });
     }
 
@@ -171,22 +174,19 @@ class MyMap {
         $('<textarea>').appendTo($("#form-group-restaurantComment")).attr({class:"form-control", id:"FormControlTextareaRestaurantComment", col:"3", row:"3"});
 
         $('<p>').appendTo($("#form-addRestaurant")).html("* Champs obligatoires").addClass("text-left").css("color", "red");
-        $('<p>').appendTo($("#form-addRestaurant")).html("Informations importantes :").addClass("text-left");
-        $('<p>').appendTo($("#form-addRestaurant")).html("Cliquez sur Enregistrer pour valider votre ajout").addClass("text-left");
-        $('<p>').appendTo($("#form-addRestaurant")).html("Cliquez sur Annuler pour supprimer").addClass("text-left");
+        $('<i>').appendTo($("#form-addRestaurant")).addClass("fas fa-exclamation-triangle animate__animated animate__flash").css({fontSize:"3em", color:"red", marginBottom:"0.5em"});
+        $('<p>').appendTo($("#form-addRestaurant")).html("Informations importantes :").addClass("text-center animate__animated animate__flash");
+        $('<p>').appendTo($("#form-addRestaurant")).html("Cliquez sur Enregistrer pour valider votre ajout").addClass("text-center animate__animated animate__flash");
 
         $('<div>').appendTo($("#modal-content-addRestaurant")).attr({class:"modal-footer", id:"modal-footer-addRestaurant"});
         $('<a>').appendTo($("#modal-footer-addRestaurant")).attr({href:"#updateLink", id:"linkCloseAddRestaurant"});
         $('<button>').appendTo($("#linkCloseAddRestaurant")).attr({type:"submit", class:"btn btn-secondary btn-sm", id:"btnCloseAddRestaurant"}).attr("data-dismiss", "modal").html("Fermer");
         $('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"submit", class:"btn btn-primary btn-sm", id:"btnSaveAddRestaurant"}).html("Enregistrer");
-        //$('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"submit", class:"btn btn-danger btn-sm", id:"cancelAddRestaurant"}).html("Annuler");
     }
 
     createInfoWindowNewMarker(marker, map) {
         let contentString = 
         '<button class="btn btn-primary btn-sm" type="button" id="addRestaurant" data-toggle="modal" data-target="#addRestaurantModal">Ajouter un restaurant</button>' ;
-        //'<button class="btn btn-success btn-sm" type="submit" id="submitNewRestaurant" disabled="true">Soumettre</button>' +
-        //'<button class="btn btn-danger btn-sm" id="cancelAddRestaurant">Annuler</button>';
 
         let infowindow = new google.maps.InfoWindow({
             content: contentString
@@ -195,52 +195,6 @@ class MyMap {
         marker.addListener("click", () => {
 
             infowindow.open(map, marker);
-        });
-    }
-
-    addNewRestaurantArray(lat, lng) {
-        let inputRestaurantName = document.getElementById("inputRestaurantName");
-        let inputRestaurantAddress = document.getElementById("inputRestaurantAddress");
-        let starsRating = document.getElementById("inputGroupSelectRestaurantRating");
-        let commentRating = document.getElementById("FormControlTextareaRestaurantComment");
-
-        $("#btnSaveAddRestaurant").click(function() {
-            if (inputRestaurantName.value && inputRestaurantAddress.value && commentRating.value) {
-                if (starsRating.value >= 1 && starsRating.value <= 5) {
-                    restaurants.push({
-                        id : restaurants.length + 1,
-                        restaurantName : inputRestaurantName.value,
-                        address : inputRestaurantAddress.value,
-                        lat : lat,
-                        long : lng,
-                        ratings : [
-                            {
-                                stars : parseInt(starsRating.value),
-                                comment : commentRating.value
-                            }
-                        ]
-                    });
-                }
-                $("#btnSaveAddRestaurant").attr("disabled", "true");
-                $("#addRestaurant").attr("disabled", "true");
-                $('<p>').appendTo($("#form-addRestaurant")).html("Le restaurant a bien été enregitré, merci de fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color:"red", fontWeight:"bolder", fontSize:"small"});
-                $("#buttonUpdate").removeAttr("disabled");
-                $('<p>').insertBefore($("#updateLink")).addClass("alertUpdateLink animate__animated animate__flash").html("Merci de cliquer sur mettre à jour");
-            } else {
-                alert("Merci de renseigner tous les champs obligatoires *");
-            }
-        });
-        this.clearFormAddNewRestaurant(inputRestaurantName, inputRestaurantAddress, starsRating, commentRating);
-    }
-
-    clearFormAddNewRestaurant(inputRestaurantName, inputRestaurantAddress, starsRating, commentRating) {
-        $("#btnCloseAddRestaurant").click(function(){
-            inputRestaurantName.value = "";
-            inputRestaurantAddress.value = "";
-            starsRating.value = "";
-            commentRating.value = "";
-            //$("#btnSaveAddRestaurant").removeAttr("disabled");
-            //$('.alertMessage').remove();
         });
     }
 }

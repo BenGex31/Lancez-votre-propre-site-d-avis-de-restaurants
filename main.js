@@ -1,10 +1,10 @@
 window.onload = function() {
   const app = new App();
-  app.filterRestaurants();;
+  app.filterRestaurants();
 }
 
 $(function() {
-    $('#reload').click(function() {
-      window.location.reload(true);
-    });
+  $('#reload').click(function() {
+    window.location.reload(true);
   });
+});

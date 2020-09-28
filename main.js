@@ -4,7 +4,7 @@ window.onload = function() {
 }
 
 $(function() {
-    $('#reload').click(function() {
-      window.location.reload(true);
-    });
+  $('#reload').click(function() {
+    window.location.reload(true);
   });
+});

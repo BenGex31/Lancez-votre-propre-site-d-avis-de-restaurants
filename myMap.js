@@ -51,7 +51,7 @@ class MyMap {
                 infoWindow.open(map, markerRestaurant);
             });
         }
-        console.log(this.markersArray);
+        //console.log(this.markersArray);
     }
 
     geolocation() {

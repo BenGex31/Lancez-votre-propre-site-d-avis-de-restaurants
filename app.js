@@ -11,7 +11,7 @@ class App {
 
         const map = new MyMap(48.8565387, 2.3518054);
         map.createMap();
-        console.log(map);
+        //console.log(map);
 
         const filter = new Restaurant();
         

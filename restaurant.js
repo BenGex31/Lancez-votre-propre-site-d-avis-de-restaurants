@@ -200,53 +200,52 @@ class Restaurant {
 
    publishReview() {
       for (let restaurant of restaurants) {
-          let inputGroupSelectRestaurant = document.getElementById("inputGroupSelectRestaurant" + restaurant.id);
-          let FormControlTextareaRestaurant = document.getElementById("FormControlTextareaRestaurant" + restaurant.id);
-          let restaurantsName = document.getElementById(restaurant.id);
+            let inputGroupSelectRestaurant = document.getElementById("inputGroupSelectRestaurant" + restaurant.id);
+            let FormControlTextareaRestaurant = document.getElementById("FormControlTextareaRestaurant" + restaurant.id);
+            let restaurantsName = document.getElementById(restaurant.id);
 
-          $("#publishReview" + restaurant.id).on("click", function(){
-              if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value) {
+            $("#publishReview" + restaurant.id).on("click", function(){
+               if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value) {
                   if (restaurant.id === parseInt(restaurantsName.id)) {
-                     restaurant.ratings.push({
-                        stars: parseInt(inputGroupSelectRestaurant.value),
-                        comment: FormControlTextareaRestaurant.value
-                     });
+                     restaurant.ratings.push(
+                        new Review(parseInt(inputGroupSelectRestaurant.value), FormControlTextareaRestaurant.value)
+                     );
                      $("#modal-body-consult-restaurant" + restaurant.id).html("");
                   }
-  
+
                   for (let i = 0; i < restaurant.ratings.length; i++) {
-                      $('<div>').prependTo($("#modal-body-consult-restaurant" + restaurant.id)).attr("id", "consultRating" + i + "Restaurant" + restaurant.id);
-                      $('<p>').prependTo($("#consultRating" + i + "Restaurant" + restaurant.id)).addClass("comment").attr("id", "comment" + i + "Restaurant" + restaurant.id).html(restaurant.ratings[i].comment);
-                      $('<p>').appendTo($('#consultRating'+ i + "Restaurant" + restaurant.id)).addClass("stars").attr("id", "stars" + i + "Restaurant" + restaurant.id).html("Note : " + restaurant.ratings[i].stars + " / 5");
+                        $('<div>').prependTo($("#modal-body-consult-restaurant" + restaurant.id)).attr("id", "consultRating" + i + "Restaurant" + restaurant.id);
+                        $('<p>').prependTo($("#consultRating" + i + "Restaurant" + restaurant.id)).addClass("comment").attr("id", "comment" + i + "Restaurant" + restaurant.id).html(restaurant.ratings[i].comment);
+                        $('<p>').appendTo($('#consultRating'+ i + "Restaurant" + restaurant.id)).addClass("stars").attr("id", "stars" + i + "Restaurant" + restaurant.id).html("Note : " + restaurant.ratings[i].stars + " / 5");
                   }
-  
+
                   $("#publishReview" + restaurant.id).attr("disabled", "true");
                   $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Votre avis a bien été enregistré !").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
                   $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Merci de bien vouloir cliquer sur Fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
-  
+
                   let totalStars = restaurant.ratings.reduce(function(sum, ratings){
-                      return sum + ratings.stars;
-                      }, 0);
+                        return sum + ratings.stars;
+                        }, 0);
                   
                   let averageRatings = (totalStars / restaurant.ratings.length);
-              
+               
                   restaurant.averageRatings = averageRatings.toFixed(1);
                   restaurant.sumStars = totalStars;
                   restaurant.numberRatings = restaurant.ratings.length;
                   $("#review" + restaurant.id).html("Note moyenne : " + restaurant.averageRatings + " / 5");
-              } else {
+               } else {
                   alert("Merci de renseigner une note et un commentaire, sinon merci de cliquer sur Fermer")
-              }
-          });
-              
-          $("#modal-footer-writeReview" + restaurant.id +  " .btn-secondary").click(function(){
-              inputGroupSelectRestaurant.value = "";
-              $("#spanResultRating" + restaurant.id).html("");
-              FormControlTextareaRestaurant.value = "";
-              $("#spanResultComment" + restaurant.id).html("");
-              $('.alertMessage').remove();
-              $("#publishReview" + restaurant.id).removeAttr("disabled");
-          });
+               }
+            });
+               
+            $("#modal-footer-writeReview" + restaurant.id +  " .btn-secondary").click(function(){
+               inputGroupSelectRestaurant.value = "";
+               $("#spanResultRating" + restaurant.id).html("");
+               FormControlTextareaRestaurant.value = "";
+               $("#spanResultComment" + restaurant.id).html("");
+               $('.alertMessage').remove();
+               $("#publishReview" + restaurant.id).removeAttr("disabled");
+            });
       }
    }
 
@@ -259,19 +258,10 @@ class Restaurant {
       $("#btnSaveAddRestaurant").click(function() {
          if (inputRestaurantName.value && inputRestaurantAddress.value && commentRating.value) {
             if (starsRating.value >= 1 && starsRating.value <= 5) {
-                  restaurants.push({
-                     id : restaurants.length + 1,
-                     restaurantName : inputRestaurantName.value,
-                     address : inputRestaurantAddress.value,
-                     lat : lat,
-                     long : lng,
-                     ratings : [
-                        {
-                              stars : parseInt(starsRating.value),
-                              comment : commentRating.value
-                        }
-                     ]
-                  });
+                  restaurants.push(
+                     new Restaurant(restaurants.length + 1, inputRestaurantName.value, inputRestaurantAddress.value, lat, lng,
+                        [new Review(parseInt(starsRating.value), commentRating.value)])
+                  );
             }
             $("#btnSaveAddRestaurant").attr("disabled", "true");
             $("#addRestaurant").attr("disabled", "true");
@@ -283,7 +273,7 @@ class Restaurant {
          }
       });
       this.clearFormAddNewRestaurant(inputRestaurantName, inputRestaurantAddress, starsRating, commentRating);
-}
+   }
 
    clearFormAddNewRestaurant(inputRestaurantName, inputRestaurantAddress, starsRating, commentRating) {
       $("#btnCloseAddRestaurant").click(function(){

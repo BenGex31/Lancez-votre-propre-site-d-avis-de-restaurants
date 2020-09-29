@@ -1,11 +1,89 @@
 class Restaurant {
-   constructor(id, restaurantName, address, lat, long, ratings) {
+   constructor(id, restaurantName, address, lat, long, ratings, place_id) {
       this.id = id;
       this.restaurantName = restaurantName;
       this.address = address;
       this.lat = lat;
       this.long = long;
       this.ratings = ratings;
+      this.placeId = place_id;
+   }
+
+   createListResults(array) {
+      for (let restaurant of array) {
+         $('<div>').appendTo($("#restaurantsList")).attr({id: restaurant.place_id, class:"restaurantInfo"});
+         $('<h5>').appendTo($("#" + restaurant.place_id)).attr({class:"restaurantName", id:"restaurantName" + restaurant.place_id}).html(restaurant.name);
+         $('<p>').appendTo($("#" + restaurant.place_id)).attr({class:"RestaurantAddress", id:"RestaurantAddress" + restaurant.place_id}).html(restaurant.vicinity);
+         $('<i>').prependTo($("#RestaurantAddress" + restaurant.place_id)).addClass("fas fa-map-marker-alt");
+         $('<p>').appendTo($("#" + restaurant.place_id)).attr("id", "review" + restaurant.place_id).html("Note moyenne : " + restaurant.rating + " / 5").css({color:"#0a3d62", fontWeight:"bolder", fontSize:"small"});
+      }
+   }
+   
+   createButtonConsultReviewResults(array) {
+      for (let restaurant of array) {
+         $('<button>').appendTo($("#" + restaurant.place_id)).attr({id:"buttonConsulReview" + restaurant.place_id, type:"button", class:"btn btn-warning btn-sm"}).attr("data-toogle", "modal").attr("data-target", "#review" + restaurant.place_id + "ModalScrollable").css({fontSize:"small", color:"black", border:"0.5px solid black", fontWeight:"bolder"}).html("Voir les avis");
+         $('<div>').insertAfter($("#buttonConsulReview" + restaurant.place_id)).attr({class:"modal fade", id:"review" + restaurant.place_id + "ModalScrollable", tabindex:"-1", role:"dialog"}).attr("aria-labelledby", "ReviewTitle" + restaurant.place_id + "ModalScrollableTitle").attr("aria-hidden", "true");
+         $('<div>').appendTo($("#review" + restaurant.place_id + "ModalScrollable")).attr({class:"modal-dialog modal-dialog-scrollable", role:"document", id:"modal-dialog" + restaurant.place_id});
+         $('<div>').appendTo($("#modal-dialog" + restaurant.place_id)).attr({class:"modal-content", id:"modal-content" + restaurant.place_id});
+         
+         $('<div>').appendTo($("#modal-content" + restaurant.place_id)).attr({class:"modal-header", id:"modal-header" + restaurant.place_id});
+         $('<div>').appendTo($("#modal-header" + restaurant.place_id)).attr({class:"modal-title", id:"ReviewTitle" + restaurant.place_id + "ModalScrollableTitle"});
+         $('<h6>').appendTo($("#ReviewTitle" + restaurant.place_id + "ModalScrollableTitle")).html("Restaurant : " + restaurant.name);
+         $('<img>').appendTo($("#ReviewTitle" + restaurant.place_id + "ModalScrollableTitle")).attr({class:"streetView", src:"https://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + restaurant.geometry.location.lat() + "," + restaurant.geometry.location.lng() + "&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"});
+         
+         $('<div>').appendTo($("#modal-content" + restaurant.place_id)).attr({class:"modal-body", id:"modal-body" + restaurant.place_id});
+         // insert comments and ratings
+
+         $('<div>').appendTo($("#modal-content" + restaurant.place_id)).attr({class:"modal-footer", id:"modal-footer" + restaurant.place_id});
+         $('<button>').appendTo($("#modal-footer" + restaurant.place_id)).attr({type:"button", class:"btn btn-secondary btn-sm"}).attr("data-dismiss", "modal").css("font-size", "small");
+      }
+   }
+
+   createButtonWriteReviewResults(array) {
+      for (let restaurant of array) {
+         $('<button>').appendTo($('#' + restaurant.place_id)).html("Rédiger un avis").attr({type: "button", class: "btn btn-primary btn-sm", id: "buttonWriteReview" + restaurant.place_id}).attr("data-toggle", "modal").attr("data-target", "#writeReview" + restaurant.place_id).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#3c6382", color: "whitesmoke"});
+         $('<div>').insertAfter($('#buttonWriteReview' + restaurant.place_id)).attr({class: 'modal fade', id: "writeReview" + restaurant.place_id, tabindex: "-1"}).attr('aria-labelledby', "writeReview" + restaurant.place_id + "Label").attr('aria-hidden', 'true');
+         $('<div>').appendTo($('#writeReview' + restaurant.place_id)).attr({class: "modal-dialog", id: "modal-dialog-writeReview" + restaurant.place_id});
+         $('<div>').appendTo($('#modal-dialog-writeReview' + restaurant.place_id)).attr({class: "modal-content", id: "modal-content-writeReview" + restaurant.place_id});
+         $('<div>').appendTo($('#modal-content-writeReview' + restaurant.place_id)).attr({class: "modal-header", id: "modal-header-writeReview" + restaurant.place_id});
+         $('<h6>').appendTo($("#modal-header-writeReview" + restaurant.place_id)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "writeReview" + restaurant.place_id + "Label"}).html("Restaurant : " + restaurant.name);
+         $('<button>').appendTo($("#modal-header-writeReview" + restaurant.place_id)).attr({type: "button", class: "close", id: "buttonCloseWriteReview" + restaurant.place_id}).attr('data-dismiss', 'modal').attr('aria-label', 'Close');
+         $('<span>').appendTo($("#buttonCloseWriteReview" + restaurant.place_id)).attr('aria-hidden', 'true').html("&times;");
+         $('<div>').appendTo($("#modal-content-writeReview" + restaurant.place_id)).attr({class: "modal-body", id: "modal-body-writeReview" + restaurant.place_id});
+         $('<h5>').appendTo($("#modal-body-writeReview" + restaurant.place_id)).html("Votre avis compte aussi !").css({color: "darkgreen", fontWeight: "bolder"}).addClass("text-center animate__animated animate__flash animate__delay-1s").css("margin-bottom", "1em");
+         
+         $('<div>').appendTo($("#modal-body-writeReview" + restaurant.place_id)).attr({class: "input-group mb-3", id: "input-group" + restaurant.place_id});
+         $('<div>').appendTo($("#input-group" + restaurant.place_id)).attr({class: "input-group-prepend", id: "input-group-prepend" + restaurant.place_id});
+         $('<label>').appendTo($("#input-group-prepend" + restaurant.place_id)).attr({class: "input-group-text", for: "inputGroupSelectRestaurant" + restaurant.place_id}).html("Sélectionner votre note entre 1 et 5 : ").css("background-color", "#f8c291").css("font-size", "small");
+         $('<select>').appendTo($("#input-group" + restaurant.place_id)).attr({class: "custom-select", id: "inputGroupSelectRestaurant" + restaurant.place_id, type: "number"}).css("font-size", "small");
+         $('<option>').appendTo($("#inputGroupSelectRestaurant" + restaurant.place_id)).attr("value", "").html("Faites votre choix");
+
+         for(let i = 1; i <= 5; i++) {
+            $('<option>').appendTo($("#inputGroupSelectRestaurant" + restaurant.place_id)).attr("value", i).html(i);
+         }
+         
+         $('<form>').appendTo($("#modal-body-writeReview" + restaurant.place_id)).addClass("formComment" + restaurant.place_id);
+         $('<div>').appendTo($(".formComment" + restaurant.place_id)).attr({class: "form-group", id: "form-group" +restaurant.place_id});
+         $('<label>').appendTo($("#form-group" + restaurant.place_id)).attr("for", "FormControlTextareaRestaurant" + restaurant.place_id).html("Ecrire votre commentaire :").css("font-size", "small");
+         $('<textarea>').appendTo($("#form-group" + restaurant.place_id)).attr({class: "form-control", id: "FormControlTextareaRestaurant" + restaurant.place_id, col: "3", rows: "3"}).css("font-size", "small");
+         $('<div>').appendTo($("#modal-body-writeReview" + restaurant.place_id)).attr("id", "resultReview" + restaurant.place_id);
+         $('<p>').appendTo($("#resultReview" + restaurant.place_id)).attr("id", "resultRating" + restaurant.place_id).html("Votre note : ").css({fontSize: "small", fontWeight: "bolder"});
+         $('<span>').appendTo($("#resultRating" + restaurant.place_id)).attr("id", "spanResultRating"+ restaurant.place_id).css({fontSize: "small", fontStyle: "italic", color: "black"});
+         $('<p>').appendTo($("#resultReview" + restaurant.place_id)).attr("id", "resultComment" + restaurant.place_id).html("Votre commentaire : ").css({fontSize: "small", fontWeight: "bolder"});
+         $('<span>').appendTo($("#resultComment" + restaurant.place_id)).attr("id", "spanResultComment" + restaurant.place_id).css({fontSize: "small", fontStyle: "italic", color: "black"});
+
+         $("#inputGroupSelectRestaurant" + restaurant.place_id).change(function(event){
+            $("#spanResultRating" + restaurant.place_id).html(event.target.value);
+         });
+
+         $("#FormControlTextareaRestaurant" + restaurant.place_id).change(function(event){
+            $("#spanResultComment" + restaurant.place_id).html('"' + event.target.value + '"');
+         });
+
+         $('<div>').appendTo($("#modal-content-writeReview" + restaurant.place_id)).attr({class: "modal-footer", id: "modal-footer-writeReview" + restaurant.place_id});
+         $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.place_id)).attr({type: "button", class: "btn btn-secondary btn-sm"}).attr('data-dismiss', 'modal').html("Fermer").css("font-size", "small");
+         $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.place_id)).attr({type: "submit", class: "btn btn-primary btn-sm", id: "publishReview" + restaurant.place_id}).html("Publier un avis").css("font-size", "small");
+      }
    }
 
    createListRestaurants(arrayRestaurant) {
@@ -135,59 +213,59 @@ class Restaurant {
    
          newDivModalFooter.appendChild(buttonFooter);
          buttonFooter.setAttribute("type", "button");
-         buttonFooter.setAttribute("class", "btn btn-secondary");
+         buttonFooter.setAttribute("class", "btn btn-secondary btn-sm");
          buttonFooter.setAttribute("data-dismiss", "modal");
          buttonFooter.innerHTML = "Fermer";
          buttonFooter.style.fontSize = "small";
       }
-  }
-
-  createButtonWriteReview(arrayRestaurant) {
-   for (let restaurant of arrayRestaurant) {
-      $('<button>').appendTo($('#' + restaurant.id)).html("Rédiger un avis").attr({type: "button", class: "btn btn-primary btn-sm", id: "buttonWriteReview" + restaurant.id}).attr("data-toggle", "modal").attr("data-target", "#writeReview" + restaurant.id).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#3c6382", color: "whitesmoke"});
-      $('<div>').insertAfter($('#buttonWriteReview' + restaurant.id)).attr({class: 'modal fade', id: "writeReview" + restaurant.id, tabindex: "-1"}).attr('aria-labelledby', "writeReview" + restaurant.id + "Label").attr('aria-hidden', 'true');
-      $('<div>').appendTo($('#writeReview' + restaurant.id)).attr({class: "modal-dialog", id: "modal-dialog-writeReview" + restaurant.id});
-      $('<div>').appendTo($('#modal-dialog-writeReview' + restaurant.id)).attr({class: "modal-content", id: "modal-content-writeReview" + restaurant.id});
-      $('<div>').appendTo($('#modal-content-writeReview' + restaurant.id)).attr({class: "modal-header", id: "modal-header-writeReview" + restaurant.id});
-      $('<h6>').appendTo($("#modal-header-writeReview" + restaurant.id)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "writeReview" + restaurant.id + "Label"}).html("Restaurant : " + restaurant.restaurantName);
-      $('<button>').appendTo($("#modal-header-writeReview" + restaurant.id)).attr({type: "button", class: "close", id: "buttonCloseWriteReview" + restaurant.id}).attr('data-dismiss', 'modal').attr('aria-label', 'Close');
-      $('<span>').appendTo($("#buttonCloseWriteReview" + restaurant.id)).attr('aria-hidden', 'true').html("&times;");
-      $('<div>').appendTo($("#modal-content-writeReview" + restaurant.id)).attr({class: "modal-body", id: "modal-body-writeReview" + restaurant.id});
-      $('<h5>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Votre avis compte aussi !").css({color: "darkgreen", fontWeight: "bolder"}).addClass("text-center animate__animated animate__flash animate__delay-1s").css("margin-bottom", "1em");
-      
-      $('<div>').appendTo($("#modal-body-writeReview" + restaurant.id)).attr({class: "input-group mb-3", id: "input-group" + restaurant.id});
-      $('<div>').appendTo($("#input-group" + restaurant.id)).attr({class: "input-group-prepend", id: "input-group-prepend" + restaurant.id});
-      $('<label>').appendTo($("#input-group-prepend" + restaurant.id)).attr({class: "input-group-text", for: "inputGroupSelectRestaurant" + restaurant.id}).html("Sélectionner votre note entre 1 et 5 : ").css("background-color", "#f8c291").css("font-size", "small");
-      $('<select>').appendTo($("#input-group" + restaurant.id)).attr({class: "custom-select", id: "inputGroupSelectRestaurant" + restaurant.id, type: "number"}).css("font-size", "small");
-      $('<option>').appendTo($("#inputGroupSelectRestaurant" + restaurant.id)).attr("value", "").html("Faites votre choix");
-
-      for(let i = 1; i <= 5; i++) {
-         $('<option>').appendTo($("#inputGroupSelectRestaurant" + restaurant.id)).attr("value", i).html(i);
-      }
-      
-      $('<form>').appendTo($("#modal-body-writeReview" + restaurant.id)).addClass("formComment" + restaurant.id);
-      $('<div>').appendTo($(".formComment" + restaurant.id)).attr({class: "form-group", id: "form-group" +restaurant.id});
-      $('<label>').appendTo($("#form-group" + restaurant.id)).attr("for", "FormControlTextareaRestaurant" + restaurant.id).html("Ecrire votre commentaire :").css("font-size", "small");
-      $('<textarea>').appendTo($("#form-group" + restaurant.id)).attr({class: "form-control", id: "FormControlTextareaRestaurant" + restaurant.id, col: "3", rows: "3"}).css("font-size", "small");
-      $('<div>').appendTo($("#modal-body-writeReview" + restaurant.id)).attr("id", "resultReview" + restaurant.id);
-      $('<p>').appendTo($("#resultReview" + restaurant.id)).attr("id", "resultRating" + restaurant.id).html("Votre note : ").css({fontSize: "small", fontWeight: "bolder"});
-      $('<span>').appendTo($("#resultRating" + restaurant.id)).attr("id", "spanResultRating"+ restaurant.id).css({fontSize: "small", fontStyle: "italic", color: "black"});
-      $('<p>').appendTo($("#resultReview" + restaurant.id)).attr("id", "resultComment" + restaurant.id).html("Votre commentaire : ").css({fontSize: "small", fontWeight: "bolder"});
-      $('<span>').appendTo($("#resultComment" + restaurant.id)).attr("id", "spanResultComment" + restaurant.id).css({fontSize: "small", fontStyle: "italic", color: "black"});
-
-      $("#inputGroupSelectRestaurant" + restaurant.id).change(function(event){
-         $("#spanResultRating" + restaurant.id).html(event.target.value);
-      });
-
-      $("#FormControlTextareaRestaurant" + restaurant.id).change(function(event){
-         $("#spanResultComment" + restaurant.id).html('"' + event.target.value + '"');
-      });
-
-      $('<div>').appendTo($("#modal-content-writeReview" + restaurant.id)).attr({class: "modal-footer", id: "modal-footer-writeReview" + restaurant.id});
-      $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.id)).attr({type: "button", class: "btn btn-secondary btn-sm"}).attr('data-dismiss', 'modal').html("Fermer").css("font-size", "small");
-      $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.id)).attr({type: "submit", class: "btn btn-primary btn-sm", id: "publishReview" + restaurant.id}).html("Publier un avis").css("font-size", "small");
-      }
    }
+
+   createButtonWriteReview(arrayRestaurant) {
+      for (let restaurant of arrayRestaurant) {
+         $('<button>').appendTo($('#' + restaurant.id)).html("Rédiger un avis").attr({type: "button", class: "btn btn-primary btn-sm", id: "buttonWriteReview" + restaurant.id}).attr("data-toggle", "modal").attr("data-target", "#writeReview" + restaurant.id).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#3c6382", color: "whitesmoke"});
+         $('<div>').insertAfter($('#buttonWriteReview' + restaurant.id)).attr({class: 'modal fade', id: "writeReview" + restaurant.id, tabindex: "-1"}).attr('aria-labelledby', "writeReview" + restaurant.id + "Label").attr('aria-hidden', 'true');
+         $('<div>').appendTo($('#writeReview' + restaurant.id)).attr({class: "modal-dialog", id: "modal-dialog-writeReview" + restaurant.id});
+         $('<div>').appendTo($('#modal-dialog-writeReview' + restaurant.id)).attr({class: "modal-content", id: "modal-content-writeReview" + restaurant.id});
+         $('<div>').appendTo($('#modal-content-writeReview' + restaurant.id)).attr({class: "modal-header", id: "modal-header-writeReview" + restaurant.id});
+         $('<h6>').appendTo($("#modal-header-writeReview" + restaurant.id)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "writeReview" + restaurant.id + "Label"}).html("Restaurant : " + restaurant.restaurantName);
+         $('<button>').appendTo($("#modal-header-writeReview" + restaurant.id)).attr({type: "button", class: "close", id: "buttonCloseWriteReview" + restaurant.id}).attr('data-dismiss', 'modal').attr('aria-label', 'Close');
+         $('<span>').appendTo($("#buttonCloseWriteReview" + restaurant.id)).attr('aria-hidden', 'true').html("&times;");
+         $('<div>').appendTo($("#modal-content-writeReview" + restaurant.id)).attr({class: "modal-body", id: "modal-body-writeReview" + restaurant.id});
+         $('<h5>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Votre avis compte aussi !").css({color: "darkgreen", fontWeight: "bolder"}).addClass("text-center animate__animated animate__flash animate__delay-1s").css("margin-bottom", "1em");
+         
+         $('<div>').appendTo($("#modal-body-writeReview" + restaurant.id)).attr({class: "input-group mb-3", id: "input-group" + restaurant.id});
+         $('<div>').appendTo($("#input-group" + restaurant.id)).attr({class: "input-group-prepend", id: "input-group-prepend" + restaurant.id});
+         $('<label>').appendTo($("#input-group-prepend" + restaurant.id)).attr({class: "input-group-text", for: "inputGroupSelectRestaurant" + restaurant.id}).html("Sélectionner votre note entre 1 et 5 : ").css("background-color", "#f8c291").css("font-size", "small");
+         $('<select>').appendTo($("#input-group" + restaurant.id)).attr({class: "custom-select", id: "inputGroupSelectRestaurant" + restaurant.id, type: "number"}).css("font-size", "small");
+         $('<option>').appendTo($("#inputGroupSelectRestaurant" + restaurant.id)).attr("value", "").html("Faites votre choix");
+
+         for(let i = 1; i <= 5; i++) {
+            $('<option>').appendTo($("#inputGroupSelectRestaurant" + restaurant.id)).attr("value", i).html(i);
+         }
+         
+         $('<form>').appendTo($("#modal-body-writeReview" + restaurant.id)).addClass("formComment" + restaurant.id);
+         $('<div>').appendTo($(".formComment" + restaurant.id)).attr({class: "form-group", id: "form-group" +restaurant.id});
+         $('<label>').appendTo($("#form-group" + restaurant.id)).attr("for", "FormControlTextareaRestaurant" + restaurant.id).html("Ecrire votre commentaire :").css("font-size", "small");
+         $('<textarea>').appendTo($("#form-group" + restaurant.id)).attr({class: "form-control", id: "FormControlTextareaRestaurant" + restaurant.id, col: "3", rows: "3"}).css("font-size", "small");
+         $('<div>').appendTo($("#modal-body-writeReview" + restaurant.id)).attr("id", "resultReview" + restaurant.id);
+         $('<p>').appendTo($("#resultReview" + restaurant.id)).attr("id", "resultRating" + restaurant.id).html("Votre note : ").css({fontSize: "small", fontWeight: "bolder"});
+         $('<span>').appendTo($("#resultRating" + restaurant.id)).attr("id", "spanResultRating"+ restaurant.id).css({fontSize: "small", fontStyle: "italic", color: "black"});
+         $('<p>').appendTo($("#resultReview" + restaurant.id)).attr("id", "resultComment" + restaurant.id).html("Votre commentaire : ").css({fontSize: "small", fontWeight: "bolder"});
+         $('<span>').appendTo($("#resultComment" + restaurant.id)).attr("id", "spanResultComment" + restaurant.id).css({fontSize: "small", fontStyle: "italic", color: "black"});
+
+         $("#inputGroupSelectRestaurant" + restaurant.id).change(function(event){
+            $("#spanResultRating" + restaurant.id).html(event.target.value);
+         });
+
+         $("#FormControlTextareaRestaurant" + restaurant.id).change(function(event){
+            $("#spanResultComment" + restaurant.id).html('"' + event.target.value + '"');
+         });
+
+         $('<div>').appendTo($("#modal-content-writeReview" + restaurant.id)).attr({class: "modal-footer", id: "modal-footer-writeReview" + restaurant.id});
+         $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.id)).attr({type: "button", class: "btn btn-secondary btn-sm"}).attr('data-dismiss', 'modal').html("Fermer").css("font-size", "small");
+         $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.id)).attr({type: "submit", class: "btn btn-primary btn-sm", id: "publishReview" + restaurant.id}).html("Publier un avis").css("font-size", "small");
+         }
+      }
 
    displayRestaurants() {
       this.createListRestaurants(restaurants);
@@ -200,53 +278,52 @@ class Restaurant {
 
    publishReview() {
       for (let restaurant of restaurants) {
-          let inputGroupSelectRestaurant = document.getElementById("inputGroupSelectRestaurant" + restaurant.id);
-          let FormControlTextareaRestaurant = document.getElementById("FormControlTextareaRestaurant" + restaurant.id);
-          let restaurantsName = document.getElementById(restaurant.id);
+         let inputGroupSelectRestaurant = document.getElementById("inputGroupSelectRestaurant" + restaurant.id);
+         let FormControlTextareaRestaurant = document.getElementById("FormControlTextareaRestaurant" + restaurant.id);
+         let restaurantsName = document.getElementById(restaurant.id);
 
-          $("#publishReview" + restaurant.id).on("click", function(){
-              if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value) {
+         $("#publishReview" + restaurant.id).on("click", function(){
+            if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value) {
                   if (restaurant.id === parseInt(restaurantsName.id)) {
-                     restaurant.ratings.push({
-                        stars: parseInt(inputGroupSelectRestaurant.value),
-                        comment: FormControlTextareaRestaurant.value
-                     });
+                     restaurant.ratings.push(
+                        new Review(parseInt(inputGroupSelectRestaurant.value), FormControlTextareaRestaurant.value)
+                     );
                      $("#modal-body-consult-restaurant" + restaurant.id).html("");
                   }
-  
+
                   for (let i = 0; i < restaurant.ratings.length; i++) {
-                      $('<div>').prependTo($("#modal-body-consult-restaurant" + restaurant.id)).attr("id", "consultRating" + i + "Restaurant" + restaurant.id);
-                      $('<p>').prependTo($("#consultRating" + i + "Restaurant" + restaurant.id)).addClass("comment").attr("id", "comment" + i + "Restaurant" + restaurant.id).html(restaurant.ratings[i].comment);
-                      $('<p>').appendTo($('#consultRating'+ i + "Restaurant" + restaurant.id)).addClass("stars").attr("id", "stars" + i + "Restaurant" + restaurant.id).html("Note : " + restaurant.ratings[i].stars + " / 5");
+                     $('<div>').prependTo($("#modal-body-consult-restaurant" + restaurant.id)).attr("id", "consultRating" + i + "Restaurant" + restaurant.id);
+                     $('<p>').prependTo($("#consultRating" + i + "Restaurant" + restaurant.id)).addClass("comment").attr("id", "comment" + i + "Restaurant" + restaurant.id).html(restaurant.ratings[i].comment);
+                     $('<p>').appendTo($('#consultRating'+ i + "Restaurant" + restaurant.id)).addClass("stars").attr("id", "stars" + i + "Restaurant" + restaurant.id).html("Note : " + restaurant.ratings[i].stars + " / 5");
                   }
-  
+
                   $("#publishReview" + restaurant.id).attr("disabled", "true");
                   $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Votre avis a bien été enregistré !").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
                   $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Merci de bien vouloir cliquer sur Fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
-  
+
                   let totalStars = restaurant.ratings.reduce(function(sum, ratings){
-                      return sum + ratings.stars;
-                      }, 0);
+                     return sum + ratings.stars;
+                     }, 0);
                   
                   let averageRatings = (totalStars / restaurant.ratings.length);
-              
+            
                   restaurant.averageRatings = averageRatings.toFixed(1);
                   restaurant.sumStars = totalStars;
                   restaurant.numberRatings = restaurant.ratings.length;
                   $("#review" + restaurant.id).html("Note moyenne : " + restaurant.averageRatings + " / 5");
-              } else {
+            } else {
                   alert("Merci de renseigner une note et un commentaire, sinon merci de cliquer sur Fermer")
-              }
-          });
-              
-          $("#modal-footer-writeReview" + restaurant.id +  " .btn-secondary").click(function(){
-              inputGroupSelectRestaurant.value = "";
-              $("#spanResultRating" + restaurant.id).html("");
-              FormControlTextareaRestaurant.value = "";
-              $("#spanResultComment" + restaurant.id).html("");
-              $('.alertMessage').remove();
-              $("#publishReview" + restaurant.id).removeAttr("disabled");
-          });
+            }
+         });
+            
+         $("#modal-footer-writeReview" + restaurant.id +  " .btn-secondary").click(function(){
+            inputGroupSelectRestaurant.value = "";
+            $("#spanResultRating" + restaurant.id).html("");
+            FormControlTextareaRestaurant.value = "";
+            $("#spanResultComment" + restaurant.id).html("");
+            $('.alertMessage').remove();
+            $("#publishReview" + restaurant.id).removeAttr("disabled");
+         });
       }
    }
 
@@ -259,19 +336,10 @@ class Restaurant {
       $("#btnSaveAddRestaurant").click(function() {
          if (inputRestaurantName.value && inputRestaurantAddress.value && commentRating.value) {
             if (starsRating.value >= 1 && starsRating.value <= 5) {
-                  restaurants.push({
-                     id : restaurants.length + 1,
-                     restaurantName : inputRestaurantName.value,
-                     address : inputRestaurantAddress.value,
-                     lat : lat,
-                     long : lng,
-                     ratings : [
-                        {
-                              stars : parseInt(starsRating.value),
-                              comment : commentRating.value
-                        }
-                     ]
-                  });
+                  restaurants.push(
+                     new Restaurant(restaurants.length + 1, inputRestaurantName.value, inputRestaurantAddress.value, lat, lng,
+                        [new Review(parseInt(starsRating.value), commentRating.value)])
+                  );
             }
             $("#btnSaveAddRestaurant").attr("disabled", "true");
             $("#addRestaurant").attr("disabled", "true");
@@ -283,7 +351,7 @@ class Restaurant {
          }
       });
       this.clearFormAddNewRestaurant(inputRestaurantName, inputRestaurantAddress, starsRating, commentRating);
-}
+   }
 
    clearFormAddNewRestaurant(inputRestaurantName, inputRestaurantAddress, starsRating, commentRating) {
       $("#btnCloseAddRestaurant").click(function(){
@@ -304,7 +372,7 @@ let restaurants = [
       new Review(5, "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"),
       new Review(3, "J'ai trouvé ça correct, sans plus"),
    ]),
-   new Restaurant(3, "Le Gabriel", "42 Avenue Gabriel, 75008 Paris", 48.8697092, 2.313439, [
+   new Restaurant(3, "Restaurant Le Gabriel", "42 Avenue Gabriel, 75008 Paris", 48.8697092, 2.313439, [
       new Review(5, "le Gabriel restera mon souvenir gastronomique le plus mémorable"),
       new Review(5, "Une excellente adresse que je recommande absolument."),
    ]),

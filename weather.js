@@ -51,7 +51,7 @@ class Weather {
                 requestWeatherLocation.onreadystatechange = function() {
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                         let resultWeatherPosition = JSON.parse(this.responseText);
-                        
+                        //console.log(resultWeatherPosition);
                         cityName.innerHTML = "Météo sur " + resultWeatherPosition.city_info.name + ", " + resultWeatherPosition.city_info.country;
                         currentDate.innerHTML = "Date : " + resultWeatherPosition.current_condition.date;
                         currentHour.innerHTML = "Heure local : " + resultWeatherPosition.current_condition.hour;

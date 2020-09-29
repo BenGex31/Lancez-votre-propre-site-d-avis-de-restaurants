@@ -56,7 +56,6 @@ class MyMap {
 
     geolocation() {
         const map = this.map;
-        const city = this.city;
         let infoWindow = new google.maps.InfoWindow;
 
         let geolocation = document.getElementById("geolocation");
@@ -119,7 +118,7 @@ class MyMap {
                         listResults.createListResults(results);
                         listResults.createButtonConsultReviewResults(results);
                         listResults.createButtonWriteReviewResults(results);
-                        console.log(status);
+                        console.log("Le service est " + status);
                         console.log(results);
 
                     } else {

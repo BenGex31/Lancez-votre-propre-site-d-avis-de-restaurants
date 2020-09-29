@@ -8,10 +8,11 @@ class MyMap {
         this.long = long;
         this.city = {lat: this.lat, lng: this.long};
         this.map = new google.maps.Map(document.getElementById('map'), {zoom: 12, center: this.city});
+        //this.geolocation();
     }
 
     createMap() {
-        let markerParis = new google.maps.Marker({position: this.city, map: this.map, label: "Paris"});
+        new google.maps.Marker({position: this.city, map: this.map, label: "Paris"});
         this.geolocation();
         this.addMarkerRestaurant();
     }
@@ -51,52 +52,112 @@ class MyMap {
                 infoWindow.open(map, markerRestaurant);
             });
         }
-        console.log(this.markersArray);
     }
 
     geolocation() {
         const map = this.map;
+        const city = this.city;
         let infoWindow = new google.maps.InfoWindow;
 
         let geolocation = document.getElementById("geolocation");
         geolocation.addEventListener("click", function(){
             // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-            const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                const pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                console.log(pos);
 
-            new google.maps.Marker({
-                position: pos,
-                map: map,
-                animation: google.maps.Animation.DROP,
-                label : "Vous êtes ici !",
-                icon: {
-                    url: "img/icon-user-location.png",
-                    scaledSize: new google.maps.Size(50, 50),
-                    origin: new google.maps.Point(0, 0),
-                    anchor: new google.maps.Point(0, 0)
-                }
-            });
+                let request = {
+                    location: pos,
+                    radius: '5000',
+                    type:['restaurant']
+                };
 
-            map.setCenter(pos);
-            }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-            });
-        } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
-        }
+                const service = new google.maps.places.PlacesService(map);
+                service.nearbySearch(request, (results, status) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        for (let restaurant of results) {
+                            let markerResults = new google.maps.Marker({
+                                place: {
+                                    placeId: restaurant.place_id,
+                                    location: restaurant.geometry.location
+                                },
+                                map: map,
+                                animation: google.maps.Animation.DROP,
+                                label: restaurant.name,
+                                icon: {
+                                    url: "img/icon-restaurant-location.png",
+                                    scaledSize: new google.maps.Size(50, 50),
+                                    origin: new google.maps.Point(0, 0),
+                                    anchor: new google.maps.Point(0, 0)
+                                }
+                            });
 
-        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                                'Erreur: Le service de géolocalisation a échoué.' :
-                                'Erreur: Votre navigateur ne prend pas en charge la géolocalisation.');
-        infoWindow.open(map);
-        }
+                            const contentString =
+                            '<h1 id="firstHeading" class="restaurantName text-left">' + restaurant.name + '</h1>' + 
+                            '<div class="text-left">' +
+                            '<img class"streetView" src="https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + restaurant.geometry.location.lat() + "," + restaurant.geometry.location.lng() + '&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc">' +
+                            '</div>' +
+                            '<div id="bodyContent">' +
+                            '<p><i class="fas fa-map-marker-alt"></i>' + restaurant.vicinity + '</p>' +
+                            '</div>';
+
+                            const infoWindow = new google.maps.InfoWindow({
+                                content : contentString
+                            });
+
+                            markerResults.addListener("click", () => {
+                                infoWindow.open(map, markerResults);
+                            });
+                        }
+
+                        const listResults = new Restaurant();
+                        listResults.clearListRestaurants();
+                        listResults.createListResults(results);
+                        listResults.createButtonConsultReviewResults(results);
+                        listResults.createButtonWriteReviewResults(results);
+                        console.log(status);
+                        console.log(results);
+
+                    } else {
+                        alert("Aucun restaurant dans votre zone.");
+                        console.log(status);
+                        console.log(results);
+                    }
+                });
+
+                new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    animation: google.maps.Animation.DROP,
+                    label : "Vous êtes ici !",
+                    icon: {
+                        url: "img/icon-user-location.png",
+                        scaledSize: new google.maps.Size(50, 50),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(0, 0)
+                    }
+                });
+
+                map.setCenter(pos);
+                }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+            }
+            
+            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent(browserHasGeolocation ?
+                                        'Erreur: Le service de géolocalisation a échoué.' :
+                                        'Erreur: Votre navigateur ne prend pas en charge la géolocalisation.');
+                infoWindow.open(map);
+            }
         });
     }
 

@@ -13,7 +13,8 @@ class Restaurant {
       for (let restaurant of array) {
          $('<div>').appendTo($("#restaurantsList")).attr({id: restaurant.place_id, class:"restaurantInfo"});
          $('<h5>').appendTo($("#" + restaurant.place_id)).attr({class:"restaurantName", id:"restaurantName" + restaurant.place_id}).html(restaurant.name);
-         $('<p>').appendTo($("#" + restaurant.place_id)).attr({class:"RestaurantAddress", id:"RestaurantAddress" + restaurant.place_id}).html(restaurant.vicinity);
+         $('<img>').prependTo($("#restaurantName" + restaurant.place_id)).attr("src", restaurant.icon).css({width:"20px", height:"20px", marginRight:"0.5em"});
+         $('<p>').appendTo($("#" + restaurant.place_id)).attr({class:"RestaurantAddress", id:"RestaurantAddress" + restaurant.place_id}).html(restaurant.vicinity).css("font-size", "small");
          $('<i>').prependTo($("#RestaurantAddress" + restaurant.place_id)).addClass("fas fa-map-marker-alt");
          $('<p>').appendTo($("#" + restaurant.place_id)).attr("id", "review" + restaurant.place_id).html("Note moyenne : " + restaurant.rating + " / 5").css({color:"#0a3d62", fontWeight:"bolder", fontSize:"small"});
       }
@@ -21,21 +22,21 @@ class Restaurant {
    
    createButtonConsultReviewResults(array) {
       for (let restaurant of array) {
-         $('<button>').appendTo($("#" + restaurant.place_id)).attr({id:"buttonConsulReview" + restaurant.place_id, type:"button", class:"btn btn-warning btn-sm"}).attr("data-toogle", "modal").attr("data-target", "#review" + restaurant.place_id + "ModalScrollable").css({fontSize:"small", color:"black", border:"0.5px solid black", fontWeight:"bolder"}).html("Voir les avis");
-         $('<div>').insertAfter($("#buttonConsulReview" + restaurant.place_id)).attr({class:"modal fade", id:"review" + restaurant.place_id + "ModalScrollable", tabindex:"-1", role:"dialog"}).attr("aria-labelledby", "ReviewTitle" + restaurant.place_id + "ModalScrollableTitle").attr("aria-hidden", "true");
-         $('<div>').appendTo($("#review" + restaurant.place_id + "ModalScrollable")).attr({class:"modal-dialog modal-dialog-scrollable", role:"document", id:"modal-dialog" + restaurant.place_id});
-         $('<div>').appendTo($("#modal-dialog" + restaurant.place_id)).attr({class:"modal-content", id:"modal-content" + restaurant.place_id});
+         $('<button>').appendTo($('#' + restaurant.place_id)).html("Voir les avis").attr({type: "button", class: "btn btn-warning btn-sm", id: "buttonConsultReview" + restaurant.place_id}).attr("data-toggle", "modal").attr("data-target", "#consultReview" + restaurant.place_id).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#82ccdd", color: "black"});
+         $('<div>').insertAfter($('#buttonConsultReview' + restaurant.place_id)).attr({class: 'modal fade', id: "consultReview" + restaurant.place_id, tabindex: "-1"}).attr('aria-labelledby', "consultReview" + restaurant.place_id + "Label").attr('aria-hidden', 'true');
+         $('<div>').appendTo($('#consultReview' + restaurant.place_id)).attr({class: "modal-dialog", id: "modal-dialog-consultReview" + restaurant.place_id});
+         $('<div>').appendTo($('#modal-dialog-consultReview' + restaurant.place_id)).attr({class: "modal-content", id: "modal-content-consultReview" + restaurant.place_id});
          
-         $('<div>').appendTo($("#modal-content" + restaurant.place_id)).attr({class:"modal-header", id:"modal-header" + restaurant.place_id});
-         $('<div>').appendTo($("#modal-header" + restaurant.place_id)).attr({class:"modal-title", id:"ReviewTitle" + restaurant.place_id + "ModalScrollableTitle"});
-         $('<h6>').appendTo($("#ReviewTitle" + restaurant.place_id + "ModalScrollableTitle")).html("Restaurant : " + restaurant.name);
-         $('<img>').appendTo($("#ReviewTitle" + restaurant.place_id + "ModalScrollableTitle")).attr({class:"streetView", src:"https://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + restaurant.geometry.location.lat() + "," + restaurant.geometry.location.lng() + "&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"});
+         $('<div>').appendTo($('#modal-content-consultReview' + restaurant.place_id)).attr({class: "modal-header", id: "modal-header-consultReview" + restaurant.place_id});
+         $('<h6>').appendTo($("#modal-header-consultReview" + restaurant.place_id)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "consultReview" + restaurant.place_id + "Label"}).html(restaurant.name);
+         //$('<h6>').appendTo($("#modal-title-consultReview" + restaurant.place_id)).html("Restaurant : " + restaurant.name);
+         $('<img>').appendTo($("#modal-header-consultReview" + restaurant.place_id)).attr({class:"streetView", src:"https://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + restaurant.geometry.location.lat() + "," + restaurant.geometry.location.lng() + "&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"});
          
-         $('<div>').appendTo($("#modal-content" + restaurant.place_id)).attr({class:"modal-body", id:"modal-body" + restaurant.place_id});
+         $('<div>').appendTo($("#modal-content-consultReview" + restaurant.place_id)).attr({class:"modal-body", id:"modal-body-consultReview" + restaurant.place_id});
          // insert comments and ratings
 
-         $('<div>').appendTo($("#modal-content" + restaurant.place_id)).attr({class:"modal-footer", id:"modal-footer" + restaurant.place_id});
-         $('<button>').appendTo($("#modal-footer" + restaurant.place_id)).attr({type:"button", class:"btn btn-secondary btn-sm"}).attr("data-dismiss", "modal").css("font-size", "small");
+         $('<div>').appendTo($("#modal-content-consultReview" + restaurant.place_id)).attr({class:"modal-footer", id:"modal-footer-consultReview" + restaurant.place_id});
+         $('<button>').appendTo($("#modal-footer-consultReview" + restaurant.place_id)).attr({type:"button", class:"btn btn-secondary btn-sm"}).attr("data-dismiss", "modal").css("font-size", "small").html("Fermer");
       }
    }
 
@@ -45,8 +46,9 @@ class Restaurant {
          $('<div>').insertAfter($('#buttonWriteReview' + restaurant.place_id)).attr({class: 'modal fade', id: "writeReview" + restaurant.place_id, tabindex: "-1"}).attr('aria-labelledby', "writeReview" + restaurant.place_id + "Label").attr('aria-hidden', 'true');
          $('<div>').appendTo($('#writeReview' + restaurant.place_id)).attr({class: "modal-dialog", id: "modal-dialog-writeReview" + restaurant.place_id});
          $('<div>').appendTo($('#modal-dialog-writeReview' + restaurant.place_id)).attr({class: "modal-content", id: "modal-content-writeReview" + restaurant.place_id});
+         
          $('<div>').appendTo($('#modal-content-writeReview' + restaurant.place_id)).attr({class: "modal-header", id: "modal-header-writeReview" + restaurant.place_id});
-         $('<h6>').appendTo($("#modal-header-writeReview" + restaurant.place_id)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "writeReview" + restaurant.place_id + "Label"}).html("Restaurant : " + restaurant.name);
+         $('<h6>').appendTo($("#modal-header-writeReview" + restaurant.place_id)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "writeReview" + restaurant.place_id + "Label"}).html(restaurant.name);
          $('<button>').appendTo($("#modal-header-writeReview" + restaurant.place_id)).attr({type: "button", class: "close", id: "buttonCloseWriteReview" + restaurant.place_id}).attr('data-dismiss', 'modal').attr('aria-label', 'Close');
          $('<span>').appendTo($("#buttonCloseWriteReview" + restaurant.place_id)).attr('aria-hidden', 'true').html("&times;");
          $('<div>').appendTo($("#modal-content-writeReview" + restaurant.place_id)).attr({class: "modal-body", id: "modal-body-writeReview" + restaurant.place_id});
@@ -183,7 +185,7 @@ class Restaurant {
          newDivModalTitle.setAttribute("class", "modal-title");
          newDivModalTitle.setAttribute("id", "ReviewTitle" + arrayRestaurant[restaurant].id + "ModalScrollableTitle");
          newDivModalTitle.appendChild(restaurantNameH6);
-         restaurantNameH6.innerHTML = "Restaurant : " + arrayRestaurant[restaurant].restaurantName;
+         restaurantNameH6.innerHTML = arrayRestaurant[restaurant].restaurantName;
          newDivModalTitle.appendChild(buttonClose);
    
          buttonClose.setAttribute("class", "close");

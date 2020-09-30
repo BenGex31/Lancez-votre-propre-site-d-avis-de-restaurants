@@ -2,13 +2,13 @@ class MyMap {
     newLat;
     newLng;
     markersArray = [];
+    geolocationMap = false;
 
     constructor(lat, long) {
         this.lat = lat;
         this.long = long;
         this.city = {lat: this.lat, lng: this.long};
         this.map = new google.maps.Map(document.getElementById('map'), {zoom: 12, center: this.city});
-        //this.geolocation();
     }
 
     createMap() {
@@ -56,6 +56,7 @@ class MyMap {
 
     geolocation() {
         const map = this.map;
+        const listResults = new Restaurant();
         let infoWindow = new google.maps.InfoWindow;
 
         let geolocation = document.getElementById("geolocation");
@@ -78,52 +79,16 @@ class MyMap {
                 const service = new google.maps.places.PlacesService(map);
                 service.nearbySearch(request, (results, status) => {
                     if (status === google.maps.places.PlacesServiceStatus.OK) {
-                        for (let restaurant of results) {
-                            let markerResults = new google.maps.Marker({
-                                place: {
-                                    placeId: restaurant.place_id,
-                                    location: restaurant.geometry.location
-                                },
-                                map: map,
-                                animation: google.maps.Animation.DROP,
-                                label: restaurant.name,
-                                icon: {
-                                    url: "img/icon-restaurant-location.png",
-                                    scaledSize: new google.maps.Size(50, 50),
-                                    origin: new google.maps.Point(0, 0),
-                                    anchor: new google.maps.Point(0, 0)
-                                }
-                            });
-
-                            const contentString =
-                            '<h1 id="firstHeading" class="restaurantName text-left">' + restaurant.name + '</h1>' + 
-                            '<div class="text-left">' +
-                            '<img class"streetView" src="https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + restaurant.geometry.location.lat() + "," + restaurant.geometry.location.lng() + '&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc">' +
-                            '</div>' +
-                            '<div id="bodyContent">' +
-                            '<p><i class="fas fa-map-marker-alt"></i>' + restaurant.vicinity + '</p>' +
-                            '</div>';
-
-                            const infoWindow = new google.maps.InfoWindow({
-                                content : contentString
-                            });
-
-                            markerResults.addListener("click", () => {
-                                infoWindow.open(map, markerResults);
-                            });
-                        }
-
-                        const listResults = new Restaurant();
+                        listResults.createMarkerResults(results, map);
                         listResults.clearListRestaurants();
                         listResults.createListResults(results);
                         listResults.createButtonConsultReviewResults(results);
                         listResults.createButtonWriteReviewResults(results);
                         console.log("Le service est " + status);
                         console.log(results);
-
                     } else {
                         alert("Aucun restaurant dans votre zone.");
-                        console.log(status);
+                        console.log("Le service est " + status);
                         console.log(results);
                     }
                 });

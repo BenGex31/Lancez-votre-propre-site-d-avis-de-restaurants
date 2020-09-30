@@ -11,50 +11,52 @@ class App {
 
         const map = new MyMap(48.8565387, 2.3518054);
         map.createMap();
-
+        console.log(map);
         const filter = new Restaurant();
         
-        switch(filterRatings.value) {
-            case "1":
-                filter.clearListRestaurants();
-                filter.createListRestaurants(oneStarArray);
-                filter.createButtonWriteReview(oneStarArray);
-                map.createMarkerRestaurants(oneStarArray);
-                filter.publishReview();
-                break;
-            case "2":
-                filter.clearListRestaurants();
-                filter.createListRestaurants(twoStarArray);
-                filter.createButtonWriteReview(twoStarArray);
-                map.createMarkerRestaurants(twoStarArray);
-                filter.publishReview();
-                break;
-            case "3":
-                filter.clearListRestaurants();
-                filter.createListRestaurants(threeStarArray);
-                filter.createButtonWriteReview(threeStarArray);
-                map.createMarkerRestaurants(threeStarArray);
-                filter.publishReview();
-                break;
-            case "4":
-                filter.clearListRestaurants();
-                filter.createListRestaurants(fourStarArray);
-                filter.createButtonWriteReview(fourStarArray);
-                map.createMarkerRestaurants(fourStarArray);
-                filter.publishReview();
-                break;
-            case "5":
-                filter.clearListRestaurants();
-                filter.createListRestaurants(fiveStarArray);
-                filter.createButtonWriteReview(fiveStarArray);
-                map.createMarkerRestaurants(fiveStarArray);
-                filter.publishReview();
-                break;
-            default:
-                filter.clearListRestaurants();
-                filter.displayRestaurants();
-                map.createMarkerRestaurants(restaurants);
-                filter.publishReview();
+        if (map.geolocationMap === false) {
+            switch(filterRatings.value) {
+                case "1":
+                    filter.clearListRestaurants();
+                    filter.createListRestaurants(oneStarArray);
+                    filter.createButtonWriteReview(oneStarArray);
+                    map.createMarkerRestaurants(oneStarArray);
+                    filter.publishReview();
+                    break;
+                case "2":
+                    filter.clearListRestaurants();
+                    filter.createListRestaurants(twoStarArray);
+                    filter.createButtonWriteReview(twoStarArray);
+                    map.createMarkerRestaurants(twoStarArray);
+                    filter.publishReview();
+                    break;
+                case "3":
+                    filter.clearListRestaurants();
+                    filter.createListRestaurants(threeStarArray);
+                    filter.createButtonWriteReview(threeStarArray);
+                    map.createMarkerRestaurants(threeStarArray);
+                    filter.publishReview();
+                    break;
+                case "4":
+                    filter.clearListRestaurants();
+                    filter.createListRestaurants(fourStarArray);
+                    filter.createButtonWriteReview(fourStarArray);
+                    map.createMarkerRestaurants(fourStarArray);
+                    filter.publishReview();
+                    break;
+                case "5":
+                    filter.clearListRestaurants();
+                    filter.createListRestaurants(fiveStarArray);
+                    filter.createButtonWriteReview(fiveStarArray);
+                    map.createMarkerRestaurants(fiveStarArray);
+                    filter.publishReview();
+                    break;
+                default:
+                    filter.clearListRestaurants();
+                    filter.displayRestaurants();
+                    map.createMarkerRestaurants(restaurants);
+                    filter.publishReview();
+            }
         }
     }
 }

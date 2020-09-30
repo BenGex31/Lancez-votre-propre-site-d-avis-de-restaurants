@@ -88,6 +88,96 @@ class Restaurant {
       }
    }
 
+   filterResultsRating(array, map) {
+      const filterRatings = document.getElementById("filterRatings");
+
+      const oneStarArray = array.filter(average => average.rating >= 0 && average.rating <= 1);
+      const twoStarArray = array.filter(average => average.rating >= 1 && average.rating <= 2);
+      const threeStarArray = array.filter(average => average.rating >= 2 && average.rating <= 3);
+      const fourStarArray = array.filter(average => average.rating >= 3 && average.rating <= 4);
+      const fiveStarArray = array.filter(average => average.rating >= 4 && average.rating <= 5);
+
+      if(filterRatings.selected) {
+         this.clearListRestaurants();
+         this.createListResults(array);
+         this.createButtonConsultReviewResults(array);
+         this.createButtonWriteReviewResults(array);
+         this.createMarkerResults(array, map);
+      }
+      if (filterRatings.value == 1) {
+         this.clearListRestaurants();
+         this.createListResults(oneStarArray);
+         this.createButtonConsultReviewResults(oneStarArray);
+         this.createButtonWriteReviewResults(oneStarArray);
+         this.createMarkerResults(oneStarArray, map);
+      }
+      if (filterRatings.value == 2) {
+         this.clearListRestaurants();
+         this.createListResults(twoStarArray);
+         this.createButtonConsultReviewResults(twoStarArray);
+         this.createButtonWriteReviewResults(twoStarArray);
+         this.createMarkerResults(twoStarArray, map);
+      }
+      if (filterRatings.value == 3) {
+         this.clearListRestaurants();
+         this.createListResults(threeStarArray);
+         this.createButtonConsultReviewResults(threeStarArray);
+         this.createButtonWriteReviewResults(threeStarArray);
+         this.createMarkerResults(threeStarArray, map);
+      }
+      if (filterRatings.value == 4) {
+         this.clearListRestaurants();
+         this.createListResults(fourStarArray);
+         this.createButtonConsultReviewResults(fourStarArray);
+         this.createButtonWriteReviewResults(fourStarArray);
+         this.createMarkerResults(fourStarArray, map);
+      }
+      if (filterRatings.value == 5) {
+         this.clearListRestaurants();
+         this.createListResults(fiveStarArray);
+         this.createButtonConsultReviewResults(fiveStarArray);
+         this.createButtonWriteReviewResults(fiveStarArray);
+         this.createMarkerResults(fiveStarArray, map);
+      }
+   }
+
+   createMarkerResults(array, map) {
+      for(let restaurant of array) {
+         let markerResults = new google.maps.Marker({
+            place: {
+                  placeId: restaurant.place_id,
+                  location: restaurant.geometry.location
+            },
+            map: map,
+            animation: google.maps.Animation.DROP,
+            label: restaurant.name,
+            icon: {
+                  url: "img/icon-restaurant-location.png",
+                  scaledSize: new google.maps.Size(50, 50),
+                  origin: new google.maps.Point(0, 0),
+                  anchor: new google.maps.Point(0, 0)
+            }
+         });
+
+         const contentString =
+                        '<h1 id="firstHeading" class="restaurantName text-left">' + restaurant.name + '</h1>' + 
+                        '<div class="text-left">' +
+                        '<img class"streetView" src="https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + restaurant.geometry.location.lat() + "," + restaurant.geometry.location.lng() + '&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc">' +
+                        '</div>' +
+                        '<div id="bodyContent">' +
+                        '<p><i class="fas fa-map-marker-alt"></i>' + restaurant.vicinity + '</p>' +
+                        '</div>';
+
+         const infoWindow = new google.maps.InfoWindow({
+            content : contentString
+         });
+
+         markerResults.addListener("click", () => {
+            infoWindow.open(map, markerResults);
+         });
+      }
+   }
+
    createListRestaurants(arrayRestaurant) {
       for (let restaurant in arrayRestaurant) {
          let newDiv = document.createElement("div");

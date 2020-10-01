@@ -32,7 +32,7 @@ class MyMap {
                 console.log(pos);
 
                 listResults.getRestaurantList(pos, map);
-                listResults.getGooglePlacesReviews(map);
+                console.log(restaurantResults);
 
                 new google.maps.Marker({
                     position: pos,
@@ -96,7 +96,6 @@ class MyMap {
                 anchor: new google.maps.Point(0, 0)
             }
         });
-        this.markersArray.push(marker);
 
         marker.setMap(map);
         map.panTo(latLng);

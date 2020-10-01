@@ -1,8 +1,6 @@
 class MyMap {
     newLat;
     newLng;
-    markersArray = [];
-    geolocationMap = false;
 
     constructor(lat, long) {
         this.lat = lat;
@@ -17,46 +15,9 @@ class MyMap {
         this.addMarkerRestaurant();
     }
 
-    createMarkerRestaurants(array) {
-        const map = this.map;
-        for(let restaurant of array) {
-            let markerRestaurant = new google.maps.Marker({
-                position: {lat: restaurant.lat, lng: restaurant.long},
-                map: map,
-                animation: google.maps.Animation.DROP,
-                label: restaurant.restaurantName,
-                icon: {
-                    url: "img/icon-restaurant-location.png",
-                    scaledSize: new google.maps.Size(50, 50),
-                    origin: new google.maps.Point(0, 0),
-                    anchor: new google.maps.Point(0, 0)
-                }
-            });
-
-            this.markersArray.push(markerRestaurant);
-
-            const contentString =
-            '<h1 id="firstHeading" class="restaurantName text-left">' + restaurant.restaurantName + '</h1>' + 
-            '<div class="text-left">' +
-            '<img class"streetView" src="https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + restaurant.lat + "," + restaurant.long + '&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc">' +
-            '</div>' +
-            '<div id="bodyContent">' +
-            '<p><i class="fas fa-map-marker-alt"></i>' + restaurant.address + '</p>' +
-            '</div>';
-
-            const infoWindow = new google.maps.InfoWindow({
-                content : contentString
-            });
-
-            markerRestaurant.addListener("click", () => {
-                infoWindow.open(map, markerRestaurant);
-            });
-        }
-    }
-
     geolocation() {
         const map = this.map;
-        const listResults = new Restaurant();
+        let listResults = new Restaurant();
         let infoWindow = new google.maps.InfoWindow;
 
         let geolocation = document.getElementById("geolocation");
@@ -70,28 +31,8 @@ class MyMap {
                 };
                 console.log(pos);
 
-                let request = {
-                    location: pos,
-                    radius: '5000',
-                    type:['restaurant']
-                };
-
-                const service = new google.maps.places.PlacesService(map);
-                service.nearbySearch(request, (results, status) => {
-                    if (status === google.maps.places.PlacesServiceStatus.OK) {
-                        listResults.createMarkerResults(results, map);
-                        listResults.clearListRestaurants();
-                        listResults.createListResults(results);
-                        listResults.createButtonConsultReviewResults(results);
-                        listResults.createButtonWriteReviewResults(results);
-                        console.log("Le service est " + status);
-                        console.log(results);
-                    } else {
-                        alert("Aucun restaurant dans votre zone.");
-                        console.log("Le service est " + status);
-                        console.log(results);
-                    }
-                });
+                listResults.getRestaurantList(pos, map);
+                listResults.getGooglePlacesReviews(map);
 
                 new google.maps.Marker({
                     position: pos,

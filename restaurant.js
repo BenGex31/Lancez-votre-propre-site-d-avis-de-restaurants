@@ -24,54 +24,51 @@ class Restaurant {
       service.nearbySearch(request, (results, status) => {
          if (status === google.maps.places.PlacesServiceStatus.OK) {
             results.forEach((restaurant) => {
-                  const newRestaurant = new Restaurant(
-                     restaurantResults.length + 1,
-                     restaurant.name,
-                     restaurant.vicinity,
-                     restaurant.icon,
-                     restaurant.geometry.location.lat(),
-                     restaurant.geometry.location.lng(),
-                     restaurant.geometry.location,
-                     restaurant.rating,
-                     restaurant.place_id,
-                     []
-                  );
-                  restaurantResults.push(newRestaurant);
-                  
-               });
-               console.log(restaurantResults);
-            this.displayResults(restaurantResults);
-            this.createMarkerResults(restaurantResults, map);
+               this.getGooglePlacesReviews(restaurant, map);
+            });
          }
       });
    }
 
-   getGooglePlacesReviews(map) {
+   getGooglePlacesReviews(restaurant, map) {
       // Récupération des reviews de chaque restaurants sur GooglePlaces via restaurant.place_id
       const request = {
-      placeId: "ChIJ8b5ShVRW_kcRG_JSQ8801Tk",
+      placeId: restaurant.place_id,
       fields: ['review']
       };
 
       const service = new google.maps.places.PlacesService(map);
       service.getDetails(request, (place, status) => {
          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            let googlePlacesReviews = [];
-            // Si un restaurant n'a pas de reviews, alors place.reviews === undefined
-            if (place.reviews) {
-               googlePlacesReviews = place.reviews.map((review) => {
-                  return new Review(
-                     review.author_name,
-                     review.rating,
-                     review.text,
-                  );
-               });
-               console.log(googlePlacesReviews);
-            }
+            this.populateRestaurantResults(restaurant, place);
+            this.displayResults(restaurantResults);
+            this.createMarkerResults(restaurantResults, map);
          } else {
-            alert('Impossible de récupérer les avis clients.', status);
+            alert('Aucun avis client.', status);
          }
       });
+   }
+
+   populateRestaurantResults(restaurant, place) {
+      const newRestaurant = new Restaurant(
+         restaurantResults.length + 1,
+         restaurant.name,
+         restaurant.vicinity,
+         restaurant.icon,
+         restaurant.geometry.location.lat(),
+         restaurant.geometry.location.lng(),
+         restaurant.geometry.location,
+         restaurant.rating,
+         restaurant.place_id,
+         place.reviews.map((review) => {
+            return new Review(
+               review.author_name,
+               review.rating,
+               review.text,
+            );
+         })
+      );
+      restaurantResults.push(newRestaurant);
    }
 
    createMarkerRestaurants(array, map) {

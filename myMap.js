@@ -32,6 +32,7 @@ class MyMap {
                 console.log(pos);
 
                 listResults.getRestaurantList(pos, map);
+                
                 console.log(restaurantResults);
 
                 new google.maps.Marker({

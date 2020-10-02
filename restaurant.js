@@ -1,5 +1,5 @@
 class Restaurant {
-   constructor(id, restaurantName, address, icon, lat, long, location, rating, place_id, ratings) {
+   constructor(id, restaurantName, address, icon, lat, long, location, rating, place_id, reviews) {
       this.id = id;
       this.restaurantName = restaurantName;
       this.address = address;
@@ -9,7 +9,7 @@ class Restaurant {
       this.location = location;
       this.rating = rating;
       this.place_id = place_id;
-      this.ratings = ratings;
+      this.reviews = reviews;
    }
 
    // Récupération des restaurants via GooglePlaces
@@ -22,7 +22,7 @@ class Restaurant {
 
       const service = new google.maps.places.PlacesService(map);
       service.nearbySearch(request, (results, status) => {
-         if (status === google.maps.places.PlacesServiceStatus.OK) {
+         if (status == google.maps.places.PlacesServiceStatus.OK) {
             results.forEach((restaurant) => {
                this.getGooglePlacesReviews(restaurant, map);
             });
@@ -39,10 +39,11 @@ class Restaurant {
 
       const service = new google.maps.places.PlacesService(map);
       service.getDetails(request, (place, status) => {
-         if (status === google.maps.places.PlacesServiceStatus.OK) {
+         if (status == google.maps.places.PlacesServiceStatus.OK) {
             this.populateRestaurantResults(restaurant, place);
             this.displayResults(restaurantResults);
             this.createMarkerResults(restaurantResults, map);
+            console.log(restaurantResults);
          } else {
             alert('Aucun avis client.', status);
          }
@@ -134,7 +135,7 @@ class Restaurant {
          $('<img>').appendTo($("#modal-header-consultReview" + restaurant.id)).attr({class:"streetView", src:"https://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + restaurant.lat + "," + restaurant.long + "&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"});
          
          $('<div>').appendTo($("#modal-content-consultReview" + restaurant.id)).attr({class:"modal-body", id:"modal-body-consultReview" + restaurant.id});
-         // insert comments and ratings
+         // insert comments and reviews
 
          $('<div>').appendTo($("#modal-content-consultReview" + restaurant.id)).attr({class:"modal-footer", id:"modal-footer-consultReview" + restaurant.id});
          $('<button>').appendTo($("#modal-footer-consultReview" + restaurant.id)).attr({type:"button", class:"btn btn-secondary btn-sm"}).attr("data-dismiss", "modal").css("font-size", "small").html("Fermer");
@@ -189,59 +190,6 @@ class Restaurant {
       }
    }
 
-   filterResultsRating(array, map) {
-      const filterRatings = document.getElementById("filterRatings");
-
-      const oneStarArray = array.filter(average => average.rating >= 0 && average.rating <= 1);
-      const twoStarArray = array.filter(average => average.rating >= 1 && average.rating <= 2);
-      const threeStarArray = array.filter(average => average.rating >= 2 && average.rating <= 3);
-      const fourStarArray = array.filter(average => average.rating >= 3 && average.rating <= 4);
-      const fiveStarArray = array.filter(average => average.rating >= 4 && average.rating <= 5);
-
-      if(filterRatings.selected) {
-         this.clearListRestaurants();
-         this.createListResults(array);
-         this.createButtonConsultReviewResults(array);
-         this.createButtonWriteReviewResults(array);
-         this.createMarkerResults(array, map);
-      }
-      if (filterRatings.value == 1) {
-         this.clearListRestaurants();
-         this.createListResults(oneStarArray);
-         this.createButtonConsultReviewResults(oneStarArray);
-         this.createButtonWriteReviewResults(oneStarArray);
-         this.createMarkerResults(oneStarArray, map);
-      }
-      if (filterRatings.value == 2) {
-         this.clearListRestaurants();
-         this.createListResults(twoStarArray);
-         this.createButtonConsultReviewResults(twoStarArray);
-         this.createButtonWriteReviewResults(twoStarArray);
-         this.createMarkerResults(twoStarArray, map);
-      }
-      if (filterRatings.value == 3) {
-         this.clearListRestaurants();
-         this.createListResults(threeStarArray);
-         this.createButtonConsultReviewResults(threeStarArray);
-         this.createButtonWriteReviewResults(threeStarArray);
-         this.createMarkerResults(threeStarArray, map);
-      }
-      if (filterRatings.value == 4) {
-         this.clearListRestaurants();
-         this.createListResults(fourStarArray);
-         this.createButtonConsultReviewResults(fourStarArray);
-         this.createButtonWriteReviewResults(fourStarArray);
-         this.createMarkerResults(fourStarArray, map);
-      }
-      if (filterRatings.value == 5) {
-         this.clearListRestaurants();
-         this.createListResults(fiveStarArray);
-         this.createButtonConsultReviewResults(fiveStarArray);
-         this.createButtonWriteReviewResults(fiveStarArray);
-         this.createMarkerResults(fiveStarArray, map);
-      }
-   }
-
    createMarkerResults(array, map) {
       for(let restaurant of array) {
          let markerResults = new google.maps.Marker({
@@ -276,6 +224,59 @@ class Restaurant {
          markerResults.addListener("click", () => {
             infoWindow.open(map, markerResults);
          });
+      }
+   }
+
+   filterResultsRating(array, map) {
+      const filterreviews = document.getElementById("filterreviews");
+
+      const oneStarArray = array.filter(average => average.rating >= 0 && average.rating <= 1);
+      const twoStarArray = array.filter(average => average.rating >= 1 && average.rating <= 2);
+      const threeStarArray = array.filter(average => average.rating >= 2 && average.rating <= 3);
+      const fourStarArray = array.filter(average => average.rating >= 3 && average.rating <= 4);
+      const fiveStarArray = array.filter(average => average.rating >= 4 && average.rating <= 5);
+
+      if(filterreviews.selected) {
+         this.clearListRestaurants();
+         this.createListResults(array);
+         this.createButtonConsultReviewResults(array);
+         this.createButtonWriteReviewResults(array);
+         this.createMarkerResults(array, map);
+      }
+      if (filterreviews.value == 1) {
+         this.clearListRestaurants();
+         this.createListResults(oneStarArray);
+         this.createButtonConsultReviewResults(oneStarArray);
+         this.createButtonWriteReviewResults(oneStarArray);
+         this.createMarkerResults(oneStarArray, map);
+      }
+      if (filterreviews.value == 2) {
+         this.clearListRestaurants();
+         this.createListResults(twoStarArray);
+         this.createButtonConsultReviewResults(twoStarArray);
+         this.createButtonWriteReviewResults(twoStarArray);
+         this.createMarkerResults(twoStarArray, map);
+      }
+      if (filterreviews.value == 3) {
+         this.clearListRestaurants();
+         this.createListResults(threeStarArray);
+         this.createButtonConsultReviewResults(threeStarArray);
+         this.createButtonWriteReviewResults(threeStarArray);
+         this.createMarkerResults(threeStarArray, map);
+      }
+      if (filterreviews.value == 4) {
+         this.clearListRestaurants();
+         this.createListResults(fourStarArray);
+         this.createButtonConsultReviewResults(fourStarArray);
+         this.createButtonWriteReviewResults(fourStarArray);
+         this.createMarkerResults(fourStarArray, map);
+      }
+      if (filterreviews.value == 5) {
+         this.clearListRestaurants();
+         this.createListResults(fiveStarArray);
+         this.createButtonConsultReviewResults(fiveStarArray);
+         this.createButtonWriteReviewResults(fiveStarArray);
+         this.createMarkerResults(fiveStarArray, map);
       }
    }
 
@@ -320,23 +321,23 @@ class Restaurant {
 
          review.setAttribute("id", "review" + arrayRestaurant[restaurant].id);
 
-         let totalStars = arrayRestaurant[restaurant].ratings.reduce(function(sum, ratings){
-            return sum + ratings.stars;
+         let totalStars = arrayRestaurant[restaurant].reviews.reduce(function(sum, reviews){
+            return sum + reviews.stars;
          }, 0);
 
-         let average = (totalStars / arrayRestaurant[restaurant].ratings.length);
+         let average = (totalStars / arrayRestaurant[restaurant].reviews.length);
 
-         if (arrayRestaurant[restaurant].ratings.length > 1) {
-            arrayRestaurant[restaurant].averageRatings = average.toFixed(1);
+         if (arrayRestaurant[restaurant].reviews.length > 1) {
+            arrayRestaurant[restaurant].averagereviews = average.toFixed(1);
             arrayRestaurant[restaurant].sumStars = totalStars;
-            arrayRestaurant[restaurant].numberRatings = arrayRestaurant[restaurant].ratings.length;
-            review.innerHTML = "Note moyenne : " + arrayRestaurant[restaurant].averageRatings + " / 5";
+            arrayRestaurant[restaurant].numberreviews = arrayRestaurant[restaurant].reviews.length;
+            review.innerHTML = "Note moyenne : " + arrayRestaurant[restaurant].averagereviews + " / 5";
 
-         } else if (arrayRestaurant[restaurant].ratings.length <= 1) {
-            arrayRestaurant[restaurant].averageRatings = average.toFixed(1);
+         } else if (arrayRestaurant[restaurant].reviews.length <= 1) {
+            arrayRestaurant[restaurant].averagereviews = average.toFixed(1);
             arrayRestaurant[restaurant].sumStars = totalStars;
-            arrayRestaurant[restaurant].numberRatings = arrayRestaurant[restaurant].ratings.length;
-            review.innerHTML = "Note moyenne : " + arrayRestaurant[restaurant].averageRatings + " / 5";
+            arrayRestaurant[restaurant].numberreviews = arrayRestaurant[restaurant].reviews.length;
+            review.innerHTML = "Note moyenne : " + arrayRestaurant[restaurant].averagereviews + " / 5";
          }
          
          review.style.color = "#0a3d62";
@@ -395,10 +396,10 @@ class Restaurant {
          newDivModalBody.setAttribute("class", "modal-body");
          newDivModalBody.setAttribute("id", "modal-body-consult-restaurant" + arrayRestaurant[restaurant].id);
 
-         for (let i = 0; i < arrayRestaurant[restaurant].ratings.length; i++) {
+         for (let i = 0; i < arrayRestaurant[restaurant].reviews.length; i++) {
             $('<div>').prependTo($("#modal-body-consult-restaurant" + arrayRestaurant[restaurant].id)).attr("id", "consultRating" + i + "Restaurant" + arrayRestaurant[restaurant].id);
-            $('<p>').prependTo($("#consultRating" + i + "Restaurant" + arrayRestaurant[restaurant].id)).attr({id: "comment" + i + arrayRestaurant[restaurant].restaurantName, class: "comment"}).html(arrayRestaurant[restaurant].ratings[i].comment);
-            $('<p>').appendTo($("#consultRating" + i + "Restaurant" + arrayRestaurant[restaurant].id)).attr({id: "stars" + i + arrayRestaurant[restaurant].restaurantName, class: "stars"}).html("Note : " + arrayRestaurant[restaurant].ratings[i].stars + " / 5");
+            $('<p>').prependTo($("#consultRating" + i + "Restaurant" + arrayRestaurant[restaurant].id)).attr({id: "comment" + i + arrayRestaurant[restaurant].restaurantName, class: "comment"}).html(arrayRestaurant[restaurant].reviews[i].comment);
+            $('<p>').appendTo($("#consultRating" + i + "Restaurant" + arrayRestaurant[restaurant].id)).attr({id: "stars" + i + arrayRestaurant[restaurant].restaurantName, class: "stars"}).html("Note : " + arrayRestaurant[restaurant].reviews[i].stars + " / 5");
          }
    
          newDivModalContent.appendChild(newDivModalFooter);
@@ -478,32 +479,32 @@ class Restaurant {
          $("#publishReview" + restaurant.id).on("click", function(){
             if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value) {
                   if (restaurant.id === parseInt(restaurantsName.id)) {
-                     restaurant.ratings.push(
+                     restaurant.reviews.push(
                         new Review(parseInt(inputGroupSelectRestaurant.value), FormControlTextareaRestaurant.value)
                      );
                      $("#modal-body-consult-restaurant" + restaurant.id).html("");
                   }
 
-                  for (let i = 0; i < restaurant.ratings.length; i++) {
+                  for (let i = 0; i < restaurant.reviews.length; i++) {
                      $('<div>').prependTo($("#modal-body-consult-restaurant" + restaurant.id)).attr("id", "consultRating" + i + "Restaurant" + restaurant.id);
-                     $('<p>').prependTo($("#consultRating" + i + "Restaurant" + restaurant.id)).addClass("comment").attr("id", "comment" + i + "Restaurant" + restaurant.id).html(restaurant.ratings[i].comment);
-                     $('<p>').appendTo($('#consultRating'+ i + "Restaurant" + restaurant.id)).addClass("stars").attr("id", "stars" + i + "Restaurant" + restaurant.id).html("Note : " + restaurant.ratings[i].stars + " / 5");
+                     $('<p>').prependTo($("#consultRating" + i + "Restaurant" + restaurant.id)).addClass("comment").attr("id", "comment" + i + "Restaurant" + restaurant.id).html(restaurant.reviews[i].comment);
+                     $('<p>').appendTo($('#consultRating'+ i + "Restaurant" + restaurant.id)).addClass("stars").attr("id", "stars" + i + "Restaurant" + restaurant.id).html("Note : " + restaurant.reviews[i].stars + " / 5");
                   }
 
                   $("#publishReview" + restaurant.id).attr("disabled", "true");
                   $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Votre avis a bien été enregistré !").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
                   $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Merci de bien vouloir cliquer sur Fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
 
-                  let totalStars = restaurant.ratings.reduce(function(sum, ratings){
-                     return sum + ratings.stars;
+                  let totalStars = restaurant.reviews.reduce(function(sum, reviews){
+                     return sum + reviews.stars;
                      }, 0);
                   
-                  let averageRatings = (totalStars / restaurant.ratings.length);
+                  let averagereviews = (totalStars / restaurant.reviews.length);
             
-                  restaurant.averageRatings = averageRatings.toFixed(1);
+                  restaurant.averagereviews = averagereviews.toFixed(1);
                   restaurant.sumStars = totalStars;
-                  restaurant.numberRatings = restaurant.ratings.length;
-                  $("#review" + restaurant.id).html("Note moyenne : " + restaurant.averageRatings + " / 5");
+                  restaurant.numberreviews = restaurant.reviews.length;
+                  $("#review" + restaurant.id).html("Note moyenne : " + restaurant.averagereviews + " / 5");
             } else {
                   alert("Merci de renseigner une note et un commentaire, sinon merci de cliquer sur Fermer")
             }

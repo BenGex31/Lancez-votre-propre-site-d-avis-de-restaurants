@@ -79,14 +79,6 @@ class Restaurant {
          restaurant.rating,
          restaurant.place_id,
          []
-         /*place.reviews.forEach((review) => {
-            new Review(
-               review.author_name,
-               review.rating,
-               review.text,
-               restaurant.place_id
-            );
-         })*/
       );
       restaurantResults.push(newRestaurant);
    }
@@ -143,21 +135,26 @@ class Restaurant {
    }
    
    createButtonConsultReviewResults(array) {
-      for (let restaurant of array) {
-         $('<button>').appendTo($('#' + restaurant.id)).html("Voir les avis").attr({type: "button", class: "btn btn-warning btn-sm", id: "buttonConsultReview" + restaurant.id}).attr("data-toggle", "modal").attr("data-target", "#consultReview" + restaurant.id).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#82ccdd", color: "black"});
-         $('<div>').insertAfter($('#buttonConsultReview' + restaurant.id)).attr({class: 'modal fade', id: "consultReview" + restaurant.id, tabindex: "-1"}).attr('aria-labelledby', "consultReview" + restaurant.id + "Label").attr('aria-hidden', 'true');
-         $('<div>').appendTo($('#consultReview' + restaurant.id)).attr({class: "modal-dialog", id: "modal-dialog-consultReview" + restaurant.id});
-         $('<div>').appendTo($('#modal-dialog-consultReview' + restaurant.id)).attr({class: "modal-content", id: "modal-content-consultReview" + restaurant.id});
+      for (let restaurant in array) {
+         $('<button>').appendTo($('#' + array[restaurant].id)).html("Voir les avis").attr({type: "button", class: "btn btn-warning btn-sm", id: "buttonConsultReview" + array[restaurant].id}).attr("data-toggle", "modal").attr("data-target", "#consultReview" + array[restaurant].id).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#82ccdd", color: "black"});
+         $('<div>').insertAfter($('#buttonConsultReview' + array[restaurant].id)).attr({class: 'modal fade', id: "consultReview" + array[restaurant].id, tabindex: "-1"}).attr('aria-labelledby', "consultReview" + array[restaurant].id + "Label").attr('aria-hidden', 'true');
+         $('<div>').appendTo($('#consultReview' + array[restaurant].id)).attr({class: "modal-dialog", id: "modal-dialog-consultReview" + array[restaurant].id});
+         $('<div>').appendTo($('#modal-dialog-consultReview' + array[restaurant].id)).attr({class: "modal-content", id: "modal-content-consultReview" + array[restaurant].id});
          
-         $('<div>').appendTo($('#modal-content-consultReview' + restaurant.id)).attr({class: "modal-header", id: "modal-header-consultReview" + restaurant.id});
-         $('<h6>').appendTo($("#modal-header-consultReview" + restaurant.id)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "consultReview" + restaurant.id + "Label"}).html(restaurant.restaurantName);
-         $('<img>').appendTo($("#modal-header-consultReview" + restaurant.id)).attr({class:"streetView", src:"https://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + restaurant.lat + "," + restaurant.long + "&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"});
+         $('<div>').appendTo($('#modal-content-consultReview' + array[restaurant].id)).attr({class: "modal-header", id: "modal-header-consultReview" + array[restaurant].id});
+         $('<h6>').appendTo($("#modal-header-consultReview" + array[restaurant].id)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "consultReview" + array[restaurant].id + "Label"}).html(array[restaurant].restaurantName);
+         $('<img>').appendTo($("#modal-header-consultReview" + array[restaurant].id)).attr({class:"streetView", src:"https://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + array[restaurant].lat + "," + array[restaurant].long + "&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"});
          
-         $('<div>').appendTo($("#modal-content-consultReview" + restaurant.id)).attr({class:"modal-body", id:"modal-body-consultReview" + restaurant.id});
-         // insert comments and reviews
-
-         $('<div>').appendTo($("#modal-content-consultReview" + restaurant.id)).attr({class:"modal-footer", id:"modal-footer-consultReview" + restaurant.id});
-         $('<button>').appendTo($("#modal-footer-consultReview" + restaurant.id)).attr({type:"button", class:"btn btn-secondary btn-sm"}).attr("data-dismiss", "modal").css("font-size", "small").html("Fermer");
+         $('<div>').appendTo($("#modal-content-consultReview" + array[restaurant].id)).attr({class:"modal-body", id:"modal-body-consultReview" + array[restaurant].id});
+         
+         for (let i = 0; i < array[restaurant].reviews.length; i++) {
+            $('<div>').appendTo($("#modal-body-consultReview" + array[restaurant].id)).attr("id", "blocReview" + i + "Restaurant" + array[restaurant].id);
+            $('<p>').appendTo($("#blocReview" + i + "Restaurant" + array[restaurant].id)).attr({id: "comment" + i + "Restaurant" + array[restaurant].id, class: "comment"}).html(array[restaurant].reviews[i].comment);
+            $('<p>').appendTo($("#blocReview" + i + "Restaurant" + array[restaurant].id)).attr({id: "stars" + i + "Restaurant" + array[restaurant].id, class: "stars"}).html("Note : " + array[restaurant].reviews[i].stars + " / 5");
+         }
+         
+         $('<div>').appendTo($("#modal-content-consultReview" + array[restaurant].id)).attr({class:"modal-footer", id:"modal-footer-consultReview" + array[restaurant].id});
+         $('<button>').appendTo($("#modal-footer-consultReview" + array[restaurant].id)).attr({type:"button", class:"btn btn-secondary btn-sm"}).attr("data-dismiss", "modal").css("font-size", "small").html("Fermer");
       }
    }
 

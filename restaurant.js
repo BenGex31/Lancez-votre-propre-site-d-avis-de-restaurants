@@ -22,16 +22,24 @@ class Restaurant {
 
       const service = new google.maps.places.PlacesService(map);
       service.nearbySearch(request, (results, status) => {
+         //debugger;
          if (status == google.maps.places.PlacesServiceStatus.OK) {
             results.forEach((restaurant) => {
+               this.populateRestaurantResults(restaurant);
                this.getGooglePlacesReviews(restaurant, map);
-            });
+            })
+            this.displayResults(restaurantResults);
+            this.createMarkerResults(restaurantResults, map);
+            console.log(restaurantResults);
+         } else {
+            alert(status + ". La requête a échoué, merci d'essayer à nouveau ultérieurement");
          }
       });
    }
 
    getGooglePlacesReviews(restaurant, map) {
       // Récupération des reviews de chaque restaurants sur GooglePlaces via restaurant.place_id
+      
       const request = {
       placeId: restaurant.place_id,
       fields: ['review']
@@ -40,10 +48,18 @@ class Restaurant {
       const service = new google.maps.places.PlacesService(map);
       service.getDetails(request, (place, status) => {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            this.populateRestaurantResults(restaurant, place);
-            this.displayResults(restaurantResults);
-            this.createMarkerResults(restaurantResults, map);
-            console.log(restaurantResults);
+            for (const review of place.reviews) {
+               for (const element in restaurantResults) {
+                  if (restaurantResults[element].place_id == restaurant.place_id) {
+                     restaurantResults[element].reviews.push(new Review(
+                        review.author_name,
+                        review.rating,
+                        review.text,
+                        restaurant.place_id
+                     ))
+                  }
+               }
+            }
          } else {
             alert('Aucun avis client.', status);
          }
@@ -51,6 +67,7 @@ class Restaurant {
    }
 
    populateRestaurantResults(restaurant, place) {
+      //debugger;
       const newRestaurant = new Restaurant(
          restaurantResults.length + 1,
          restaurant.name,
@@ -61,13 +78,15 @@ class Restaurant {
          restaurant.geometry.location,
          restaurant.rating,
          restaurant.place_id,
-         place.reviews.map((review) => {
-            return new Review(
+         []
+         /*place.reviews.forEach((review) => {
+            new Review(
                review.author_name,
                review.rating,
                review.text,
+               restaurant.place_id
             );
-         })
+         })*/
       );
       restaurantResults.push(newRestaurant);
    }

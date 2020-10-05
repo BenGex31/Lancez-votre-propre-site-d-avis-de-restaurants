@@ -32,14 +32,13 @@ class Restaurant {
             this.createMarkerResults(restaurantResults, map);
             console.log(restaurantResults);
          } else {
-            alert(status + ". La requête a échoué, merci d'essayer à nouveau ultérieurement");
+            alert("Le status requête est " + status + ", merci d'essayer à nouveau ultérieurement.");
          }
       });
    }
 
    getGooglePlacesReviews(restaurant, map) {
       // Récupération des reviews de chaque restaurants sur GooglePlaces via restaurant.place_id
-      
       const request = {
       placeId: restaurant.place_id,
       fields: ['review']
@@ -49,9 +48,9 @@ class Restaurant {
       service.getDetails(request, (place, status) => {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (const review of place.reviews) {
-               for (const element in restaurantResults) {
-                  if (restaurantResults[element].place_id == restaurant.place_id) {
-                     restaurantResults[element].reviews.push(new Review(
+               for (const element of restaurantResults) {
+                  if (element.place_id == restaurant.place_id) {
+                     element.reviews.push(new Review(
                         review.author_name,
                         review.rating,
                         review.text,
@@ -61,13 +60,12 @@ class Restaurant {
                }
             }
          } else {
-            alert('Aucun avis client.', status);
+            alert('Aucun avis client.' + "Le status de la requête est " + status);
          }
       });
    }
 
-   populateRestaurantResults(restaurant, place) {
-      //debugger;
+   populateRestaurantResults(restaurant) {
       const newRestaurant = new Restaurant(
          restaurantResults.length + 1,
          restaurant.name,
@@ -79,6 +77,14 @@ class Restaurant {
          restaurant.rating,
          restaurant.place_id,
          []
+         /*place.reviews.map(review => {
+            return new Review(
+               review.author_name,
+               review.rating,
+               review.text,
+               restaurant.place_id
+            )
+         })*/
       );
       restaurantResults.push(newRestaurant);
    }
@@ -135,26 +141,26 @@ class Restaurant {
    }
    
    createButtonConsultReviewResults(array) {
-      for (let restaurant in array) {
-         $('<button>').appendTo($('#' + array[restaurant].id)).html("Voir les avis").attr({type: "button", class: "btn btn-warning btn-sm", id: "buttonConsultReview" + array[restaurant].id}).attr("data-toggle", "modal").attr("data-target", "#consultReview" + array[restaurant].id).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#82ccdd", color: "black"});
-         $('<div>').insertAfter($('#buttonConsultReview' + array[restaurant].id)).attr({class: 'modal fade', id: "consultReview" + array[restaurant].id, tabindex: "-1"}).attr('aria-labelledby', "consultReview" + array[restaurant].id + "Label").attr('aria-hidden', 'true');
-         $('<div>').appendTo($('#consultReview' + array[restaurant].id)).attr({class: "modal-dialog", id: "modal-dialog-consultReview" + array[restaurant].id});
-         $('<div>').appendTo($('#modal-dialog-consultReview' + array[restaurant].id)).attr({class: "modal-content", id: "modal-content-consultReview" + array[restaurant].id});
+      for (let restaurant of array) {
+         $('<button>').appendTo($('#' + restaurant.id)).html("Voir les avis").attr({type: "button", class: "btn btn-warning btn-sm", id: "buttonConsultReview" + restaurant.id}).attr("data-toggle", "modal").attr("data-target", "#consultReview" + restaurant.id).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#82ccdd", color: "black"});
+         $('<div>').insertAfter($('#buttonConsultReview' + restaurant.id)).attr({class: 'modal fade', id: "consultReview" + restaurant.id, tabindex: "-1"}).attr('aria-labelledby', "consultReview" + restaurant.id + "Label").attr('aria-hidden', 'true');
+         $('<div>').appendTo($('#consultReview' + restaurant.id)).attr({class: "modal-dialog", id: "modal-dialog-consultReview" + restaurant.id});
+         $('<div>').appendTo($('#modal-dialog-consultReview' + restaurant.id)).attr({class: "modal-content", id: "modal-content-consultReview" + restaurant.id});
          
-         $('<div>').appendTo($('#modal-content-consultReview' + array[restaurant].id)).attr({class: "modal-header", id: "modal-header-consultReview" + array[restaurant].id});
-         $('<h6>').appendTo($("#modal-header-consultReview" + array[restaurant].id)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "consultReview" + array[restaurant].id + "Label"}).html(array[restaurant].restaurantName);
-         $('<img>').appendTo($("#modal-header-consultReview" + array[restaurant].id)).attr({class:"streetView", src:"https://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + array[restaurant].lat + "," + array[restaurant].long + "&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"});
+         $('<div>').appendTo($('#modal-content-consultReview' + restaurant.id)).attr({class: "modal-header", id: "modal-header-consultReview" + restaurant.id});
+         $('<h6>').appendTo($("#modal-header-consultReview" + restaurant.id)).attr({class: "modal-title animate__animated animate__fadeInRight animate__delay-0.5s", id: "consultReview" + restaurant.id + "Label"}).html(restaurant.restaurantName);
+         $('<img>').appendTo($("#modal-header-consultReview" + restaurant.id)).attr({class:"streetView", src:"https://maps.googleapis.com/maps/api/streetview?size=200x150&location=" + restaurant.lat + "," + restaurant.long + "&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"});
          
-         $('<div>').appendTo($("#modal-content-consultReview" + array[restaurant].id)).attr({class:"modal-body", id:"modal-body-consultReview" + array[restaurant].id});
-         
-         for (let i = 0; i < array[restaurant].reviews.length; i++) {
-            $('<div>').appendTo($("#modal-body-consultReview" + array[restaurant].id)).attr("id", "blocReview" + i + "Restaurant" + array[restaurant].id);
-            $('<p>').appendTo($("#blocReview" + i + "Restaurant" + array[restaurant].id)).attr({id: "comment" + i + "Restaurant" + array[restaurant].id, class: "comment"}).html(array[restaurant].reviews[i].comment);
-            $('<p>').appendTo($("#blocReview" + i + "Restaurant" + array[restaurant].id)).attr({id: "stars" + i + "Restaurant" + array[restaurant].id, class: "stars"}).html("Note : " + array[restaurant].reviews[i].stars + " / 5");
+         $('<div>').appendTo($("#modal-content-consultReview" + restaurant.id)).attr({class:"modal-body", id:"modal-body-consultReview" + restaurant.id});
+         //debugger;
+         for  (let i = 0; i < restaurant.reviews.length; i++) {
+            $('<div>').appendTo($("#modal-body-consultReview" + restaurant.id)).attr("id", "blocReview" + i + "Restaurant" + restaurant.id);
+            $('<p>').appendTo($("#blocReview" + i + "Restaurant" + restaurant.id)).attr({id: "comment" + "Restaurant" + restaurant.id, class: "comment"}).html(restaurant.reviews[i].comment);
+            $('<p>').appendTo($("#blocReview" + i + "Restaurant" + restaurant.id)).attr({id: "stars" + "Restaurant" + restaurant.id, class: "stars"}).html("Note : " + restaurant.reviews[i].stars + " / 5");
          }
          
-         $('<div>').appendTo($("#modal-content-consultReview" + array[restaurant].id)).attr({class:"modal-footer", id:"modal-footer-consultReview" + array[restaurant].id});
-         $('<button>').appendTo($("#modal-footer-consultReview" + array[restaurant].id)).attr({type:"button", class:"btn btn-secondary btn-sm"}).attr("data-dismiss", "modal").css("font-size", "small").html("Fermer");
+         $('<div>').appendTo($("#modal-content-consultReview" + restaurant.id)).attr({class:"modal-footer", id:"modal-footer-consultReview" + restaurant.id});
+         $('<button>').appendTo($("#modal-footer-consultReview" + restaurant.id)).attr({type:"button", class:"btn btn-secondary btn-sm"}).attr("data-dismiss", "modal").css("font-size", "small").html("Fermer");
       }
    }
 
@@ -574,6 +580,7 @@ class Restaurant {
 }
 
 let restaurantResults = [];
+let reviewResults = [];
 
 let restaurants = [
    new Restaurant(1, "Bronco", "39 Rue des Petites Écuries, 75010 Paris", 48.8737815, 2.3501649, [

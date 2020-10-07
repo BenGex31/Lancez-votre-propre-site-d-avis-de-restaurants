@@ -25,8 +25,32 @@ class Restaurant {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
             results.forEach((restaurant) => {
                //this.populateRestaurantResults(restaurant);
+               const newRestaurant = new Restaurant(
+                  restaurantResults.length + 1,
+                  restaurant.name,
+                  restaurant.vicinity,
+                  restaurant.icon,
+                  restaurant.geometry.location.lat(),
+                  restaurant.geometry.location.lng(),
+                  restaurant.geometry.location,
+                  restaurant.rating,
+                  restaurant.place_id,
+                  []
+                  /*place.reviews.map(review => {
+                     return new Review(
+                        review.author_name,
+                        review.rating,
+                        review.text,
+                        restaurant.place_id
+                     )
+                  })*/
+               );
+               restaurantResults.push(newRestaurant);
                this.getGooglePlacesReviews(restaurant, map);
             });
+            this.displayResults(restaurantResults);
+            this.createMarkerResults(restaurantResults, map);
+            console.log(restaurantResults);
          } else {
             alert("Le status de la requête est " + status + ", merci d'essayer à nouveau ultérieurement.");
          }
@@ -44,8 +68,8 @@ class Restaurant {
       const service = new google.maps.places.PlacesService(map);
       service.getDetails(request, (place, status) => {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            this.populateRestaurantResults(restaurant, place, map);
-            /*place.reviews.map(review => {
+            //this.populateRestaurantResults(restaurant, place, map);
+            place.reviews.forEach(review => {
                const newReview = new Review(
                   review.author_name,
                   review.rating,
@@ -57,7 +81,7 @@ class Restaurant {
                      element.reviews.push(newReview);
                   }
                });
-            });*/
+            });
          } else {
             alert('Aucun avis client.' + "Le status de la requête est " + status);
          }
@@ -75,19 +99,20 @@ class Restaurant {
          restaurant.geometry.location,
          restaurant.rating,
          restaurant.place_id,
-         place.reviews.map(review => {
+         []
+         /*place.reviews.map(review => {
             return new Review(
                review.author_name,
                review.rating,
                review.text,
                restaurant.place_id
             )
-         })
+         })*/
       );
       restaurantResults.push(newRestaurant);
-      console.log(restaurantResults);
-      this.displayResults(restaurantResults);
-      this.createMarkerResults(restaurantResults, map)
+      //console.log(restaurantResults);
+      //this.displayResults(restaurantResults);
+      //this.createMarkerResults(restaurantResults, map);
    }
 
    createMarkerRestaurants(array, map) {
@@ -155,6 +180,7 @@ class Restaurant {
          $('<div>').appendTo($("#modal-content-consultReview" + restaurant.id)).attr({class:"modal-body", id:"modal-body-consultReview" + restaurant.id});
          $('<h5>').appendTo($("#modal-body-consultReview" + restaurant.id)).addClass("titleReviews text-center").html("Commentaires et notes des clients").css({fontWeight: "bolder", borderBottom: "1px solid black", marginBottom: "2em"});
          //debugger;
+         //console.log(restaurantResults.reviews.length);
          for  (let review = 0; review < restaurant.reviews.length; review++) {
             $('<div>').appendTo($("#modal-body-consultReview" + restaurant.id)).attr("id", "blocReview" + review + "Restaurant" + restaurant.id).css({border:"2px inset black", marginBottom:"1em", padding:"0.5em", borderRadius:"5px", backgroundColor:"#3c6382", color:"white"});
             $('<p>').appendTo($("#blocReview" + review + "Restaurant" + restaurant.id)).attr({id: "author" + review + "Restaurant" + restaurant.id, class: "author"}).html(restaurant.reviews[review].author).css("color", "#82ccdd");

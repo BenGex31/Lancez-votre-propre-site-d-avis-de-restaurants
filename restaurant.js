@@ -14,17 +14,16 @@ class Restaurant {
 
    // Récupération des restaurants via GooglePlaces
    getRestaurantList(position, map) {
-      const request = {
+      const requestRestaurant = {
          location: position,
          radius: '5000',
          type: ['restaurant']
       };
 
       const service = new google.maps.places.PlacesService(map);
-      service.nearbySearch(request, (results, status) => {
+      service.nearbySearch(requestRestaurant, (results, status) => {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
             results.forEach((restaurant) => {
-               //this.populateRestaurantResults(restaurant);
                const newRestaurant = new Restaurant(
                   restaurantResults.length + 1,
                   restaurant.name,
@@ -36,30 +35,46 @@ class Restaurant {
                   restaurant.rating,
                   restaurant.place_id,
                   []
-                  /*place.reviews.map(review => {
-                     return new Review(
-                        review.author_name,
-                        review.rating,
-                        review.text,
-                        restaurant.place_id
-                     )
-                  })*/
                );
                restaurantResults.push(newRestaurant);
-               this.getGooglePlacesReviews(restaurant, map);
+
+               const requestReview = {
+                  placeId: restaurant.place_id,
+                  fields: ['review']
+               };
+               
+               const service = new google.maps.places.PlacesService(map);
+               service.getDetails(requestReview, (place, status) => {
+                  if (status == google.maps.places.PlacesServiceStatus.OK) {
+                     place.reviews.forEach(review => {
+                        const newReview = new Review(
+                           review.author_name,
+                           review.rating,
+                           review.text,
+                           restaurant.place_id
+                        )
+                        restaurantResults.forEach(element => {
+                           if (element.place_id == restaurant.place_id) {
+                              element.reviews.push(newReview);
+                           }
+                        });
+                     });
+                  } else {
+                     alert('Aucun avis client.' + "Le status de la requête est " + status);
+                  }
+               });
             });
+            console.log(restaurantResults);
             this.displayResults(restaurantResults);
             this.createMarkerResults(restaurantResults, map);
-            console.log(restaurantResults);
          } else {
-            alert("Le status de la requête est " + status + ", merci d'essayer à nouveau ultérieurement.");
+         alert("Le status de la requête est " + status + ", merci d'essayer à nouveau ultérieurement.");
          }
       });
    }
 
-   getGooglePlacesReviews(restaurant, map) {
+   /*getGooglePlacesReviews(restaurant, map) {
       // Récupération des reviews de chaque restaurants sur GooglePlaces via restaurant.place_id
-      
       const request = {
       placeId: restaurant.place_id,
       fields: ['review']
@@ -86,9 +101,9 @@ class Restaurant {
             alert('Aucun avis client.' + "Le status de la requête est " + status);
          }
       });
-   }
+   }*/
 
-   populateRestaurantResults(restaurant, place, map) {
+   /*populateRestaurantResults(restaurant, place, map) {
       const newRestaurant = new Restaurant(
          restaurantResults.length + 1,
          restaurant.name,
@@ -100,20 +115,20 @@ class Restaurant {
          restaurant.rating,
          restaurant.place_id,
          []
-         /*place.reviews.map(review => {
+         place.reviews.map(review => {
             return new Review(
                review.author_name,
                review.rating,
                review.text,
                restaurant.place_id
             )
-         })*/
+         })
       );
       restaurantResults.push(newRestaurant);
       //console.log(restaurantResults);
       //this.displayResults(restaurantResults);
       //this.createMarkerResults(restaurantResults, map);
-   }
+   }*/
 
    createMarkerRestaurants(array, map) {
       for(let restaurant of array) {
@@ -181,7 +196,7 @@ class Restaurant {
          $('<h5>').appendTo($("#modal-body-consultReview" + restaurant.id)).addClass("titleReviews text-center").html("Commentaires et notes des clients").css({fontWeight: "bolder", borderBottom: "1px solid black", marginBottom: "2em"});
          //debugger;
          //console.log(restaurantResults.reviews.length);
-         for  (let review = 0; review < restaurant.reviews.length; review++) {
+         for (let review = 0; review < restaurant.reviews.length; review++) {
             $('<div>').appendTo($("#modal-body-consultReview" + restaurant.id)).attr("id", "blocReview" + review + "Restaurant" + restaurant.id).css({border:"2px inset black", marginBottom:"1em", padding:"0.5em", borderRadius:"5px", backgroundColor:"#3c6382", color:"white"});
             $('<p>').appendTo($("#blocReview" + review + "Restaurant" + restaurant.id)).attr({id: "author" + review + "Restaurant" + restaurant.id, class: "author"}).html(restaurant.reviews[review].author).css("color", "#82ccdd");
             $('<i>').prependTo($("#author" + review + "Restaurant" + restaurant.id)).addClass("fas fa-user-edit").css({color:"white", marginRight:"0.5em"});
@@ -611,7 +626,6 @@ class Restaurant {
 }
 
 let restaurantResults = [];
-let reviewResults = [];
 
 let restaurants = [
    new Restaurant(1, "Bronco", "39 Rue des Petites Écuries, 75010 Paris", 48.8737815, 2.3501649, [
@@ -640,4 +654,4 @@ let restaurants = [
    ]),
 ];
 
-console.log(restaurants);
+//console.log(restaurants);

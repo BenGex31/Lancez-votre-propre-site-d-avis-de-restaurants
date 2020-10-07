@@ -30,10 +30,7 @@ class MyMap {
                     lng: position.coords.longitude
                 };
                 console.log(pos);
-
                 listResults.getRestaurantList(pos, map);
-                listResults.displayResults(restaurantResults);
-                listResults.createMarkerResults(restaurantResults, map)
 
                 new google.maps.Marker({
                     position: pos,
@@ -52,6 +49,7 @@ class MyMap {
                 }, function() {
                 handleLocationError(true, infoWindow, map.getCenter());
                 });
+                
             } else {
             // Browser doesn't support Geolocation
             handleLocationError(false, infoWindow, map.getCenter());

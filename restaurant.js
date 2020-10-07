@@ -25,13 +25,10 @@ class Restaurant {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
             results.forEach((restaurant) => {
                //this.populateRestaurantResults(restaurant);
-               this.getGooglePlacesReviews(restaurant, map)
+               this.getGooglePlacesReviews(restaurant, map);
             });
-            console.log(restaurantResults);
-            this.displayResults(restaurantResults);
-            this.createMarkerResults(restaurantResults, map);
          } else {
-            alert("Le status requête est " + status + ", merci d'essayer à nouveau ultérieurement.");
+            alert("Le status de la requête est " + status + ", merci d'essayer à nouveau ultérieurement.");
          }
       });
    }
@@ -88,6 +85,7 @@ class Restaurant {
          })
       );
       restaurantResults.push(newRestaurant);
+      console.log(restaurantResults);
       this.displayResults(restaurantResults);
       this.createMarkerResults(restaurantResults, map)
    }

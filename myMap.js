@@ -6,7 +6,8 @@ class MyMap {
         this.lat = lat;
         this.long = long;
         this.city = {lat: this.lat, lng: this.long};
-        this.map = new google.maps.Map(document.getElementById('map'), {zoom: 12, center: this.city});
+        this.zoom = 17;
+        this.map = new google.maps.Map(document.getElementById('map'), {zoom: this.zoom, center: this.city});
     }
 
     createMap() {
@@ -17,11 +18,26 @@ class MyMap {
 
     geolocation() {
         const map = this.map;
+        const ParisLocation = this.city;
+        
         let listResults = new Restaurant();
         let infoWindow = new google.maps.InfoWindow;
 
+        listResults.getRestaurantsListParisWithReviews(ParisLocation, map);
+
+        $("#buttonFilter").on("click", function() {
+            listResults.filterResultsRating(restaurantListParis, map);
+        });
+        //$("#geolocation").removeAttr("disabled");
+
         let geolocation = document.getElementById("geolocation");
         geolocation.addEventListener("click", function(){
+            restauranstList = [];
+            listResults.clearMarkers();
+            //listResults.clearListRestaurants();
+
+            $("#map").css("height", "600px");
+
             // Try HTML5 geolocation.
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
@@ -30,7 +46,12 @@ class MyMap {
                     lng: position.coords.longitude
                 };
                 console.log(pos);
-                listResults.getRestaurantList(pos, map);
+                //listResults.clearListRestaurants();
+                listResults.getRestauranstListWithReviews(pos, map);
+                
+                $("#buttonFilter").on("click", function() {
+                    listResults.filterResultsRating(restauranstList, map)
+                });
 
                 new google.maps.Marker({
                     position: pos,

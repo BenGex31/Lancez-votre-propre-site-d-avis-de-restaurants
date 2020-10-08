@@ -1,4 +1,4 @@
-class App {
+/*class App {
 
     filterRestaurants() {
         const filterRatings = document.getElementById("filterRatings");
@@ -73,4 +73,4 @@ buttonFilter.addEventListener("click", function(){
 $("#buttonUpdate").on("click", function() {
     filter.filterRestaurants();
     $("#buttonUpdate").attr("disabled", "true");
-});
+});*/

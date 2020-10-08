@@ -13,7 +13,7 @@ class Restaurant {
    }
 
    // Récupération des restaurants via GooglePlaces
-   getRestaurantList(position, map) {
+   getRestauranstListWithReviews(position, map) {
       const requestRestaurant = {
          location: position,
          radius: '5000',
@@ -25,7 +25,7 @@ class Restaurant {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
             results.forEach((restaurant) => {
                const newRestaurant = new Restaurant(
-                  restaurantResults.length + 1,
+                  restauranstList.length + 1,
                   restaurant.name,
                   restaurant.vicinity,
                   restaurant.icon,
@@ -36,99 +36,115 @@ class Restaurant {
                   restaurant.place_id,
                   []
                );
-               restaurantResults.push(newRestaurant);
+               restauranstList.push(newRestaurant);
 
-               const requestReview = {
-                  placeId: restaurant.place_id,
-                  fields: ['review']
-               };
-               
-               const service = new google.maps.places.PlacesService(map);
-               service.getDetails(requestReview, (place, status) => {
-                  if (status == google.maps.places.PlacesServiceStatus.OK) {
-                     place.reviews.forEach(review => {
-                        const newReview = new Review(
-                           review.author_name,
-                           review.rating,
-                           review.text,
-                           restaurant.place_id
-                        )
-                        restaurantResults.forEach(element => {
-                           if (element.place_id == restaurant.place_id) {
-                              element.reviews.push(newReview);
-                           }
-                        });
-                     });
-                  } else {
-                     alert('Aucun avis client.' + "Le status de la requête est " + status);
-                  }
-               });
+               this.getGooglePlacesReviews(restaurant, map);
             });
-            console.log(restaurantResults);
-            this.displayResults(restaurantResults);
-            this.createMarkerResults(restaurantResults, map);
+            console.table(restauranstList);
+            this.clearListRestaurants();
+            this.displayResults(restauranstList);
+            this.createMarkerResults(restauranstList, map);
+            this.displayMarkersOnMap(map);
          } else {
          alert("Le status de la requête est " + status + ", merci d'essayer à nouveau ultérieurement.");
          }
       });
    }
 
-   /*getGooglePlacesReviews(restaurant, map) {
-      // Récupération des reviews de chaque restaurants sur GooglePlaces via restaurant.place_id
-      const request = {
-      placeId: restaurant.place_id,
-      fields: ['review']
+   getGooglePlacesReviews(restaurant, map) {
+      const requestReview = {
+         placeId: restaurant.place_id,
+         fields: ['review']
       };
 
       const service = new google.maps.places.PlacesService(map);
-      service.getDetails(request, (place, status) => {
+      service.getDetails(requestReview, (place, status) => {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            //this.populateRestaurantResults(restaurant, place, map);
             place.reviews.forEach(review => {
                const newReview = new Review(
                   review.author_name,
                   review.rating,
                   review.text,
                   restaurant.place_id
-               )
-               restaurantResults.forEach(element => {
+               );
+               //debugger
+               restauranstList.forEach(element => {
                   if (element.place_id == restaurant.place_id) {
                      element.reviews.push(newReview);
                   }
+
                });
             });
          } else {
             alert('Aucun avis client.' + "Le status de la requête est " + status);
          }
       });
-   }*/
+   }
 
-   /*populateRestaurantResults(restaurant, place, map) {
-      const newRestaurant = new Restaurant(
-         restaurantResults.length + 1,
-         restaurant.name,
-         restaurant.vicinity,
-         restaurant.icon,
-         restaurant.geometry.location.lat(),
-         restaurant.geometry.location.lng(),
-         restaurant.geometry.location,
-         restaurant.rating,
-         restaurant.place_id,
-         []
-         place.reviews.map(review => {
-            return new Review(
-               review.author_name,
-               review.rating,
-               review.text,
-               restaurant.place_id
-            )
-         })
-      );
-      restaurantResults.push(newRestaurant);
-      //console.log(restaurantResults);
-      //this.displayResults(restaurantResults);
-      //this.createMarkerResults(restaurantResults, map);
-   }*/
+   getRestaurantsListParisWithReviews(position, map) {
+      const requestRestaurantParis = {
+         location: position,
+         radius: '130',
+         type: ['restaurant']
+     }
+
+     const service = new google.maps.places.PlacesService(map);
+     service.nearbySearch(requestRestaurantParis, (results, status) => {
+         if (status == google.maps.places.PlacesServiceStatus.OK) {
+            results.forEach(restaurantParis => {
+               const newrestaurantParis = new Restaurant(
+                  restaurantListParis.length + 1,
+                  restaurantParis.name,
+                  restaurantParis.vicinity,
+                  restaurantParis.icon,
+                  restaurantParis.geometry.location.lat(),
+                  restaurantParis.geometry.location.lng(),
+                  restaurantParis.geometry.location,
+                  restaurantParis.rating,
+                  restaurantParis.place_id,
+                  []
+               );
+               restaurantListParis.push(newrestaurantParis);
+
+               this.getGooglePlacesReviewsParis(restaurantParis, map);
+            });
+            console.table(restaurantListParis);
+            this.displayResults(restaurantListParis);
+            this.createMarkerResults(restaurantListParis, map);
+            this.displayMarkersOnMap(map);
+         }
+     });
+   }
+
+   getGooglePlacesReviewsParis(restaurantParis, map) {
+      const requestReviewParis = {
+         placeId: restaurantParis.place_id,
+         fields: ['review']
+      };
+
+      const service = new google.maps.places.PlacesService(map);
+      service.getDetails(requestReviewParis, (place, status) => {
+         if (status == google.maps.places.PlacesServiceStatus.OK) {
+            place.reviews.forEach(reviewParis => {
+               const newReview = new Review(
+                  reviewParis.author_name,
+                  reviewParis.rating,
+                  reviewParis.text,
+                  restaurantParis.place_id
+               );
+               //debugger
+               restaurantListParis.forEach(element => {
+                  if (element.place_id == restaurantParis.place_id) {
+                     element.reviews.push(newReview);
+                  }
+
+               });
+            });
+         } else {
+            alert('Aucun avis client.' + "Le status de la requête est " + status);
+         }
+      });
+   }
 
    createMarkerRestaurants(array, map) {
       for(let restaurant of array) {
@@ -195,8 +211,7 @@ class Restaurant {
          $('<div>').appendTo($("#modal-content-consultReview" + restaurant.id)).attr({class:"modal-body", id:"modal-body-consultReview" + restaurant.id});
          $('<h5>').appendTo($("#modal-body-consultReview" + restaurant.id)).addClass("titleReviews text-center").html("Commentaires et notes des clients").css({fontWeight: "bolder", borderBottom: "1px solid black", marginBottom: "2em"});
          //debugger;
-         //console.log(restaurantResults.reviews.length);
-         for (let review = 0; review < restaurant.reviews.length; review++) {
+         for  (let review = 0; review < restaurant.reviews.length; review++) {
             $('<div>').appendTo($("#modal-body-consultReview" + restaurant.id)).attr("id", "blocReview" + review + "Restaurant" + restaurant.id).css({border:"2px inset black", marginBottom:"1em", padding:"0.5em", borderRadius:"5px", backgroundColor:"#3c6382", color:"white"});
             $('<p>').appendTo($("#blocReview" + review + "Restaurant" + restaurant.id)).attr({id: "author" + review + "Restaurant" + restaurant.id, class: "author"}).html(restaurant.reviews[review].author).css("color", "#82ccdd");
             $('<i>').prependTo($("#author" + review + "Restaurant" + restaurant.id)).addClass("fas fa-user-edit").css({color:"white", marginRight:"0.5em"});
@@ -209,6 +224,7 @@ class Restaurant {
          $('<button>').appendTo($("#modal-footer-consultReview" + restaurant.id)).attr({type:"button", class:"btn btn-secondary btn-sm"}).attr("data-dismiss", "modal").css("font-size", "small").html("Fermer");
       }
    }
+
 
    createButtonWriteReviewResults(arrayRestaurant) {
       for (let restaurant of arrayRestaurant) {
@@ -261,11 +277,8 @@ class Restaurant {
    createMarkerResults(arrayRestaurant, map) {
       for(let restaurant of arrayRestaurant) {
          let markerResults = new google.maps.Marker({
-            place: {
-               placeId: restaurant.place_id,
-               location: restaurant.location
-            },
-            map: map,
+            position: {lat: restaurant.lat, lng: restaurant.long},
+            //map: map,
             animation: google.maps.Animation.DROP,
             label: restaurant.restaurantName,
             icon: {
@@ -276,6 +289,8 @@ class Restaurant {
             }
          });
 
+         markersArray.push(markerResults);
+         //markerResults.setMap(map);
          const contentString =
                         '<h1 id="firstHeading" class="restaurantName text-left">' + restaurant.restaurantName + '</h1>' + 
                         '<div class="text-left">' +
@@ -293,10 +308,22 @@ class Restaurant {
             infoWindow.open(map, markerResults);
          });
       }
+      console.table(markersArray);
+   }
+
+   displayMarkersOnMap(map) {
+      for (const marker of markersArray) {
+         marker.setMap(map);
+      }
+   }
+
+   clearMarkers() {
+      this.displayMarkersOnMap(null);
+      markersArray = [];
    }
 
    filterResultsRating(array, map) {
-      const filterreviews = document.getElementById("filterreviews");
+      const filterRatings = document.getElementById("filterRatings");
 
       const oneStarArray = array.filter(average => average.rating >= 0 && average.rating <= 1);
       const twoStarArray = array.filter(average => average.rating >= 1 && average.rating <= 2);
@@ -304,47 +331,60 @@ class Restaurant {
       const fourStarArray = array.filter(average => average.rating >= 3 && average.rating <= 4);
       const fiveStarArray = array.filter(average => average.rating >= 4 && average.rating <= 5);
 
-      if(filterreviews.selected) {
+      if (filterRatings.value >= 1 && filterRatings.value <= 5) {
+         if (filterRatings.value == 1) {
+            this.clearListRestaurants();
+            this.createListResults(oneStarArray);
+            this.createButtonConsultReviewResults(oneStarArray);
+            this.createButtonWriteReviewResults(oneStarArray);
+            this.clearMarkers();
+            this.createMarkerResults(oneStarArray, map);
+            this.displayMarkersOnMap(map);
+         }
+         if (filterRatings.value == 2) {
+            this.clearListRestaurants();
+            this.createListResults(twoStarArray);
+            this.createButtonConsultReviewResults(twoStarArray);
+            this.createButtonWriteReviewResults(twoStarArray);
+            this.clearMarkers();
+            this.createMarkerResults(twoStarArray, map);
+            this.displayMarkersOnMap(map);
+         }
+         if (filterRatings.value == 3) {
+            this.clearListRestaurants();
+            this.createListResults(threeStarArray);
+            this.createButtonConsultReviewResults(threeStarArray);
+            this.createButtonWriteReviewResults(threeStarArray);
+            this.clearMarkers();
+            this.createMarkerResults(threeStarArray, map);
+            this.displayMarkersOnMap(map);
+         }
+         if (filterRatings.value == 4) {
+            this.clearListRestaurants();
+            this.createListResults(fourStarArray);
+            this.createButtonConsultReviewResults(fourStarArray);
+            this.createButtonWriteReviewResults(fourStarArray);
+            this.clearMarkers();
+            this.createMarkerResults(fourStarArray, map);
+            this.displayMarkersOnMap(map);
+         }
+         if (filterRatings.value == 5) {
+            this.clearListRestaurants();
+            this.createListResults(fiveStarArray);
+            this.createButtonConsultReviewResults(fiveStarArray);
+            this.createButtonWriteReviewResults(fiveStarArray);
+            this.clearMarkers();
+            this.createMarkerResults(fiveStarArray, map);
+            this.displayMarkersOnMap(map);
+         }
+      } else {
          this.clearListRestaurants();
          this.createListResults(array);
          this.createButtonConsultReviewResults(array);
          this.createButtonWriteReviewResults(array);
+         this.clearMarkers();
          this.createMarkerResults(array, map);
-      }
-      if (filterreviews.value == 1) {
-         this.clearListRestaurants();
-         this.createListResults(oneStarArray);
-         this.createButtonConsultReviewResults(oneStarArray);
-         this.createButtonWriteReviewResults(oneStarArray);
-         this.createMarkerResults(oneStarArray, map);
-      }
-      if (filterreviews.value == 2) {
-         this.clearListRestaurants();
-         this.createListResults(twoStarArray);
-         this.createButtonConsultReviewResults(twoStarArray);
-         this.createButtonWriteReviewResults(twoStarArray);
-         this.createMarkerResults(twoStarArray, map);
-      }
-      if (filterreviews.value == 3) {
-         this.clearListRestaurants();
-         this.createListResults(threeStarArray);
-         this.createButtonConsultReviewResults(threeStarArray);
-         this.createButtonWriteReviewResults(threeStarArray);
-         this.createMarkerResults(threeStarArray, map);
-      }
-      if (filterreviews.value == 4) {
-         this.clearListRestaurants();
-         this.createListResults(fourStarArray);
-         this.createButtonConsultReviewResults(fourStarArray);
-         this.createButtonWriteReviewResults(fourStarArray);
-         this.createMarkerResults(fourStarArray, map);
-      }
-      if (filterreviews.value == 5) {
-         this.clearListRestaurants();
-         this.createListResults(fiveStarArray);
-         this.createButtonConsultReviewResults(fiveStarArray);
-         this.createButtonWriteReviewResults(fiveStarArray);
-         this.createMarkerResults(fiveStarArray, map);
+         this.displayMarkersOnMap(map);
       }
    }
 
@@ -625,7 +665,9 @@ class Restaurant {
    }
 }
 
-let restaurantResults = [];
+let restauranstList = [];
+let restaurantListParis = [];
+let markersArray = [];
 
 let restaurants = [
    new Restaurant(1, "Bronco", "39 Rue des Petites Écuries, 75010 Paris", 48.8737815, 2.3501649, [

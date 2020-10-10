@@ -66,19 +66,20 @@
                     <option value="5">Entre 4 et 5</option>
                   </select>
                   <div class="input-group-append">
-                    <a href="#restaurantsList"><button id="buttonFilter" class="btn btn-success" type="button">Appliquer</button></a>
+                    <a href="#titleListRestaurant"><button id="buttonFilter" class="btn btn-success" type="button" disabled="true">Appliquer</button></a>
                   </div>
                 </div>
               </div>
               <div class="col-lg-6 text-center">
-                <a href="#map"><button id="geolocation" type="button" class="btn btn-danger btn-sm"><i class="fas fa-search-location"></i>Autour de vous</button></a>
+                <a href="#titleListRestaurant"><button id="geolocation" type="button" class="btn btn-danger btn-sm"><i class="fas fa-search-location"></i>Autour de vous</button></a>
               </div>
             </div>
           </div>
           <div class="container-fluid">
             <div class="row restaurantMap">
-              <div class="col-sm-3">
-                <h3 class="titleListRestaurant text-center">Liste des restaurants</h3>
+              <div class="col-sm-3 text-center">
+                <button id="titleListRestaurant" class="btn btn-primary btn-sm" type="button">Afficher les restaurants</button>
+                <!--<h3 id="titleListRestaurant" class="text-center">Liste des restaurants</h3>-->
                 <div id="restaurantsList"></div>
               </div>
               <div class="col-sm-9 text-center">

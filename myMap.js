@@ -6,37 +6,57 @@ class MyMap {
         this.lat = lat;
         this.long = long;
         this.city = {lat: this.lat, lng: this.long};
-        this.zoom = 17;
+        this.zoom = 16;
         this.map = new google.maps.Map(document.getElementById('map'), {zoom: this.zoom, center: this.city});
     }
 
     createMap() {
         new google.maps.Marker({position: this.city, map: this.map, label: "Paris"});
+        this.generateRestaurantsListGooglePlacesParis();
         this.geolocation();
         this.addMarkerRestaurant();
     }
 
-    geolocation() {
+    generateRestaurantsListGooglePlacesParis() {
         const map = this.map;
         const ParisLocation = this.city;
+        let listResults = new Restaurant();
+
+        listResults.getRestaurantsListParisWithReviews(ParisLocation, map);
+
+        $("#titleListRestaurant").on("click", function() {
+            $("#buttonFilter").removeAttr("disabled");
+            listResults.clearListRestaurants();
+            listResults.createListResults(restauranstListParis);
+            listResults.createButtonConsultReviewResults(restauranstListParis);
+            listResults.createButtonWriteReviewResults(restauranstListParis);
+            listResults.clearMarkers();
+            listResults.createMarkerResults(restauranstListParis, map);
+            listResults.displayMarkersOnMap(map);
+        });
+
+        $("#buttonFilter").on("click", function() {
+            listResults.filterResultsRating(restauranstListParis, map);
+        });
+    }
+
+    geolocation() {
+        const map = this.map;
         
         let listResults = new Restaurant();
         let infoWindow = new google.maps.InfoWindow;
 
-        listResults.getRestaurantsListParisWithReviews(ParisLocation, map);
-
-        $("#buttonFilter").on("click", function() {
-            listResults.filterResultsRating(restaurantListParis, map);
-        });
-        //$("#geolocation").removeAttr("disabled");
-
         let geolocation = document.getElementById("geolocation");
         geolocation.addEventListener("click", function(){
-            restauranstList = [];
-            listResults.clearMarkers();
-            //listResults.clearListRestaurants();
 
-            $("#map").css("height", "600px");
+            $("#buttonFilter").attr("disabled", "true");
+
+            restauranstList = [];
+
+            listResults.clearListRestaurants();
+            listResults.clearMarkers();
+
+            //$("#map").css("height", "600px");
 
             // Try HTML5 geolocation.
             if (navigator.geolocation) {
@@ -48,6 +68,17 @@ class MyMap {
                 console.log(pos);
                 //listResults.clearListRestaurants();
                 listResults.getRestauranstListWithReviews(pos, map);
+
+                $("#titleListRestaurant").on("click", function() {
+                    $("#buttonFilter").removeAttr("disabled");
+                    listResults.clearListRestaurants();
+                    listResults.createListResults(restauranstList);
+                    listResults.createButtonConsultReviewResults(restauranstList);
+                    listResults.createButtonWriteReviewResults(restauranstList);
+                    listResults.clearMarkers();
+                    listResults.createMarkerResults(restauranstList, map);
+                    listResults.displayMarkersOnMap(map);
+                });
                 
                 $("#buttonFilter").on("click", function() {
                     listResults.filterResultsRating(restauranstList, map)

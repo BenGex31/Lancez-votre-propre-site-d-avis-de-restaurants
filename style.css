@@ -175,8 +175,10 @@ header h2 {
 
 /* Liste restaurants*/
 
-.titleListRestaurant {
-    color: white;
+#titleListRestaurant {
+    color: black;
+    background-color: #82ccdd;
+    border: 1px solid black;
 }
 
 #filterRatings {

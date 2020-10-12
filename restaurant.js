@@ -26,6 +26,7 @@ class Restaurant {
             results.forEach((restaurant) => {
                this.getGooglePlacesReviews(restaurant, map);
             });
+            console.log(restauranstList);
          } else {
          alert("Le status de la requête est " + status + ", merci d'essayer à nouveau ultérieurement.");
          }
@@ -55,7 +56,6 @@ class Restaurant {
             );
 
             restauranstList.push(newRestaurant);
-            console.log(restauranstList);
 
             place.reviews.forEach(review => {
                const newReview = new Review(
@@ -92,6 +92,9 @@ class Restaurant {
             results.forEach(restaurantParis => {
                this.getGooglePlacesReviewsParis(restaurantParis, map);
             });
+            console.log(restaurantsListParis);
+         } else {
+            alert('Aucun avis client.' + "Le status de la requête est " + status);
          }
      });
    }
@@ -116,8 +119,8 @@ class Restaurant {
                )
             });
 
-            const newrestaurantParis = new Restaurant(
-               restauranstListParis.length + 1,
+            const newRestaurantParis = new Restaurant(
+               restaurantsListParis.length + 1,
                restaurantParis.name,
                restaurantParis.vicinity,
                restaurantParis.icon,
@@ -129,46 +132,48 @@ class Restaurant {
                reviewsParis
             );
 
-            restauranstListParis.push(newrestaurantParis);
-            console.log(restauranstListParis);
+            restaurantsListParis.push(newRestaurantParis);
          } else {
             alert('Aucun avis client.' + "Le status de la requête est " + status);
          }
       });
    }
 
-   createMarkerRestaurants(array, map) {
-      for(let restaurant of array) {
-      let markerRestaurant = new google.maps.Marker({
-         position: {lat: restaurant.lat, lng: restaurant.long},
-         map: map,
-         animation: google.maps.Animation.DROP,
-         label: restaurant.restaurantName,
-         icon: {
-            url: "img/icon-restaurant-location.png",
-            scaledSize: new google.maps.Size(50, 50),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(0, 0)
+   getLocalRestaurantList() {
+      let requestRestaurantLocal = new XMLHttpRequest();
+      requestRestaurantLocal.onreadystatechange = () => {
+         if (this.readyState == XMLHttpRequest.DONE) {
+            let results = JSON.parse(this.responseText);
+
+            results.forEach(restaurant => {
+               const reviews = restaurant.ratings.map(rating => new Review(
+                  "Utilisateur anonyme",
+                  "https://cdn3.iconfinder.com/data/icons/glyphicon/64/profil-512.png",
+                  rating.stars,
+                  rating.comment,
+                  undefined,
+                  "Date de publication non renseignée"
+               ));
+      
+               const newRestaurantLocal = new Restaurant(
+                  restaurantsListParis.length + 1,
+                  restaurant.restaurantName,
+                  restaurant.address,
+                  "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+                  restaurant.lat,
+                  restaurant.long,
+                  undefined,
+                  undefined,
+                  undefined,
+                  reviews
+               );
+               restaurantsListParis.push(newRestaurantLocal);
+            });
          }
-      });
-
-      const contentString =
-      '<h1 id="firstHeading" class="restaurantName text-left">' + restaurant.restaurantName + '</h1>' + 
-      '<div class="text-left">' +
-      '<img class"streetView" src="https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + restaurant.lat + "," + restaurant.long + '&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc">' +
-      '</div>' +
-      '<div id="bodyContent">' +
-      '<p><i class="fas fa-map-marker-alt"></i>' + restaurant.address + '</p>' +
-      '</div>';
-
-      const infoWindow = new google.maps.InfoWindow({
-         content : contentString
-      });
-
-      markerRestaurant.addListener("click", () => {
-         infoWindow.open(map, markerRestaurant);
-      });
-      }
+      };
+      requestRestaurantLocal.open("GET", "data.json");
+      requestRestaurantLocal.send();
+      console.log(restaurantsListParis);
    }
 
    displayResults(arrayRestaurant) {
@@ -616,7 +621,7 @@ class Restaurant {
 }
 
 let restauranstList = [];
-let restauranstListParis = [];
+let restaurantsListParis = [];
 let markersArray = [];
 
 let restaurants = [

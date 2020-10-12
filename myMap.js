@@ -12,37 +12,14 @@ class MyMap {
 
     createMap() {
         new google.maps.Marker({position: this.city, map: this.map, label: "Paris"});
-        this.generateRestaurantsListGooglePlacesParis();
         this.geolocation();
         this.addMarkerRestaurant();
     }
 
-    generateRestaurantsListGooglePlacesParis() {
-        const map = this.map;
-        const ParisLocation = this.city;
-        let listResults = new Restaurant();
-
-        listResults.getRestaurantsListParisWithReviews(ParisLocation, map);
-
-        $("#titleListRestaurant").on("click", function() {
-            $("#buttonFilter").removeAttr("disabled");
-            listResults.clearListRestaurants();
-            listResults.createListResults(restauranstListParis);
-            listResults.createButtonConsultReviewResults(restauranstListParis);
-            listResults.createButtonWriteReviewResults(restauranstListParis);
-            listResults.clearMarkers();
-            listResults.createMarkerResults(restauranstListParis, map);
-            listResults.displayMarkersOnMap(map);
-        });
-
-        $("#buttonFilter").on("click", function() {
-            listResults.filterResultsRating(restauranstListParis, map);
-        });
-    }
-
     geolocation() {
         const map = this.map;
-        
+        const ParisLocation = this.city;
+
         let listResults = new Restaurant();
         let infoWindow = new google.maps.InfoWindow;
 
@@ -50,69 +27,91 @@ class MyMap {
         geolocation.addEventListener("click", function(){
 
             $("#buttonFilter").attr("disabled", "true");
-
+            $("#titleListRestaurant").removeAttr("disabled");
             restauranstList = [];
 
             listResults.clearListRestaurants();
             listResults.clearMarkers();
 
-            //$("#map").css("height", "600px");
-
             // Try HTML5 geolocation.
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
-                const pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                console.log(pos);
-                //listResults.clearListRestaurants();
-                listResults.getRestauranstListWithReviews(pos, map);
+                    alert("Le service de géolocalisation s'est lancé avec succès");
 
-                $("#titleListRestaurant").on("click", function() {
-                    $("#buttonFilter").removeAttr("disabled");
-                    listResults.clearListRestaurants();
-                    listResults.createListResults(restauranstList);
-                    listResults.createButtonConsultReviewResults(restauranstList);
-                    listResults.createButtonWriteReviewResults(restauranstList);
-                    listResults.clearMarkers();
-                    listResults.createMarkerResults(restauranstList, map);
-                    listResults.displayMarkersOnMap(map);
-                });
-                
-                $("#buttonFilter").on("click", function() {
-                    listResults.filterResultsRating(restauranstList, map)
-                });
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
 
-                new google.maps.Marker({
-                    position: pos,
-                    map: map,
-                    animation: google.maps.Animation.DROP,
-                    label : "Vous êtes ici !",
-                    icon: {
-                        url: "img/icon-user-location.png",
-                        scaledSize: new google.maps.Size(50, 50),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(0, 0)
-                    }
-                });
+                    console.log(pos);
 
-                map.setCenter(pos);
+                    let filterRatings = document.getElementById("filterRatings");
+                    filterRatings.value = "Toutes notes moyennes confondues";
+
+                    listResults.getRestauranstListWithReviews(pos, map);
+
+                    $("#titleListRestaurant").on("click", function() {
+                        $("#buttonFilter").removeAttr("disabled");
+                        listResults.clearListRestaurants();
+                        listResults.createListResults(restauranstList);
+                        listResults.createButtonConsultReviewResults(restauranstList);
+                        listResults.createButtonWriteReviewResults(restauranstList);
+                        listResults.clearMarkers();
+                        listResults.createMarkerResults(restauranstList, map);
+                        listResults.displayMarkersOnMap(map);
+                    });
+                    
+                    $("#buttonFilter").on("click", function() {
+                        listResults.filterResultsRating(restauranstList, map)
+                    });
+
+                    let MarkerUser = new google.maps.Marker({
+                        position: pos,
+                        //map: map,
+                        animation: google.maps.Animation.DROP,
+                        label : "Vous êtes ici !",
+                        icon: {
+                            url: "img/icon-user-location.png",
+                            scaledSize: new google.maps.Size(50, 50),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(0, 0)
+                        }
+                    });
+                    MarkerUser.setMap(map);
+
+                    map.setCenter(pos);
+
                 }, function() {
-                handleLocationError(true, infoWindow, map.getCenter());
+                    alert("La position par défaut a été définie sur Paris");
+
+                    restaurantsListParis = [];
+
+                    listResults.clearListRestaurants();
+                    listResults.clearMarkers();
+
+                    map.setCenter(ParisLocation);
+
+                    let filterRatings = document.getElementById("filterRatings");
+                    filterRatings.value = "Toutes notes moyennes confondues";
+
+                    //listResults.getRestaurantsListParisWithReviews(ParisLocation, map);
+                    listResults.getLocalRestaurantList();
+
+                    $("#titleListRestaurant").on("click", function() {
+                        $("#buttonFilter").removeAttr("disabled");
+                        listResults.clearListRestaurants();
+                        listResults.createListResults(restaurantsListParis);
+                        listResults.createButtonConsultReviewResults(restaurantsListParis);
+                        listResults.createButtonWriteReviewResults(restaurantsListParis);
+                        listResults.clearMarkers();
+                        listResults.createMarkerResults(restaurantsListParis, map);
+                        listResults.displayMarkersOnMap(map);
+                    });
+
+                    $("#buttonFilter").on("click", function() {
+                        listResults.filterResultsRating(restaurantsListParis, map);
+                    });
                 });
-                
-            } else {
-            // Browser doesn't support Geolocation
-            handleLocationError(false, infoWindow, map.getCenter());
-            }
-            
-            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-                infoWindow.setPosition(pos);
-                infoWindow.setContent(browserHasGeolocation ?
-                                        'Erreur: Le service de géolocalisation a échoué.' :
-                                        'Erreur: Votre navigateur ne prend pas en charge la géolocalisation.');
-                infoWindow.open(map);
             }
         });
     }

@@ -147,12 +147,16 @@ header h2 {
 }
 
 #addRestaurant {
+    margin-right: 5px;
+}
+
+#addRestaurant, #removeMarker {
     margin-top: 1em;
     background-color: #82ccdd;
     color: black;
 }
 
-#addRestaurant, #cancelAddRestaurant, #submitNewRestaurant {
+#addRestaurant, #cancelAddRestaurant, #submitNewRestaurant, #removeMarker {
     border: 1px solid black;
     font-size: small;
 }

@@ -28,7 +28,7 @@ class MyMap {
 
             $("#buttonFilter").attr("disabled", "true");
             $("#titleListRestaurant").removeAttr("disabled");
-            restauranstList = [];
+            restaurantsList = [];
 
             listResults.clearListRestaurants();
             listResults.clearMarkers();
@@ -48,21 +48,22 @@ class MyMap {
                     let filterRatings = document.getElementById("filterRatings");
                     filterRatings.value = "Toutes notes moyennes confondues";
 
-                    listResults.getRestauranstListWithReviews(pos, map);
+                    listResults.getrestaurantsListWithReviews(pos, map);
 
                     $("#titleListRestaurant").on("click", function() {
                         $("#buttonFilter").removeAttr("disabled");
                         listResults.clearListRestaurants();
-                        listResults.createListResults(restauranstList);
-                        listResults.createButtonConsultReviewResults(restauranstList);
-                        listResults.createButtonWriteReviewResults(restauranstList);
+                        listResults.createListResults(restaurantsList);
+                        listResults.createButtonConsultReviewResults(restaurantsList);
+                        listResults.createButtonWriteReviewResults(restaurantsList);
                         listResults.clearMarkers();
-                        listResults.createMarkerResults(restauranstList, map);
+                        listResults.createMarkerResults(restaurantsList, map);
                         listResults.displayMarkersOnMap(map);
+                        listResults.publishReview(restaurantsList);
                     });
                     
                     $("#buttonFilter").on("click", function() {
-                        listResults.filterResultsRating(restauranstList, map)
+                        listResults.filterResultsRating(restaurantsList, map);
                     });
 
                     let MarkerUser = new google.maps.Marker({
@@ -94,8 +95,8 @@ class MyMap {
                     let filterRatings = document.getElementById("filterRatings");
                     filterRatings.value = "Toutes notes moyennes confondues";
 
-                    //listResults.getRestaurantsListParisWithReviews(ParisLocation, map);
-                    listResults.getLocalRestaurantList();
+                    listResults.getRestaurantsListParisWithReviews(ParisLocation, map);
+                    //listResults.getLocalRestaurantList();
 
                     $("#titleListRestaurant").on("click", function() {
                         $("#buttonFilter").removeAttr("disabled");
@@ -106,6 +107,7 @@ class MyMap {
                         listResults.clearMarkers();
                         listResults.createMarkerResults(restaurantsListParis, map);
                         listResults.displayMarkersOnMap(map);
+                        listResults.publishReview(restaurantsListParis);
                     });
 
                     $("#buttonFilter").on("click", function() {
@@ -128,15 +130,14 @@ class MyMap {
 
             const addNewRestaurantOnMap = new Restaurant();
             addNewRestaurantOnMap.addNewRestaurantArray(event.latLng.lat(), event.latLng.lng());
-            $(".alertUpdateLink").remove();
             $("#buttonUpdate").removeAttr("disabled");
         });
     }
 
     placeMarkerRestaurantAndPanTo(latLng, map) {
-        let marker = new google.maps.Marker({
+        let markerNewRestaurant = new google.maps.Marker({
             position: latLng,
-            map: map,
+            //map: map,
             animation: google.maps.Animation.DROP,
             label: "Nouveau restaurant",
             icon: {
@@ -147,9 +148,14 @@ class MyMap {
             }
         });
 
-        marker.setMap(map);
+        this.displayMarkerNewRestaurant(markerNewRestaurant, map);
         map.panTo(latLng);
-        this.createInfoWindowNewMarker(marker, map);
+        this.createInfoWindowNewMarker(markerNewRestaurant, map);
+        markerNewRestaurantArray.push(markerNewRestaurant);
+    }
+
+    displayMarkerNewRestaurant(markerNewRestaurant, map) {
+        markerNewRestaurant.setMap(map);
     }
 
     createButtonAddRestaurant() {
@@ -164,6 +170,17 @@ class MyMap {
         $('<div>').appendTo($("#modal-content-addRestaurant")).attr({class:"modal-body", id:"modal-body-addRestaurant"});
 
         $('<form>').appendTo($("#modal-body-addRestaurant")).attr("id", "form-addRestaurant");
+
+        $('<div>').appendTo($("#form-addRestaurant")).attr({class:"form-group row text-left", id:"addUserName-form-group"});
+        $('<label>').appendTo($("#addUserName-form-group")).attr({for:"inputUserName", class:"col-lg-6 col-form-label"}).html("* Votre nom :");
+        $('<div>').appendTo($("#addUserName-form-group")).attr({class:"col-lg-6", id:"divInputUserName"});
+        $('<input>').appendTo($("#divInputUserName")).attr({type:"text", class:"form-control", id:"inputUserName"});
+
+        $('<div>').appendTo($("#form-addRestaurant")).attr({class:"form-group row text-left", id:"addUserFirstName-form-group"});
+        $('<label>').appendTo($("#addUserFirstName-form-group")).attr({for:"inputUserFirstName", class:"col-lg-6 col-form-label"}).html("* Votre prénom :");
+        $('<div>').appendTo($("#addUserFirstName-form-group")).attr({class:"col-lg-6", id:"divInputUserFirstName"});
+        $('<input>').appendTo($("#divInputUserFirstName")).attr({type:"text", class:"form-control", id:"inputUserFirstName"});
+
         $('<div>').appendTo($("#form-addRestaurant")).attr({class:"form-group row text-left", id:"addRestaurantName-form-group"});
         $('<label>').appendTo($("#addRestaurantName-form-group")).attr({for:"inputRestaurantName", class:"col-lg-6 col-form-label"}).html("* Nom du restaurant :");
         $('<div>').appendTo($("#addRestaurantName-form-group")).attr({class:"col-lg-6", id:"divInputRestaurantName"});
@@ -201,15 +218,18 @@ class MyMap {
 
     createInfoWindowNewMarker(marker, map) {
         let contentString = 
-        '<button class="btn btn-primary btn-sm" type="button" id="addRestaurant" data-toggle="modal" data-target="#addRestaurantModal">Ajouter un restaurant</button>' ;
+        '<button class="btn btn-primary btn-sm" type="button" id="addRestaurant" data-toggle="modal" data-target="#addRestaurantModal">Ajouter un restaurant</button>';
+        //'<button class="btn btn-primary btn-sm" type="button" id="removeMarker">Supprimer le marqueur</button>';
 
         let infowindow = new google.maps.InfoWindow({
             content: contentString
         });
 
         marker.addListener("click", () => {
-
             infowindow.open(map, marker);
         });
     }
 }
+
+let markerNewRestaurantArray = [];
+console.log(markerNewRestaurantArray);

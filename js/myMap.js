@@ -7,7 +7,7 @@ class MyMap {
         this.long = long;
         this.city = {lat: this.lat, lng: this.long};
         this.zoom = 16;
-        this.map = new google.maps.Map(document.getElementById('map'), {zoom: this.zoom, center: this.city});
+        this.map = new google.maps.Map(document.getElementById('map'), {zoom: this.zoom, /*center: this.city*/});
     }
 
     createMap() {
@@ -23,8 +23,8 @@ class MyMap {
         let listResults = new Restaurant();
         let infoWindow = new google.maps.InfoWindow;
 
-        let geolocation = document.getElementById("geolocation");
-        geolocation.addEventListener("click", function(){
+        //let geolocation = document.getElementById("geolocation");
+        //geolocation.addEventListener("click", function(){
 
             $("#buttonFilter").attr("disabled", "true");
             $("#titleListRestaurant").removeAttr("disabled");
@@ -51,6 +51,7 @@ class MyMap {
                     listResults.getrestaurantsListWithReviews(pos, map);
 
                     $("#titleListRestaurant").on("click", function() {
+                        $("#titleListRestaurant").html("Liste des restaurant").removeClass("animate__animated animate__heartBeat").css("color", "black");
                         $("#buttonFilter").removeAttr("disabled");
                         listResults.clearListRestaurants();
                         listResults.createListResults(restaurantsList);
@@ -68,7 +69,6 @@ class MyMap {
 
                     let MarkerUser = new google.maps.Marker({
                         position: pos,
-                        //map: map,
                         animation: google.maps.Animation.DROP,
                         label : "Vous êtes ici !",
                         icon: {
@@ -99,6 +99,7 @@ class MyMap {
                     //listResults.getLocalRestaurantList();
 
                     $("#titleListRestaurant").on("click", function() {
+                        $("#titleListRestaurant").html("Liste des restaurant").removeClass("animate__animated animate__heartBeat").css("color", "black");
                         $("#buttonFilter").removeAttr("disabled");
                         listResults.clearListRestaurants();
                         listResults.createListResults(restaurantsListParis);
@@ -115,7 +116,7 @@ class MyMap {
                     });
                 });
             }
-        });
+        //});
     }
 
     addMarkerRestaurant() {
@@ -137,7 +138,6 @@ class MyMap {
     placeMarkerRestaurantAndPanTo(latLng, map) {
         let markerNewRestaurant = new google.maps.Marker({
             position: latLng,
-            //map: map,
             animation: google.maps.Animation.DROP,
             label: "Nouveau restaurant",
             icon: {

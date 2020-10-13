@@ -11,7 +11,7 @@ class MyMap {
     }
 
     createMap() {
-        new google.maps.Marker({position: this.city, map: this.map, label: "Paris"});
+        //new google.maps.Marker({position: this.city, map: this.map, label: "Paris"});
         this.geolocation();
         this.addMarkerRestaurant();
     }
@@ -19,6 +19,7 @@ class MyMap {
     geolocation() {
         const map = this.map;
         const ParisLocation = this.city;
+        var self = this;
 
         let listResults = new Restaurant();
         let infoWindow = new google.maps.InfoWindow;
@@ -43,120 +44,87 @@ class MyMap {
                         lng: position.coords.longitude
                     };
 
-                    console.log(pos);
-
-                    let filterRatings = document.getElementById("filterRatings");
-                    filterRatings.value = "Toutes notes moyennes confondues";
-
-                    let filterRadius = document.getElementById("filterRadius");
-                    filterRadius.addEventListener("change",function(event){
-                        restaurantsList = [];
-                        listResults.getRestaurantsListWithReviews(pos, map, event.target.value);
-                    });
-                    
-                    $("#titleListRestaurant").on("click", function() {
-                        $("#titleListRestaurant").html("Liste des restaurants").removeClass("animate__animated animate__heartBeat").css("color", "black");
-                        listResults.clearListRestaurants();
-                        listResults.createListResults(restaurantsList);
-                        listResults.createButtonConsultReviewResults(restaurantsList);
-                        listResults.createButtonWriteReviewResults(restaurantsList);
-                        listResults.clearMarkers();
-                        listResults.createMarkerResults(restaurantsList, map);
-                        listResults.displayMarkersOnMap(map);
-                        listResults.publishReview(restaurantsList);
-                        
-                        if (filterRadius.value >= 100 && filterRadius.value <= 7000){
-                            $(".infoNumberRestaurant").html("");
-                            $("#buttonFilter").removeAttr("disabled");
-                            if (restaurantsList.length > 1) {
-                                $(".infoNumberRestaurant").html(restaurantsList.length + " restaurants autour de vous");
-                            } else {
-                                $(".infoNumberRestaurant").html("Aucun restaurant autour de vous");
-                            }
-                            if (restaurantsList.length == 1) {
-                                $(".infoNumberRestaurant").html(restaurantsList.length + " restaurant autour de vous");
-                            }
-                        } else {
-                            alert("Merci de sélectionner une distance");
-                            $(".infoNumberRestaurant").html("");
-                        }
-                    });
-                    
-                    $("#buttonFilter").on("click", function() {
-                        listResults.filterResultsRating(restaurantsList, map);
-                    });
-
-                    let MarkerUser = new google.maps.Marker({
-                        position: pos,
-                        animation: google.maps.Animation.DROP,
-                        label : "Vous êtes ici !",
-                        icon: {
-                            url: "img/icon-user-location.png",
-                            scaledSize: new google.maps.Size(50, 50),
-                            origin: new google.maps.Point(0, 0),
-                            anchor: new google.maps.Point(0, 0)
-                        }
-                    });
-                    MarkerUser.setMap(map);
-
-                    map.setCenter(pos);
+                    self.buildAndDisplayMap(pos, listResults, map);
 
                 }, function() {
-                    alert("La position par défaut a été définie sur Paris");
-
-                    restaurantsListParis = [];
-
-                    listResults.clearListRestaurants();
-                    listResults.clearMarkers();
-
-                    map.setCenter(ParisLocation);
-
-                    let filterRatings = document.getElementById("filterRatings");
-                    filterRatings.value = "Toutes notes moyennes confondues";
-
-                    let filterRadius = document.getElementById("filterRadius");
-                    filterRadius.addEventListener("change",function(event){
-                        restaurantsListParis = [];
-                        listResults.getRestaurantsListParisWithReviews(ParisLocation, map, event.target.value);
-                    });
-
-                    listResults.getRestaurantsListParisWithReviews(ParisLocation, map);
-                    //listResults.getLocalRestaurantList();
-
-                    $("#titleListRestaurant").on("click", function() {
-                        $("#titleListRestaurant").html("Liste des restaurants").removeClass("animate__animated animate__heartBeat").css("color", "black");
-                        listResults.clearListRestaurants();
-                        listResults.createListResults(restaurantsListParis);
-                        listResults.createButtonConsultReviewResults(restaurantsListParis);
-                        listResults.createButtonWriteReviewResults(restaurantsListParis);
-                        listResults.clearMarkers();
-                        listResults.createMarkerResults(restaurantsListParis, map);
-                        listResults.displayMarkersOnMap(map);
-                        listResults.publishReview(restaurantsListParis);
-
-                        if (filterRadius.value >= 100 && filterRadius.value <= 7000){
-                            $(".infoNumberRestaurant").html("");
-                            $("#buttonFilter").removeAttr("disabled");
-                            if (restaurantsListParis.length > 1) {
-                                $(".infoNumberRestaurant").html(restaurantsListParis.length + " restaurants autour de vous");
-                            } else {
-                                $(".infoNumberRestaurant").html("Aucun restaurant autour de vous");
-                            }
-                            if (restaurantsListParis.length == 1) {
-                                $(".infoNumberRestaurant").html(restaurantsListParis.length + " restaurant autour de vous");
-                            }
-                        } else {
-                            alert("Merci de sélectionner une distance");
-                            $(".infoNumberRestaurant").html("");
-                        }
-                    });
-
-                    $("#buttonFilter").on("click", function() {
-                        listResults.filterResultsRating(restaurantsListParis, map);
-                    });
+                    self.buildAndDisplayDefaultMap(listResults, map);
                 });
+            } else {
+                this.buildAndDisplayDefaultMap(listResults, map);
             }
         //});
+    }
+
+    buildAndDisplayDefaultMap(listResults, map) {
+        alert("La position par défaut a été définie sur Paris");
+
+        const pos = {
+            lat: 48.8565387,
+            lng: 2.3518054
+        };
+
+        this.buildAndDisplayMap(pos, listResults, map);
+    }
+
+    buildAndDisplayMap(pos, listResults, map) {
+        console.log(pos);
+
+        let filterRatings = document.getElementById("filterRatings");
+        filterRatings.value = "Toutes notes moyennes confondues";
+
+        let filterRadius = document.getElementById("filterRadius");
+        
+        filterRadius.addEventListener("change", function (event) {
+            restaurantsList = [];
+            listResults.getRestaurantsListWithReviews(pos, map, event.target.value);
+        });
+
+        $("#titleListRestaurant").on("click", function () {
+            $("#titleListRestaurant").html("Liste des restaurants").removeClass("animate__animated animate__heartBeat").css("color", "black");
+            listResults.clearListRestaurants();
+            listResults.createListResults(restaurantsList);
+            listResults.createButtonConsultReviewResults(restaurantsList);
+            listResults.createButtonWriteReviewResults(restaurantsList);
+            listResults.clearMarkers();
+            listResults.createMarkerResults(restaurantsList, map);
+            listResults.displayMarkersOnMap(map);
+            listResults.publishReview(restaurantsList);
+
+            if (filterRadius.value >= 100 && filterRadius.value <= 7000) {
+                $(".infoNumberRestaurant").html("");
+                $("#buttonFilter").removeAttr("disabled");
+                if (restaurantsList.length > 1) {
+                    $(".infoNumberRestaurant").html(restaurantsList.length + " restaurants autour de vous");
+                } else {
+                    $(".infoNumberRestaurant").html("Aucun restaurant autour de vous");
+                }
+                if (restaurantsList.length == 1) {
+                    $(".infoNumberRestaurant").html(restaurantsList.length + " restaurant autour de vous");
+                }
+            } else {
+                alert("Merci de sélectionner une distance");
+                $(".infoNumberRestaurant").html("");
+            }
+        });
+
+        $("#buttonFilter").on("click", function () {
+            listResults.filterResultsRating(restaurantsList, map);
+        });
+
+        let MarkerUser = new google.maps.Marker({
+            position: pos,
+            animation: google.maps.Animation.DROP,
+            label: "Vous êtes ici !",
+            icon: {
+                url: "img/icon-user-location.png",
+                scaledSize: new google.maps.Size(50, 50),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(0, 0)
+            }
+        });
+        MarkerUser.setMap(map);
+
+        map.setCenter(pos);
     }
 
     addMarkerRestaurant() {

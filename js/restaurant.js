@@ -13,10 +13,10 @@ class Restaurant {
    }
 
    // Récupération des restaurants via GooglePlaces
-   getrestaurantsListWithReviews(position, map) {
+   getRestaurantsListWithReviews(position, map, radius) {
       const requestRestaurant = {
          location: position,
-         radius: '6500',
+         radius: radius,
          type: ['restaurant']
       };
 
@@ -73,16 +73,16 @@ class Restaurant {
                   }
                });
             });
-         } else {
+         } /*else {
             alert('Aucun avis client.' + "Le status de la requête est " + status);
-         }
+         }*/
       });
    }
 
-   getRestaurantsListParisWithReviews(position, map) {
+   getRestaurantsListParisWithReviews(position, map, radius) {
       const requestRestaurantParis = {
          location: position,
-         radius: '130',
+         radius: radius,
          type: ['restaurant']
      }
 
@@ -133,9 +133,9 @@ class Restaurant {
             );
 
             restaurantsListParis.push(newRestaurantParis);
-         } else {
+         } /*else {
             alert('Aucun avis client.' + "Le status de la requête est " + status);
-         }
+         }*/
       });
    }
 

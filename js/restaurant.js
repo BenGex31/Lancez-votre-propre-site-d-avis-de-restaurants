@@ -73,9 +73,9 @@ class Restaurant {
                   }
                });
             });
-         } /*else {
+         } else {
             alert('Aucun avis client.' + "Le status de la requête est " + status);
-         }*/
+         }
       });
    }
 
@@ -133,9 +133,9 @@ class Restaurant {
             );
 
             restaurantsListParis.push(newRestaurantParis);
-         } /*else {
+         } else {
             alert('Aucun avis client.' + "Le status de la requête est " + status);
-         }*/
+         }
       });
    }
 
@@ -293,7 +293,7 @@ class Restaurant {
 
          $('<div>').appendTo($("#modal-content-writeReview" + restaurant.id)).attr({class: "modal-footer", id: "modal-footer-writeReview" + restaurant.id});
          $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.id)).attr({type: "button", class: "btn btn-secondary btn-sm", id:"btnCloseWriteReviewRestaurant" + restaurant.id}).attr('data-dismiss', 'modal').html("Fermer").css("font-size", "small");
-         $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.id)).attr({type: "submit", class: "btn btn-primary btn-sm", id: "publishReview" + restaurant.id}).html("Publier un avis").css("font-size", "small");
+         $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.id)).attr({type: "submit", class: "btn btn-primary btn-sm", id: "publishReview" + restaurant.id, 'data-dismiss': 'modal'}).html("Publier un avis").css("font-size", "small");
       }
    }
 
@@ -419,7 +419,8 @@ class Restaurant {
    $("#restaurantsList").html("");
    }
 
-   publishReview(array) {
+   publishReview(array, map) {
+      var self = this;
       for (let restaurant of array) {
          let textareaAuthorNameRestaurant = document.getElementById("textareaAuthorNameRestaurant" + restaurant.id)
          let inputGroupSelectRestaurant = document.getElementById("inputGroupSelectRestaurant" + restaurant.id);
@@ -441,17 +442,27 @@ class Restaurant {
                      );
                   }
 
-                  $("#publishReview" + restaurant.id).attr("disabled", "true");
+                  $("#titleListRestaurant").html("Liste des restaurants").removeClass("animate__animated animate__heartBeat").css("color", "black");
+                  self.clearListRestaurants();
+                  self.createListResults(array);
+                  self.createButtonConsultReviewResults(array);
+                  self.createButtonWriteReviewResults(array);
+                  self.clearMarkers();
+                  self.createMarkerResults(array, map);
+                  self.displayMarkersOnMap(map);
+                  self.publishReview(array);
+
+                  /*$("#publishReview" + restaurant.id).attr("disabled", "true");
                   $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Votre avis a bien été enregistré !").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
                   $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Merci de bien vouloir cliquer sur Fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
-                  $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("et de cliquer sur Mettre à jour les restaurants au dessus de la liste").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
+                  $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("et de cliquer sur Mettre à jour les restaurants au dessus de la liste").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});*/
 
                } else {
                   alert("Merci de renseigner votre nom et prénom, ainsi qu'une note et un commentaire, sinon merci de cliquer sur Fermer")
                }
             });
             
-         $("#btnCloseWriteReviewRestaurant" + restaurant.id).on("click", function(){
+         $("#btnCloseWriteReviewRestaurant" + restaurant.id).on("click", function() {
             if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value && textareaAuthorNameRestaurant.value) {
                textareaAuthorNameRestaurant.value = "";
                inputGroupSelectRestaurant.value = "";

@@ -95,6 +95,11 @@ header h2 {
     font-size: large;
 }
 
+.infoNumberRestaurant {
+    color: whitesmoke;
+    font-weight: bolder;
+}
+
 #map {
     height: 800px;
     width: 95%;
@@ -185,10 +190,14 @@ header h2 {
     border: 1px solid black;
 }
 
-#filterRatings {
+#filterRatings, #filterRadius {
     font-size: small;
     border: 1px solid black;
     height: 33px;
+}
+
+#filterRadius {
+    margin-bottom: 1em;
 }
 
 a #buttonFilter {

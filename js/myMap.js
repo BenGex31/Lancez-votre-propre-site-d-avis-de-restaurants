@@ -6,7 +6,7 @@ class MyMap {
         this.lat = lat;
         this.long = long;
         this.city = {lat: this.lat, lng: this.long};
-        this.zoom = 16;
+        this.zoom = 12;
         this.map = new google.maps.Map(document.getElementById('map'), {zoom: this.zoom, /*center: this.city*/});
     }
 
@@ -48,11 +48,14 @@ class MyMap {
                     let filterRatings = document.getElementById("filterRatings");
                     filterRatings.value = "Toutes notes moyennes confondues";
 
-                    listResults.getrestaurantsListWithReviews(pos, map);
-
+                    let filterRadius = document.getElementById("filterRadius");
+                    filterRadius.addEventListener("change",function(event){
+                        restaurantsList = [];
+                        listResults.getRestaurantsListWithReviews(pos, map, event.target.value);
+                    });
+                    
                     $("#titleListRestaurant").on("click", function() {
-                        $("#titleListRestaurant").html("Liste des restaurant").removeClass("animate__animated animate__heartBeat").css("color", "black");
-                        $("#buttonFilter").removeAttr("disabled");
+                        $("#titleListRestaurant").html("Liste des restaurants").removeClass("animate__animated animate__heartBeat").css("color", "black");
                         listResults.clearListRestaurants();
                         listResults.createListResults(restaurantsList);
                         listResults.createButtonConsultReviewResults(restaurantsList);
@@ -61,6 +64,22 @@ class MyMap {
                         listResults.createMarkerResults(restaurantsList, map);
                         listResults.displayMarkersOnMap(map);
                         listResults.publishReview(restaurantsList);
+                        
+                        if (filterRadius.value >= 100 && filterRadius.value <= 7000){
+                            $(".infoNumberRestaurant").html("");
+                            $("#buttonFilter").removeAttr("disabled");
+                            if (restaurantsList.length > 1) {
+                                $(".infoNumberRestaurant").html(restaurantsList.length + " restaurants autour de vous");
+                            } else {
+                                $(".infoNumberRestaurant").html("Aucun restaurant autour de vous");
+                            }
+                            if (restaurantsList.length == 1) {
+                                $(".infoNumberRestaurant").html(restaurantsList.length + " restaurant autour de vous");
+                            }
+                        } else {
+                            alert("Merci de sélectionner une distance");
+                            $(".infoNumberRestaurant").html("");
+                        }
                     });
                     
                     $("#buttonFilter").on("click", function() {
@@ -95,12 +114,17 @@ class MyMap {
                     let filterRatings = document.getElementById("filterRatings");
                     filterRatings.value = "Toutes notes moyennes confondues";
 
+                    let filterRadius = document.getElementById("filterRadius");
+                    filterRadius.addEventListener("change",function(event){
+                        restaurantsListParis = [];
+                        listResults.getRestaurantsListParisWithReviews(ParisLocation, map, event.target.value);
+                    });
+
                     listResults.getRestaurantsListParisWithReviews(ParisLocation, map);
                     //listResults.getLocalRestaurantList();
 
                     $("#titleListRestaurant").on("click", function() {
-                        $("#titleListRestaurant").html("Liste des restaurant").removeClass("animate__animated animate__heartBeat").css("color", "black");
-                        $("#buttonFilter").removeAttr("disabled");
+                        $("#titleListRestaurant").html("Liste des restaurants").removeClass("animate__animated animate__heartBeat").css("color", "black");
                         listResults.clearListRestaurants();
                         listResults.createListResults(restaurantsListParis);
                         listResults.createButtonConsultReviewResults(restaurantsListParis);
@@ -109,6 +133,22 @@ class MyMap {
                         listResults.createMarkerResults(restaurantsListParis, map);
                         listResults.displayMarkersOnMap(map);
                         listResults.publishReview(restaurantsListParis);
+
+                        if (filterRadius.value >= 100 && filterRadius.value <= 7000){
+                            $(".infoNumberRestaurant").html("");
+                            $("#buttonFilter").removeAttr("disabled");
+                            if (restaurantsListParis.length > 1) {
+                                $(".infoNumberRestaurant").html(restaurantsListParis.length + " restaurants autour de vous");
+                            } else {
+                                $(".infoNumberRestaurant").html("Aucun restaurant autour de vous");
+                            }
+                            if (restaurantsListParis.length == 1) {
+                                $(".infoNumberRestaurant").html(restaurantsListParis.length + " restaurant autour de vous");
+                            }
+                        } else {
+                            alert("Merci de sélectionner une distance");
+                            $(".infoNumberRestaurant").html("");
+                        }
                     });
 
                     $("#buttonFilter").on("click", function() {

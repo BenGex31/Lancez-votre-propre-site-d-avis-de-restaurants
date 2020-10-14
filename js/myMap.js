@@ -18,41 +18,34 @@ class MyMap {
 
     geolocation() {
         const map = this.map;
-        const ParisLocation = this.city;
         var self = this;
-
         let listResults = new Restaurant();
-        let infoWindow = new google.maps.InfoWindow;
 
-        //let geolocation = document.getElementById("geolocation");
-        //geolocation.addEventListener("click", function(){
+        $("#buttonFilter").attr("disabled", "true");
+        $("#titleListRestaurant").removeAttr("disabled");
 
-            $("#buttonFilter").attr("disabled", "true");
-            $("#titleListRestaurant").removeAttr("disabled");
-            restaurantsList = [];
+        //restaurantsList = [];
 
-            listResults.clearListRestaurants();
-            listResults.clearMarkers();
+        listResults.clearListRestaurants();
+        listResults.clearMarkers();
 
-            // Try HTML5 geolocation.
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    alert("Le service de géolocalisation s'est lancé avec succès");
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                alert("Le service de géolocalisation s'est lancé avec succès");
 
-                    const pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
+                const pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                self.buildAndDisplayMap(pos, listResults, map);
 
-                    self.buildAndDisplayMap(pos, listResults, map);
-
-                }, function() {
-                    self.buildAndDisplayDefaultMap(listResults, map);
-                });
-            } else {
-                this.buildAndDisplayDefaultMap(listResults, map);
-            }
-        //});
+            }, function() {
+                self.buildAndDisplayDefaultMap(listResults, map);
+            });
+        } else {
+            this.buildAndDisplayDefaultMap(listResults, map);
+        }
     }
 
     buildAndDisplayDefaultMap(listResults, map) {
@@ -62,56 +55,44 @@ class MyMap {
             lat: 48.8565387,
             lng: 2.3518054
         };
-
         this.buildAndDisplayMap(pos, listResults, map);
     }
 
     buildAndDisplayMap(pos, listResults, map) {
         console.log(pos);
 
+        var self = this;
+
         let filterRatings = document.getElementById("filterRatings");
         filterRatings.value = "Toutes notes moyennes confondues";
 
-        let filterRadius = document.getElementById("filterRadius");
-        
-        filterRadius.addEventListener("change", function (event) {
-            restaurantsList = [];
-            listResults.getRestaurantsListWithReviews(pos, map, event.target.value);
-        });
-
-        $("#titleListRestaurant").on("click", function () {
-            $("#titleListRestaurant").html("Liste des restaurants").removeClass("animate__animated animate__heartBeat").css("color", "black");
-            listResults.clearListRestaurants();
-            listResults.createListResults(restaurantsList);
-            listResults.createButtonConsultReviewResults(restaurantsList);
-            listResults.createButtonWriteReviewResults(restaurantsList);
-            listResults.clearMarkers();
-            listResults.createMarkerResults(restaurantsList, map);
-            listResults.displayMarkersOnMap(map);
-            listResults.publishReview(restaurantsList);
-
-            if (filterRadius.value >= 100 && filterRadius.value <= 7000) {
-                $(".infoNumberRestaurant").html("");
-                $("#buttonFilter").removeAttr("disabled");
-                if (restaurantsList.length > 1) {
-                    $(".infoNumberRestaurant").html(restaurantsList.length + " restaurants autour de vous");
-                } else {
-                    $(".infoNumberRestaurant").html("Aucun restaurant autour de vous");
-                }
-                if (restaurantsList.length == 1) {
-                    $(".infoNumberRestaurant").html(restaurantsList.length + " restaurant autour de vous");
-                }
-            } else {
-                alert("Merci de sélectionner une distance");
-                $(".infoNumberRestaurant").html("");
-            }
-        });
+        let filterRadius = this.filterRadiusRestaurants(listResults, pos, map);
+        this.refreshListRestaurantsAndmarkers(listResults, map, self, filterRadius);
 
         $("#buttonFilter").on("click", function () {
             listResults.filterResultsRating(restaurantsList, map);
         });
 
-        let MarkerUser = new google.maps.Marker({
+        let MarkerUser = this.createMarkerUser(pos);
+        MarkerUser.setMap(map);
+
+        map.setCenter(pos);
+    }
+
+    refreshListRestaurantsAndmarkers(listResults, map, self, filterRadius) {
+        $("#titleListRestaurant").on("click", function () {
+            listResults.clearListRestaurants();
+            listResults.displayResults(restaurantsList);
+            listResults.clearMarkers();
+            listResults.createMarkerResults(restaurantsList, map);
+            listResults.displayMarkersOnMap(map);
+            listResults.publishReview(restaurantsList);
+            self.displayNumberRestaurantOnPage(filterRadius);
+        });
+    }
+
+    createMarkerUser(pos) {
+        return new google.maps.Marker({
             position: pos,
             animation: google.maps.Animation.DROP,
             label: "Vous êtes ici !",
@@ -122,9 +103,34 @@ class MyMap {
                 anchor: new google.maps.Point(0, 0)
             }
         });
-        MarkerUser.setMap(map);
+    }
 
-        map.setCenter(pos);
+    filterRadiusRestaurants(listResults, pos, map) {
+        let filterRadius = document.getElementById("filterRadius");
+
+        filterRadius.addEventListener("change", function (event) {
+            restaurantsList = [];
+            listResults.getRestaurantsListWithReviews(pos, map, event.target.value);
+        });
+        return filterRadius;
+    }
+
+    displayNumberRestaurantOnPage(filterRadius) {
+        if (filterRadius.value >= 100 && filterRadius.value <= 7000) {
+            $(".infoNumberRestaurant").html("");
+            $("#buttonFilter").removeAttr("disabled");
+            if (restaurantsList.length > 1) {
+                $(".infoNumberRestaurant").html(restaurantsList.length + " restaurants autour de vous");
+            } else {
+                $(".infoNumberRestaurant").html("Aucun restaurant autour de vous");
+            }
+            if (restaurantsList.length == 1) {
+                $(".infoNumberRestaurant").html(restaurantsList.length + " restaurant autour de vous");
+            }
+        } else {
+            alert("Merci de sélectionner une distance");
+            $(".infoNumberRestaurant").html("");
+        }
     }
 
     addMarkerRestaurant() {
@@ -134,32 +140,33 @@ class MyMap {
             this.placeMarkerRestaurantAndPanTo(event.latLng, map);
             this.newLat = event.latLng.lat();
             this.newLng = event.latLng.lng();
-
             this.createButtonAddRestaurant();
 
             const addNewRestaurantOnMap = new Restaurant();
-            addNewRestaurantOnMap.addNewRestaurantArray(event.latLng.lat(), event.latLng.lng());
-            $("#buttonUpdate").removeAttr("disabled");
+            addNewRestaurantOnMap.addNewRestaurantArray(event.latLng.lat(), event.latLng.lng(), map);
         });
     }
 
     placeMarkerRestaurantAndPanTo(latLng, map) {
-        let markerNewRestaurant = new google.maps.Marker({
+        let markerNewRestaurant = this.createMarkerNewRestaurant(latLng);
+        this.displayMarkerNewRestaurant(markerNewRestaurant, map);
+        map.panTo(latLng);
+        this.createInfoWindowNewMarker(markerNewRestaurant, map);
+        markersArray.push(markerNewRestaurant);
+    }
+
+    createMarkerNewRestaurant(latLng) {
+        return new google.maps.Marker({
             position: latLng,
             animation: google.maps.Animation.DROP,
-            label: "Nouveau restaurant",
+            //label: "Nouveau restaurant",
             icon: {
-                url: "img/icon-restaurant-location.png",
+                url: "img/icon-restaurant-location-new-restaurant.png",
                 scaledSize: new google.maps.Size(50, 50),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(0, 0)
             }
         });
-
-        this.displayMarkerNewRestaurant(markerNewRestaurant, map);
-        map.panTo(latLng);
-        this.createInfoWindowNewMarker(markerNewRestaurant, map);
-        markerNewRestaurantArray.push(markerNewRestaurant);
     }
 
     displayMarkerNewRestaurant(markerNewRestaurant, map) {
@@ -182,22 +189,22 @@ class MyMap {
         $('<div>').appendTo($("#form-addRestaurant")).attr({class:"form-group row text-left", id:"addUserName-form-group"});
         $('<label>').appendTo($("#addUserName-form-group")).attr({for:"inputUserName", class:"col-lg-6 col-form-label"}).html("* Votre nom :");
         $('<div>').appendTo($("#addUserName-form-group")).attr({class:"col-lg-6", id:"divInputUserName"});
-        $('<input>').appendTo($("#divInputUserName")).attr({type:"text", class:"form-control", id:"inputUserName"});
+        $('<input>').appendTo($("#divInputUserName")).attr({type:"text", class:"form-control", id:"inputUserName"}).css("font-size", "small");
 
         $('<div>').appendTo($("#form-addRestaurant")).attr({class:"form-group row text-left", id:"addUserFirstName-form-group"});
         $('<label>').appendTo($("#addUserFirstName-form-group")).attr({for:"inputUserFirstName", class:"col-lg-6 col-form-label"}).html("* Votre prénom :");
         $('<div>').appendTo($("#addUserFirstName-form-group")).attr({class:"col-lg-6", id:"divInputUserFirstName"});
-        $('<input>').appendTo($("#divInputUserFirstName")).attr({type:"text", class:"form-control", id:"inputUserFirstName"});
+        $('<input>').appendTo($("#divInputUserFirstName")).attr({type:"text", class:"form-control", id:"inputUserFirstName"}).css("font-size", "small");
 
         $('<div>').appendTo($("#form-addRestaurant")).attr({class:"form-group row text-left", id:"addRestaurantName-form-group"});
         $('<label>').appendTo($("#addRestaurantName-form-group")).attr({for:"inputRestaurantName", class:"col-lg-6 col-form-label"}).html("* Nom du restaurant :");
         $('<div>').appendTo($("#addRestaurantName-form-group")).attr({class:"col-lg-6", id:"divInputRestaurantName"});
-        $('<input>').appendTo($("#divInputRestaurantName")).attr({type:"text", class:"form-control", id:"inputRestaurantName"});
+        $('<input>').appendTo($("#divInputRestaurantName")).attr({type:"text", class:"form-control", id:"inputRestaurantName"}).css("font-size", "small");
 
         $('<div>').appendTo($("#form-addRestaurant")).attr({class:"form-group row text-left", id:"addRestaurantAddress-form-group"});
         $('<label>').appendTo($("#addRestaurantAddress-form-group")).attr({for:"inputRestaurantAddress", class:"col-lg-6 col-form-label"}).html("* Adresse du restaurant :");
         $('<div>').appendTo($("#addRestaurantAddress-form-group")).attr({class:"col-lg-6", id:"divInputRestaurantAddress"});
-        $('<input>').appendTo($("#divInputRestaurantAddress")).attr({type:"text", class:"form-control", id:"inputRestaurantAddress"});
+        $('<input>').appendTo($("#divInputRestaurantAddress")).attr({type:"text", class:"form-control", id:"inputRestaurantAddress"}).css("font-size", "small");
 
         $('<div>').appendTo($("#form-addRestaurant")).attr({class:"input-group mb-3", id:"input-group-RestaurantRating"});
         $('<div>').appendTo($("#input-group-RestaurantRating")).attr({class:"input-group-prepend", id:"input-group-prependRestaurantRating"});
@@ -214,14 +221,11 @@ class MyMap {
         $('<textarea>').appendTo($("#form-group-restaurantComment")).attr({class:"form-control", id:"FormControlTextareaRestaurantComment", col:"3", row:"3"});
 
         $('<p>').appendTo($("#form-addRestaurant")).html("* Champs obligatoires").addClass("text-left").css("color", "red");
-        $('<i>').appendTo($("#form-addRestaurant")).addClass("fas fa-exclamation-triangle animate__animated animate__flash").css({fontSize:"3em", color:"red", marginBottom:"0.5em"});
-        $('<p>').appendTo($("#form-addRestaurant")).html("Informations importantes :").addClass("text-center animate__animated animate__flash");
-        $('<p>').appendTo($("#form-addRestaurant")).html("Cliquez sur Enregistrer pour valider votre ajout").addClass("text-center animate__animated animate__flash");
 
         $('<div>').appendTo($("#modal-content-addRestaurant")).attr({class:"modal-footer", id:"modal-footer-addRestaurant"});
         $('<a>').appendTo($("#modal-footer-addRestaurant")).attr({href:"#updateLink", id:"linkCloseAddRestaurant"});
-        $('<button>').appendTo($("#linkCloseAddRestaurant")).attr({type:"submit", class:"btn btn-secondary btn-sm", id:"btnCloseAddRestaurant"}).attr("data-dismiss", "modal").html("Fermer");
-        $('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"submit", class:"btn btn-primary btn-sm", id:"btnSaveAddRestaurant"}).html("Enregistrer");
+        $('<button>').appendTo($("#linkCloseAddRestaurant")).attr({type:"submit", class:"btn btn-secondary btn-sm", id:"btnCloseAddRestaurant", 'data-dismiss': 'modal'}).html("Fermer");
+        $('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"submit", class:"btn btn-primary btn-sm", id:"btnSaveAddRestaurant", 'data-dismiss': 'modal'}).html("Enregistrer");
     }
 
     createInfoWindowNewMarker(marker, map) {
@@ -238,6 +242,3 @@ class MyMap {
         });
     }
 }
-
-let markerNewRestaurantArray = [];
-console.log(markerNewRestaurantArray);

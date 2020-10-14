@@ -42,107 +42,51 @@ class Restaurant {
       const service = new google.maps.places.PlacesService(map);
       service.getDetails(requestReview, (place, status) => {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            const newRestaurant = new Restaurant(
-               restaurantsList.length + 1,
-               restaurant.name,
-               restaurant.vicinity,
-               restaurant.icon,
-               restaurant.geometry.location.lat(),
-               restaurant.geometry.location.lng(),
-               restaurant.geometry.location,
-               restaurant.rating,
-               restaurant.place_id,
-               []
-            );
-
-            restaurantsList.push(newRestaurant);
-
-            place.reviews.forEach(review => {
-               const newReview = new Review(
-                  review.author_name,
-                  review.profile_photo_url,
-                  review.rating,
-                  review.text,
-                  restaurant.place_id,
-                  review.relative_time_description
-               );
-
-               restaurantsList.forEach(element => {
-                  if (element.place_id == restaurant.place_id) {
-                     element.reviews.push(newReview);
-                  }
-               });
-            });
+            this.populateRestaurantsListGooglePlaces(restaurant, place);
          } else {
             alert('Aucun avis client.' + "Le status de la requête est " + status);
          }
       });
    }
 
-   getRestaurantsListParisWithReviews(position, map, radius) {
-      const requestRestaurantParis = {
-         location: position,
-         radius: radius,
-         type: ['restaurant']
-     }
+   populateRestaurantsListGooglePlaces(restaurant, place) {
+      const newRestaurant = new Restaurant(
+         restaurantsList.length + 1,
+         restaurant.name,
+         restaurant.vicinity,
+         restaurant.icon,
+         restaurant.geometry.location.lat(),
+         restaurant.geometry.location.lng(),
+         restaurant.geometry.location,
+         restaurant.rating,
+         restaurant.place_id,
+         []
+      );
 
-     const service = new google.maps.places.PlacesService(map);
-     service.nearbySearch(requestRestaurantParis, (results, status) => {
-         if (status == google.maps.places.PlacesServiceStatus.OK) {
-            results.forEach(restaurantParis => {
-               this.getGooglePlacesReviewsParis(restaurantParis, map);
-            });
-            console.log(restaurantsListParis);
-         } else {
-            alert('Aucun avis client.' + "Le status de la requête est " + status);
-         }
-     });
-   }
+      restaurantsList.push(newRestaurant);
 
-   getGooglePlacesReviewsParis(restaurantParis, map) {
-      const requestReviewParis = {
-         placeId: restaurantParis.place_id,
-         fields: ['review']
-      };
+      place.reviews.forEach(review => {
+         const newReview = new Review(
+            review.author_name,
+            review.profile_photo_url,
+            review.rating,
+            review.text,
+            restaurant.place_id,
+            review.relative_time_description
+         );
 
-      const service = new google.maps.places.PlacesService(map);
-      service.getDetails(requestReviewParis, (place, status) => {
-         if (status == google.maps.places.PlacesServiceStatus.OK) {
-            const reviewsParis = place.reviews.map(reviewParis => {
-                return new Review(
-                  reviewParis.author_name,
-                  reviewParis.profile_photo_url,
-                  reviewParis.rating,
-                  reviewParis.text,
-                  restaurantParis.place_id,
-                  reviewParis.relative_time_description
-               )
-            });
-
-            const newRestaurantParis = new Restaurant(
-               restaurantsListParis.length + 1,
-               restaurantParis.name,
-               restaurantParis.vicinity,
-               restaurantParis.icon,
-               restaurantParis.geometry.location.lat(),
-               restaurantParis.geometry.location.lng(),
-               restaurantParis.geometry.location,
-               restaurantParis.rating,
-               restaurantParis.place_id,
-               reviewsParis
-            );
-
-            restaurantsListParis.push(newRestaurantParis);
-         } else {
-            alert('Aucun avis client.' + "Le status de la requête est " + status);
-         }
+         restaurantsList.forEach(element => {
+            if (element.place_id == restaurant.place_id) {
+               element.reviews.push(newReview);
+            }
+         });
       });
    }
 
    getLocalRestaurantList() {
-      let requestRestaurantLocal = new XMLHttpRequest();
-      requestRestaurantLocal.onreadystatechange = (results) => {
-         if (this.readyState == XMLHttpRequest.DONE) {
+      fetch('js/data.json')
+         .then(response => response.json())
+         .then(function(results) {
             results = JSON.parse(this.responseText);
 
             results.forEach(restaurant => {
@@ -156,7 +100,7 @@ class Restaurant {
                ));
       
                const newRestaurantLocal = new Restaurant(
-                  restaurantsListParis.length + 1,
+                  restaurantsList.length + 1,
                   restaurant.restaurantName,
                   restaurant.address,
                   "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
@@ -167,13 +111,12 @@ class Restaurant {
                   undefined,
                   reviews
                );
-               restaurantsListParis.push(newRestaurantLocal);
+               restaurantsList.push(newRestaurantLocal);
             });
-         }
-      };
+         });
       requestRestaurantLocal.open("GET", "data.json");
       requestRestaurantLocal.send();
-      console.log(restaurantsListParis);
+      console.log(restaurantsList);
    }
 
    displayResults(arrayRestaurant) {
@@ -292,7 +235,7 @@ class Restaurant {
          });
 
          $('<div>').appendTo($("#modal-content-writeReview" + restaurant.id)).attr({class: "modal-footer", id: "modal-footer-writeReview" + restaurant.id});
-         $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.id)).attr({type: "button", class: "btn btn-secondary btn-sm", id:"btnCloseWriteReviewRestaurant" + restaurant.id}).attr('data-dismiss', 'modal').html("Fermer").css("font-size", "small");
+         $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.id)).attr({type: "button", class: "btn btn-secondary btn-sm", id:"btnCloseWriteReviewRestaurant" + restaurant.id}).attr('data-dismiss', 'modal').html("Annuler").css("font-size", "small");
          $('<button>').appendTo($("#modal-footer-writeReview" + restaurant.id)).attr({type: "submit", class: "btn btn-primary btn-sm", id: "publishReview" + restaurant.id, 'data-dismiss': 'modal'}).html("Publier un avis").css("font-size", "small");
       }
    }
@@ -330,10 +273,11 @@ class Restaurant {
             infoWindow.open(map, markerResults);
          });
       }
+      console.log(markersArray);
    }
 
    displayMarkersOnMap(map) {
-      for (const marker of markersArray) {
+      for (let marker of markersArray) {
          marker.setMap(map);
       }
    }
@@ -429,73 +373,99 @@ class Restaurant {
 
          $("#publishReview" + restaurant.id).on("click", function(){
             if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value && textareaAuthorNameRestaurant.value) {
-                  if (restaurant.id === parseInt(restaurantsName.id)) {
-                     restaurant.reviews.push(
-                        new Review(
-                           textareaAuthorNameRestaurant.value,
-                           "https://cdn3.iconfinder.com/data/icons/glyphicon/64/profil-512.png",
-                           parseInt(inputGroupSelectRestaurant.value),
-                           FormControlTextareaRestaurant.value,
-                           undefined,
-                           "A l'instant"
-                        )
-                     );
-                  }
-
-                  $("#titleListRestaurant").html("Liste des restaurants").removeClass("animate__animated animate__heartBeat").css("color", "black");
-                  self.clearListRestaurants();
-                  self.createListResults(array);
-                  self.createButtonConsultReviewResults(array);
-                  self.createButtonWriteReviewResults(array);
-                  self.clearMarkers();
-                  self.createMarkerResults(array, map);
-                  self.displayMarkersOnMap(map);
-                  self.publishReview(array);
-
-                  /*$("#publishReview" + restaurant.id).attr("disabled", "true");
-                  $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Votre avis a bien été enregistré !").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
-                  $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("Merci de bien vouloir cliquer sur Fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});
-                  $('<p>').appendTo($("#modal-body-writeReview" + restaurant.id)).html("et de cliquer sur Mettre à jour les restaurants au dessus de la liste").addClass("alertMessage text-center animate__animated animate__flash").css({color: "red", fontWeight: "bolder", fontSize: "small"});*/
-
-               } else {
-                  alert("Merci de renseigner votre nom et prénom, ainsi qu'une note et un commentaire, sinon merci de cliquer sur Fermer")
+               if (restaurant.id === parseInt(restaurantsName.id)) {
+                  self.addNewReview(restaurant, textareaAuthorNameRestaurant, inputGroupSelectRestaurant, FormControlTextareaRestaurant);
                }
-            });
-            
-         $("#btnCloseWriteReviewRestaurant" + restaurant.id).on("click", function() {
-            if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value && textareaAuthorNameRestaurant.value) {
-               textareaAuthorNameRestaurant.value = "";
-               inputGroupSelectRestaurant.value = "";
-               $("#spanResultRating" + restaurant.id).html("");
-               FormControlTextareaRestaurant.value = "";
-               $("#spanResultComment" + restaurant.id).html("");
-               $('.alertMessage').remove();
-               $("#publishReview" + restaurant.id).removeAttr("disabled");
-               $("#titleListRestaurant").html("Mettre à jour les restaurants").addClass("animate__animated animate__heartBeat").css("color", "red");
+               self.clearListRestaurants();
+               self.displayResults(array);
+               //self.clearMarkers();
+               //self.createMarkerResults(array, map);
+               //self.displayMarkersOnMap(map);
+               //self.publishReview(array);
+            } else {
+               alert("Merci de renseigner votre nom et prénom, ainsi qu'une note et un commentaire, sinon merci de cliquer sur Fermer")
             }
          });
+         this.refreshFormAddNewreview(restaurant, inputGroupSelectRestaurant, FormControlTextareaRestaurant, textareaAuthorNameRestaurant);
       }
    }
 
-   addNewRestaurantArray(lat, lng) {
+   addNewReview(restaurant, textareaAuthorNameRestaurant, inputGroupSelectRestaurant, FormControlTextareaRestaurant) {
+      restaurant.reviews.push(
+         new Review(
+            textareaAuthorNameRestaurant.value,
+            "https://cdn3.iconfinder.com/data/icons/glyphicon/64/profil-512.png",
+            parseInt(inputGroupSelectRestaurant.value),
+            FormControlTextareaRestaurant.value,
+            undefined,
+            "A l'instant"
+         )
+      );
+   }
+
+   refreshFormAddNewreview(restaurant, inputGroupSelectRestaurant, FormControlTextareaRestaurant, textareaAuthorNameRestaurant) {
+      $("#btnCloseWriteReviewRestaurant" + restaurant.id).on("click", function () {
+         if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value && textareaAuthorNameRestaurant.value) {
+            textareaAuthorNameRestaurant.value = "";
+            inputGroupSelectRestaurant.value = "";
+            $("#spanResultRating" + restaurant.id).html("");
+            FormControlTextareaRestaurant.value = "";
+            $("#spanResultComment" + restaurant.id).html("");
+            $('.alertMessage').remove();
+            $("#publishReview" + restaurant.id).removeAttr("disabled");
+         }
+      });
+   }
+
+   addNewRestaurantArray(lat, lng, map) {
+      var self = this;
+      let inputUserName = document.getElementById("inputUserName");
+      let inputUserFirstName = document.getElementById("inputUserFirstName");
       let inputRestaurantName = document.getElementById("inputRestaurantName");
       let inputRestaurantAddress = document.getElementById("inputRestaurantAddress");
       let starsRating = document.getElementById("inputGroupSelectRestaurantRating");
       let commentRating = document.getElementById("FormControlTextareaRestaurantComment");
 
       $("#btnSaveAddRestaurant").click(function() {
-         if (inputRestaurantName.value && inputRestaurantAddress.value && commentRating.value) {
+         if (inputUserName.value && inputUserFirstName.value && inputRestaurantName.value && inputRestaurantAddress.value && commentRating.value) {
             if (starsRating.value >= 1 && starsRating.value <= 5) {
-                  restaurants.push(
-                     new Restaurant(restaurants.length + 1, inputRestaurantName.value, inputRestaurantAddress.value, lat, lng,
-                        [new Review(parseInt(starsRating.value), commentRating.value)])
-                  );
+               let reviewsList = [];
+               const newReview = new Review(
+                  inputUserName.value + " " + inputUserFirstName.value,
+                  "https://cdn3.iconfinder.com/data/icons/glyphicon/64/profil-512.png",
+                  parseInt(starsRating.value),
+                  commentRating.value,
+                  undefined,
+                  "A l'instant"
+               );
+                  reviewsList.push(newReview);
+
+               const newRestaurant = new Restaurant(
+                  restaurantsList.length + 1,
+                  inputRestaurantName.value,
+                  inputRestaurantAddress.value,
+                  "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+                  lat,
+                  lng,
+                  undefined,
+                  Number,
+                  undefined,
+                  reviewsList
+               );
+
+               restaurantsList.push(newRestaurant);
+               self.clearListRestaurants();
+               self.displayResults(restaurantsList);
+               self.clearMarkers();
+               self.createMarkerResults(restaurantsList, map);
+               self.displayMarkersOnMap(map);
+               self.publishReview(restaurantsList, map);
+               $("#btnSaveAddRestaurant").attr("disabled", "true");
+               $("#addRestaurant").attr("disabled", "true");
+               $('<p>').appendTo($("#form-addRestaurant")).html("Le restaurant a bien été enregitré, merci de fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color:"red", fontWeight:"bolder", fontSize:"small"});
             }
-            $("#btnSaveAddRestaurant").attr("disabled", "true");
-            $("#addRestaurant").attr("disabled", "true");
-            $('<p>').appendTo($("#form-addRestaurant")).html("Le restaurant a bien été enregitré, merci de fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color:"red", fontWeight:"bolder", fontSize:"small"});
-            $("#buttonUpdate").removeAttr("disabled");
-            $('<p>').insertAfter($("#addRestaurant")).addClass("alertUpdate animate__animated animate__flash").html("Merci de cliquer sur Mettre à jour dessous la carte");
+            //$("#buttonUpdate").removeAttr("disabled");
+            //$('<p>').insertAfter($("#addRestaurant")).addClass("alertUpdate animate__animated animate__flash").html("Merci de cliquer sur Mettre à jour dessous la carte");
          } else {
             alert("Merci de renseigner tous les champs obligatoires *");
          }
@@ -514,5 +484,4 @@ class Restaurant {
 }
 
 let restaurantsList = [];
-let restaurantsListParis = [];
 let markersArray = [];

@@ -1,21 +1,25 @@
+/**
+ * Class that allows you to customize the Google Maps map
+ */
 class MyMap {
     newLat;
     newLng;
 
-    constructor(lat, long) {
-        this.lat = lat;
-        this.long = long;
-        this.city = {lat: this.lat, lng: this.long};
-        this.zoom = 12;
-        this.map = new google.maps.Map(document.getElementById('map'), {zoom: this.zoom, /*center: this.city*/});
+    constructor() {
+        this.map = new google.maps.Map(document.getElementById('map'), {zoom: 12});
     }
 
+    /**
+     * Initializes the Google Maps map
+     */
     createMap() {
-        //new google.maps.Marker({position: this.city, map: this.map, label: "Paris"});
         this.geolocation();
         this.addMarkerRestaurant();
     }
 
+    /**
+     * Allows to define the geolocation of the user, otherwise the position in Paris is defined
+     */
     geolocation() {
         const map = this.map;
         var self = this;
@@ -23,8 +27,6 @@ class MyMap {
 
         $("#buttonFilter").attr("disabled", "true");
         $("#titleListRestaurant").removeAttr("disabled");
-
-        //restaurantsList = [];
 
         listResults.clearListRestaurants();
         listResults.clearMarkers();
@@ -48,6 +50,11 @@ class MyMap {
         }
     }
 
+    /**
+     * Builds the position and displays the default Google Maps of Paris on the HTML page, as well as the list of restaurants retrieved from the Google Places API
+     * @param {object} listResults - Generic instance of the "Restaurant" class
+     * @param {object} map - Google Maps
+     */
     buildAndDisplayDefaultMap(listResults, map) {
         alert("La position par défaut a été définie sur Paris");
 
@@ -56,8 +63,16 @@ class MyMap {
             lng: 2.3518054
         };
         this.buildAndDisplayMap(pos, listResults, map);
+
+        //listResults.getLocalRestaurantList();
     }
 
+    /**
+     * Builds the position and displays the geolocated Google Maps map on the user's position on the HTML page, as well as the list of restaurants retrieved from the Google Places API
+     * @param {object} pos - Latitude and longitude
+     * @param {object} listResults - Generic instance of the "Restaurant" class
+     * @param {object} map - Google Maps
+     */
     buildAndDisplayMap(pos, listResults, map) {
         console.log(pos);
 
@@ -79,6 +94,14 @@ class MyMap {
         map.setCenter(pos);
     }
 
+    /**
+     * Refreshes the list of restaurants on the HTML page and markers on the Google Maps according to the shelf filter of the positions of the restaurants.
+     * Also displays the number of restaurants according to the filter.
+     * @param {object} listResults - Generic instance of the "Restaurant" class
+     * @param {object} map - Google Maps
+     * @param {object} self - local variable
+     * @param {*} filterRadius - Filter radius restaurant
+     */
     refreshListRestaurantsAndmarkers(listResults, map, self, filterRadius) {
         $("#titleListRestaurant").on("click", function () {
             listResults.clearListRestaurants();
@@ -91,6 +114,10 @@ class MyMap {
         });
     }
 
+    /**
+     * Creates the user's marker based on their position
+     * @param {object} pos - Latitude and longitude
+     */
     createMarkerUser(pos) {
         return new google.maps.Marker({
             position: pos,
@@ -105,6 +132,12 @@ class MyMap {
         });
     }
 
+    /**
+     * Filters the search radius of the position of restaurants on Google Maps
+     * @param {object} listResults - Generic instance of the "Restaurant" class
+     * @param {object} pos - Latitude and longitude
+     * @param {object} map - Google Maps
+     */
     filterRadiusRestaurants(listResults, pos, map) {
         let filterRadius = document.getElementById("filterRadius");
 
@@ -115,6 +148,10 @@ class MyMap {
         return filterRadius;
     }
 
+    /**
+     * Displays the number of restaurants according to the search radius of their position
+     * @param {object} filterRadius - Filter radius restaurant
+     */
     displayNumberRestaurantOnPage(filterRadius) {
         if (filterRadius.value >= 100 && filterRadius.value <= 7000) {
             $(".infoNumberRestaurant").html("");
@@ -133,6 +170,9 @@ class MyMap {
         }
     }
 
+    /**
+     * Add a marker by clicking on the Google Maps in order to add a new restaurant
+     */
     addMarkerRestaurant() {
         const map = this.map;
 
@@ -143,18 +183,35 @@ class MyMap {
             this.createButtonAddRestaurant();
 
             const addNewRestaurantOnMap = new Restaurant();
-            addNewRestaurantOnMap.addNewRestaurantArray(event.latLng.lat(), event.latLng.lng(), map);
+            addNewRestaurantOnMap.addNewRestaurantArray(this.newLat, this.newLng, map);
+            $("#removeMarker").removeAttr("disabled");
         });
     }
 
+    /**
+     * Place the marker of the new restaurant on the Google Maps map and display it, with the option to remove this marker
+     * @param {object} latLng - Latitude and longitude
+     * @param {object} map - Google Maps
+     */
     placeMarkerRestaurantAndPanTo(latLng, map) {
         let markerNewRestaurant = this.createMarkerNewRestaurant(latLng);
         this.displayMarkerNewRestaurant(markerNewRestaurant, map);
+
         map.panTo(latLng);
+
         this.createInfoWindowNewMarker(markerNewRestaurant, map);
+
         markersArray.push(markerNewRestaurant);
+        markerNewRestaurantList.push(markerNewRestaurant);
+        console.log(markerNewRestaurantList);
+
+        this.clearMarkerNewRestaurant(markerNewRestaurant);
     }
 
+    /**
+     * Create the new restaurant marker
+     * @param {object} latLng - Latitude and longitude
+     */
     createMarkerNewRestaurant(latLng) {
         return new google.maps.Marker({
             position: latLng,
@@ -169,10 +226,31 @@ class MyMap {
         });
     }
 
+    /**
+     * Displays the new restaurant marker on the Google Maps map
+     * @param {object} markerNewRestaurant - new restaurant marker variable
+     * @param {object} map - Google Maps
+     */
     displayMarkerNewRestaurant(markerNewRestaurant, map) {
         markerNewRestaurant.setMap(map);
     }
 
+    /**
+     * Remove the new restaurant marker from the Google Maps map if the user decides not to add this new restaurant
+     * @param {object} markerNewRestaurant - new restaurant marker variable
+     */
+    clearMarkerNewRestaurant(markerNewRestaurant) {
+        var self = this;
+        $("#removeMarker").on("click", function() {
+            self.displayMarkerNewRestaurant(markerNewRestaurant, null);
+            markerNewRestaurantList.pop();
+            $("#removeMarker").attr("disabled", "true");
+        });
+    }
+
+    /**
+     * Creates the HTML button located in the information window of the new marker, opening a modal window allowing you to add a new restaurant using a form
+     */
     createButtonAddRestaurant() {
         $('<div>').insertAfter($("#map")).attr("id", "divAddRestaurant");
 
@@ -225,13 +303,18 @@ class MyMap {
         $('<div>').appendTo($("#modal-content-addRestaurant")).attr({class:"modal-footer", id:"modal-footer-addRestaurant"});
         $('<a>').appendTo($("#modal-footer-addRestaurant")).attr({href:"#updateLink", id:"linkCloseAddRestaurant"});
         $('<button>').appendTo($("#linkCloseAddRestaurant")).attr({type:"submit", class:"btn btn-secondary btn-sm", id:"btnCloseAddRestaurant", 'data-dismiss': 'modal'}).html("Fermer");
-        $('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"submit", class:"btn btn-primary btn-sm", id:"btnSaveAddRestaurant", 'data-dismiss': 'modal'}).html("Enregistrer");
+        $('<button>').appendTo($("#modal-footer-addRestaurant")).attr({type:"submit", class:"btn btn-primary btn-sm", id:"btnSaveAddRestaurant", /*'data-dismiss': 'modal'*/}).html("Enregistrer");
     }
 
+    /**
+     * Create the new marker information window allowing you to add a new restaurant by clicking on this marker
+     * @param {object} marker - restaurant marker
+     * @param {*} map - Google Maps
+     */
     createInfoWindowNewMarker(marker, map) {
         let contentString = 
         '<button class="btn btn-primary btn-sm" type="button" id="addRestaurant" data-toggle="modal" data-target="#addRestaurantModal">Ajouter un restaurant</button>';
-        //'<button class="btn btn-primary btn-sm" type="button" id="removeMarker">Supprimer le marqueur</button>';
+        //'<button class="btn btn-primary btn-sm" type="submit" id="removeMarker">Supprimer le marqueur</button>';
 
         let infowindow = new google.maps.InfoWindow({
             content: contentString
@@ -242,3 +325,5 @@ class MyMap {
         });
     }
 }
+
+let markerNewRestaurantList = [];

@@ -7,7 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -15,17 +15,17 @@
 
     <script src="https://kit.fontawesome.com/35a79302cd.js" crossorigin="anonymous"></script>
 
-    <script type="text/javascript" src="restaurant.js" defer></script>
-    <script type="text/javascript" src="myMap.js" defer></script>
-    <script type="text/javascript" src="app.js" defer></script>
-    <script type="text/javascript" src="weather.js" defer></script>
-    <script type="text/javascript" src="main.js" defer></script>
+    <script type="text/javascript" src="js/review.js" defer></script>
+    <script type="text/javascript" src="js/restaurant.js" defer></script>
+    <script type="text/javascript" src="js/myMap.js" defer></script>
+    <script type="text/javascript" src="js/weather.js" defer></script>
+    <script type="text/javascript" src="js/main.js" defer></script>
   
-    <title>Etape 1 - La Bonne Fourchette - Site d'avis de restaurants</title>
+    <title>La Bonne Fourchette - Site d'avis de restaurants</title>
   </head>
   <body>
       <header>
-        <div class="container-fluid">
+        <div class="container animate__animated animate__fadeInDown animate__slow">
           <div class="row align-items-center">
             <div class="col-lg-7">
               <h1 id="mainTitle"><i class="fas fa-utensils"></i>La bonne Fourchette</h1>
@@ -38,7 +38,7 @@
         </div>
       </header>
       <div class="container-fluid">
-          <div id="restaurantMeteo" class="row justify-content-center align-items-center">
+          <div id="restaurantMeteo" class="row justify-content-center align-items-center animate__animated animate__fadeIn animate__slower">
             <div id="titleMeteo" class="col-lg-4 text-center">
               <h3><i class="fas fa-sun"></i>Une bonne météo pour un bon resto !</h3>
             </div>
@@ -47,34 +47,59 @@
             </div>
             <div id="infoWeather" class="col-lg-4 text-center"></div>
           </div>
-        <div class="row">
-          <div id="search" class="col-lg-3 text-center">
-            <div class="input-group input-group-sm">
-              <select class="custom-select" id="filterRatings" type="number" aria-label="Example select with button addon">
-                <option selected>Toutes notes moyennes confondues</option>
-                <option value="1">Entre 0 et 1</option>
-                <option value="2">Entre 1 et 2</option>
-                <option value="3">Entre 2 et 3</option>
-                <option value="4">Entre 3 et 4</option>
-                <option value="5">Entre 4 et 5</option>
-              </select>
-              <div class="input-group-append">
-                <button id="buttonFilter" class="btn btn-success" type="button">Appliquer</button>
+          <div class="container" id="mainPicture">
+            <div class="row text-center">
+              <div class="col">
+                <h2>Une table entre amis ?</h2>
+              </div>
+            </div>
+            <div class="row align-items-end justify-content-end sectionFilter">
+              <div id="search" class="col-lg-6">
+                <div class="input-group input-group-sm">
+                  <select class="custom-select" id="filterRatings" type="number" aria-label="Example select with button addon">
+                    <option selected>Toutes notes moyennes confondues</option>
+                    <option value="1">Entre 0 et 1</option>
+                    <option value="2">Entre 1 et 2</option>
+                    <option value="3">Entre 2 et 3</option>
+                    <option value="4">Entre 3 et 4</option>
+                    <option value="5">Entre 4 et 5</option>
+                  </select>
+                  <div class="input-group-append">
+                    <a href="#titleListRestaurant"><button id="buttonFilter" class="btn btn-success" type="button" disabled="true">Appliquer</button></a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 text-center">
               </div>
             </div>
           </div>
-          <div class="col-lg-9 text-center">
-            <button id="geolocation" type="button" class="btn btn-danger"><i class="fas fa-search-location"></i>Autour de vous</button>
+          <div class="container-fluid">
+            <div class="row restaurantMap">
+              <div class="col-sm-3 text-center">
+                <select class="custom-select" name="radius" id="filterRadius" type="number">
+                  <option selected>Sélectionner une distance</option>
+                  <option value="100">100 mètres</option>
+                  <option value="300">300 mètres</option>
+                  <option value="500">500 mètres</option>
+                  <option value="1000">1 km</option>
+                  <option value="2000">2 km</option>
+                  <option value="3000">3 km</option>
+                  <option value="4000">4 km</option>
+                  <option value="5000">5 km</option>
+                  <option value="6000">6 km</option>
+                  <option value="7000">7 km</option>
+                </select>
+                <button id="titleListRestaurant" class="btn btn-primary btn-sm" type="button" disabled="true">Afficher les restaurants</button>
+                <div id="restaurantsList"></div>
+              </div>
+              <div class="col-sm-9 text-center">
+                <p class="textInfoAddRestaurant">Pour ajouter un nouveau restaurant, cliquez n'importe où sur la carte <i class="fas fa-map-marked-alt"></i></p>
+                <p class="infoNumberRestaurant"></p>
+                <button type="submit" class="btn btn-primary btn-sm" id="removeMarker" disabled="true">Supprimer le marquer ajouté</button>
+                <div id="map"></div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-3">
-            <div id="restaurantsList"></div>
-          </div>
-          <div class="col-sm-9 text-center">
-            <div id="map"></div>
-          </div>
-        </div>
       </div>
       <footer>
         <div class="container-fluid">
@@ -96,7 +121,7 @@
         </div>
       </footer>
 
-    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc&libraries=places"></script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

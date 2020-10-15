@@ -1,0 +1,341 @@
+body {
+    background-color: whitesmoke;
+    font-family: 'Quicksand', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Indie Flower', cursive;
+}
+
+/* Header*/
+header {
+    padding-top: 5px;
+    margin-bottom: 0;
+    background-color: #0a3d62;
+    border-bottom: 5px solid black;
+}
+
+header h1 {
+    color: #82ccdd;
+}
+
+header h2 {
+    font-size: 1.2em;
+    font-style: italic;
+    color: #82ccdd;
+}
+
+.fa-utensils {
+    margin-right: 20px;
+    color: #82ccdd;
+}
+
+#reload {
+    margin-bottom: 1em;
+    border: 0.5px solid black;
+    background-color: #82ccdd;
+    color: black;
+}
+
+.fa-search-location {
+    margin-right: 1em;
+}
+
+/* Météo */
+
+#restaurantMeteo {
+    margin-top: 0;
+    margin-bottom: 1em;
+    background-color: #3c6382;
+    padding-right: 1em;
+    border-bottom: 5px solid black;
+}
+
+#restaurantImg {
+    margin-bottom: 1em;
+}
+
+#restaurantImg img {
+    margin-top: 1em;
+    width: 380px;
+    height: 260px;
+}
+
+#titleMeteo h3 {
+    margin-top: 1em;
+    margin-left: 1em;
+    margin-bottom: 1em;
+    color: #82ccdd;
+    font-weight: bolder;
+}
+
+#infoWeather {
+    padding-top: 1em;
+    background-color: #82ccdd;
+    border : 1px solid #0c2461;
+    border-radius: 5px;
+}
+
+#infoWeather h4 {
+    color: #0c2461;
+}
+
+.fa-sun {
+    margin-right: 5px;
+    color: #f6b93b;
+}
+
+#mainPicture {
+    margin-bottom: 1em;
+}
+
+/* Google Maps*/
+.textInfoAddRestaurant {
+    color: whitesmoke;
+    font-size: large;
+}
+
+.infoNumberRestaurant {
+    color: whitesmoke;
+    font-weight: bolder;
+}
+
+#map {
+    height: 800px;
+    width: 95%;
+    border: 3px inset #0c2461;
+    background-color: grey;
+    float: right;
+    margin-right: 1em;
+    margin-bottom: 0;
+    border-radius: 5px;
+}
+
+#bodyContent {
+    margin-top: 1em;
+}
+
+#geolocation {
+    font-size: small;
+    border: 0.5px solid black;
+    background-color: #3c6382;
+    color: whitesmoke;
+}
+
+#addRestaurantModalLabel {
+    color: #6a89cc;
+}
+
+#form-addRestaurant {
+    font-family: 'Quicksand', sans-serif;
+}
+
+#labelAddRestaurant {
+    font-weight: bolder;
+}
+
+#form-addRestaurant, #addRestaurantAddress {
+    font-size: small;
+}
+
+#input-group-prependRestaurantRating label {
+    background-color: #f8c291;
+    font-size: small;
+}
+
+#inputGroupSelectRestaurantRating, #FormControlTextareaRestaurantComment {
+    font-size: small;
+}
+
+#inputRestaurantName, #inputRestaurantAddress {
+    font-size: small;
+}
+
+#addRestaurant {
+    margin-right: 5px;
+}
+
+#addRestaurant, #removeMarker {
+    margin-top: 1em;
+    background-color: #82ccdd;
+    color: black;
+}
+
+#addRestaurant, #cancelAddRestaurant, #submitNewRestaurant, #removeMarker {
+    border: 1px solid black;
+    font-size: small;
+}
+
+#submitNewRestaurant {
+    color: black;
+    border: 1px solid black;
+}
+
+.alertUpdate {
+    font-weight: bolder;
+}
+
+#buttonUpdate {
+    margin-top: 0.5em;
+    border: 1px solid black;
+    background-color: #82ccdd;
+    color: black;
+}
+
+/* Liste restaurants*/
+
+#titleListRestaurant {
+    color: black;
+    background-color: #82ccdd;
+    border: 1px solid black;
+}
+
+#filterRatings, #filterRadius {
+    font-size: small;
+    border: 1px solid black;
+    height: 33px;
+}
+
+#filterRadius {
+    margin-bottom: 1em;
+}
+
+a #buttonFilter {
+    font-size: small;
+    border: 0.5px solid black;
+    background-color: #3c6382;
+    color: whitesmoke;
+}
+
+.sectionFilter {
+    background: url('../img/groupe-amis-prendre-photo-telephone-portable-avant-dejeuner-vue-dessusResized.png') no-repeat top left;
+    height: 300px;
+}
+
+.restaurantMap {
+    background-color: #3c6382;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    margin-top: 1em;
+    border: 5px ridge #82ccdd;
+    border-radius: 10px;
+}
+
+.restaurantInfo {
+    border: 3px inset #0c2461;
+    margin-bottom: 0.5em;
+    padding-left: 1em;
+    padding-top: 1em;
+    padding-right: 1em;
+    border-radius: 5px;
+    background-color: #60a3bc;
+}
+
+.restaurantName {
+    color: #0a3d62;
+}
+
+.restaurantAddress {
+    margin-bottom: 0.5em;
+}
+
+.fa-map-marker-alt {
+    margin-left: 5px;
+    margin-right: 5px;
+    color: orangered;
+}
+
+.restaurantAddress, .review {
+    font-size: small;
+}
+
+.location h3 {
+    margin-bottom: 2em;
+    color: #0c2461;
+}
+
+.btn-warning, .btn-primary, .btn-secondary, .btn-danger, .btn-success {
+    margin-bottom: 0.5em;
+}
+
+.btn-warning, .btn-success {
+    margin-right: 1em;
+}
+
+.modal-title {
+    color: #6a89cc;
+    font-weight: bolder;
+}
+
+.modal-header .close {
+    padding: 1rem 1rem;
+    margin-left: 12em;
+}
+
+.streetView {
+    float: left;
+}
+
+.modal-body {
+    background-color: #82ccdd;
+}
+
+.comment {
+    font-size: small;
+    font-style: italic;
+    margin-bottom: 0;
+    font-weight: bolder;
+}
+
+.stars {
+    font-size: small;
+    color: white;
+}
+
+#linkCloseAddRestaurant {
+    padding: 0;
+    margin-top: 0.5em;
+    
+}
+
+.modal-footer {
+    background-color: darkseagreen;
+}
+
+/* Footer */
+
+footer {
+    margin-top: 2em;
+    padding-top: 1em;
+    background-color:  #0a3d62;
+    border-top: 5px solid black;
+  }
+  
+  footer p {
+    color: whitesmoke;
+    font-weight: bolder;
+  }
+  
+  #Jquery {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .fab.fa-bootstrap {
+    margin-left: 8px;
+    color: #609;
+  }
+  
+  .openclassrooms {
+    color: #7451eb;
+  }
+  
+  .fab.fa-linkedin, .linkedin {
+    color: #0E76A8;
+  }
+  
+  .QR-code {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1em;
+  }

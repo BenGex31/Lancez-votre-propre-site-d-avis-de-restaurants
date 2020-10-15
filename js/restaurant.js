@@ -1,4 +1,20 @@
+/**
+ * Class representing a restaurant
+ */
 class Restaurant {
+   /**
+    * Create a restaurant
+    * @param {number} id 
+    * @param {string} restaurantName 
+    * @param {string} address 
+    * @param {image} icon 
+    * @param {number} lat 
+    * @param {number} long 
+    * @param {object} location 
+    * @param {number} rating 
+    * @param {string} place_id 
+    * @param {array} reviews 
+    */
    constructor(id, restaurantName, address, icon, lat, long, location, rating, place_id, reviews) {
       this.id = id;
       this.restaurantName = restaurantName;
@@ -12,7 +28,12 @@ class Restaurant {
       this.reviews = reviews;
    }
 
-   // Récupération des restaurants via GooglePlaces
+   /**
+    * Retrieve restaurants from the google places API with reviews
+    * @param {object} position - Latitude and longitude
+    * @param {object} map - Google Maps
+    * @param {string} radius - search radius restaurant
+    */
    getRestaurantsListWithReviews(position, map, radius) {
       const requestRestaurant = {
          location: position,
@@ -33,6 +54,11 @@ class Restaurant {
       });
    }
 
+   /**
+    * Retrieves the reviews from the google places API for each restaurant
+    * @param {object} restaurant - each restaurant
+    * @param {object} map - Google Maps
+    */
    getGooglePlacesReviews(restaurant, map) {
       const requestReview = {
          placeId: restaurant.place_id,
@@ -49,6 +75,11 @@ class Restaurant {
       });
    }
 
+   /**
+    * Populate the table of the restaurant list with the information from the google places API
+    * @param {object} restaurant - each restaurant
+    * @param {object} place 
+    */
    populateRestaurantsListGooglePlaces(restaurant, place) {
       const newRestaurant = new Restaurant(
          restaurantsList.length + 1,
@@ -83,12 +114,13 @@ class Restaurant {
       });
    }
 
+   /**
+    * Retrieve restaurants with reviews from a json file
+    */
    getLocalRestaurantList() {
       fetch('js/data.json')
          .then(response => response.json())
          .then(function(results) {
-            results = JSON.parse(this.responseText);
-
             results.forEach(restaurant => {
                const reviews = restaurant.ratings.map(rating => new Review(
                   "Utilisateur anonyme",
@@ -114,17 +146,23 @@ class Restaurant {
                restaurantsList.push(newRestaurantLocal);
             });
          });
-      requestRestaurantLocal.open("GET", "data.json");
-      requestRestaurantLocal.send();
       console.log(restaurantsList);
    }
 
+   /**
+    * Displays the list of restaurants with their "view reviews" and "write a review" buttons on the HTML page
+    * @param {array} arrayRestaurant - Restaurant array
+    */
    displayResults(arrayRestaurant) {
       this.createListResults(arrayRestaurant);
       this.createButtonConsultReviewResults(arrayRestaurant);
       this.createButtonWriteReviewResults(arrayRestaurant);
    }
 
+   /**
+    * Create the list of restaurants with their information on the HTML page
+    * @param {array} arrayRestaurant - Restaurant array
+    */
    createListResults(arrayRestaurant) {
       for (let restaurant of arrayRestaurant) {
          $('<div>').appendTo($("#restaurantsList")).attr({id: restaurant.id, class:"restaurantInfo text-left"});
@@ -143,6 +181,10 @@ class Restaurant {
       }
    }
    
+   /**
+    * Calculates the average rating of reviews left by users
+    * @param {object} restaurant - each restaurant
+    */
    getAverageRating(restaurant) {
       let totalStars = restaurant.reviews.reduce(function (sum, reviews) {
          return sum + reviews.stars;
@@ -151,6 +193,10 @@ class Restaurant {
       restaurant.rating = average;
    }
 
+   /**
+    * Creates the HTML button to view user reviews
+    * @param {array} arrayRestaurant - Restaurant array
+    */
    createButtonConsultReviewResults(arrayRestaurant) {
       for (let restaurant of arrayRestaurant) {
          $('<button>').appendTo($('#' + restaurant.id)).html("Voir les avis").attr({type: "button", class: "btn btn-warning btn-sm", id: "buttonConsultReview" + restaurant.id}).attr("data-toggle", "modal").attr("data-target", "#consultReview" + restaurant.id).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#82ccdd", color: "black"});
@@ -188,7 +234,10 @@ class Restaurant {
       }
    }
 
-
+   /**
+    * Creates the HTML button for users to write a review
+    * @param {array} arrayRestaurant - Restaurant array
+    */
    createButtonWriteReviewResults(arrayRestaurant) {
       for (let restaurant of arrayRestaurant) {
          $('<button>').appendTo($('#' + restaurant.id)).html("Rédiger un avis").attr({type: "button", class: "btn btn-primary btn-sm", id: "buttonWriteReview" + restaurant.id}).attr("data-toggle", "modal").attr("data-target", "#writeReview" + restaurant.id).css({fontSize: "small", border: "0.5px solid black", fontWeight: "bolder", backgroundColor: "#3c6382", color: "whitesmoke"});
@@ -240,6 +289,11 @@ class Restaurant {
       }
    }
 
+   /**
+    * Create marker icons on Google Maps for each restaurant
+    * @param {array} arrayRestaurant - Restaurant array
+    * @param {object} map - Google Maps
+    */
    createMarkerResults(arrayRestaurant, map) {
       for(let restaurant of arrayRestaurant) {
          let markerResults = new google.maps.Marker({
@@ -257,13 +311,13 @@ class Restaurant {
          markersArray.push(markerResults);
 
          const contentString =
-                        '<h1 id="firstHeading" class="restaurantName text-left">' + restaurant.restaurantName + '</h1>' + 
-                        '<div class="text-left">' +
-                        '<img class"streetView" src="https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + restaurant.lat + "," + restaurant.long + '&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc">' +
-                        '</div>' +
-                        '<div id="bodyContent">' +
-                        '<p><i class="fas fa-map-marker-alt"></i>' + restaurant.address + '</p>' +
-                        '</div>';
+            '<h1 id="firstHeading" class="restaurantName text-center">' + restaurant.restaurantName + '</h1>' + 
+            '<div class="text-center">' +
+            '<img class"streetView" src="https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + restaurant.lat + "," + restaurant.long + '&heading=151.78&pitch=-0.76&key=AIzaSyC4fKHC9oHDR8F0Zban3gY6M8LGYrIDlpc">' +
+            '</div>' +
+            '<div id="bodyContent">' +
+            '<p><i class="fas fa-map-marker-alt"></i>' + restaurant.address + '</p>' +
+            '</div>';
 
          const infoWindow = new google.maps.InfoWindow({
             content : contentString
@@ -276,17 +330,29 @@ class Restaurant {
       console.log(markersArray);
    }
 
+   /**
+    * Show marker icons on Google Maps
+    * @param {object} map - Google Maps
+    */
    displayMarkersOnMap(map) {
       for (let marker of markersArray) {
          marker.setMap(map);
       }
    }
 
+   /**
+    * Removes the icon markers from the Google Maps map and clears the table of markers
+    */
    clearMarkers() {
       this.displayMarkersOnMap(null);
       markersArray = [];
    }
 
+   /**
+    * Filters the ratings of the restaurant list
+    * @param {array} array - Restaurant array
+    * @param {object} map - Google Maps
+    */
    filterResultsRating(array, map) {
       const filterRatings = document.getElementById("filterRatings");
 
@@ -359,11 +425,18 @@ class Restaurant {
       }
    }
 
+   /**
+    * Empty the list of restaurants on the HTML page
+    */
    clearListRestaurants() {
    $("#restaurantsList").html("");
    }
 
-   publishReview(array, map) {
+   /**
+    * Post a review and a rating when a user clicks the HTML button "post review"
+    * @param {array} array - Restaurant array
+    */
+   publishReview(array) {
       var self = this;
       for (let restaurant of array) {
          let textareaAuthorNameRestaurant = document.getElementById("textareaAuthorNameRestaurant" + restaurant.id)
@@ -378,10 +451,6 @@ class Restaurant {
                }
                self.clearListRestaurants();
                self.displayResults(array);
-               //self.clearMarkers();
-               //self.createMarkerResults(array, map);
-               //self.displayMarkersOnMap(map);
-               //self.publishReview(array);
             } else {
                alert("Merci de renseigner votre nom et prénom, ainsi qu'une note et un commentaire, sinon merci de cliquer sur Fermer")
             }
@@ -390,6 +459,13 @@ class Restaurant {
       }
    }
 
+   /**
+    * Adds a new review to the restaurant concerned when a user posts a review
+    * @param {object} restaurant - each restaurant
+    * @param {string} textareaAuthorNameRestaurant - User comment
+    * @param {string} inputGroupSelectRestaurant - User rating
+    * @param {string} FormControlTextareaRestaurant - User comment
+    */
    addNewReview(restaurant, textareaAuthorNameRestaurant, inputGroupSelectRestaurant, FormControlTextareaRestaurant) {
       restaurant.reviews.push(
          new Review(
@@ -403,6 +479,13 @@ class Restaurant {
       );
    }
 
+   /**
+    * refreshes the form used to add a new review if the user clicks on the "Close" button in the modal window
+    * @param {object} restaurant - each restaurant
+    * @param {string} inputGroupSelectRestaurant - User rating
+    * @param {string} FormControlTextareaRestaurant - User comment
+    * @param {string} textareaAuthorNameRestaurant - User comment
+    */
    refreshFormAddNewreview(restaurant, inputGroupSelectRestaurant, FormControlTextareaRestaurant, textareaAuthorNameRestaurant) {
       $("#btnCloseWriteReviewRestaurant" + restaurant.id).on("click", function () {
          if (inputGroupSelectRestaurant.value >= 1 && inputGroupSelectRestaurant.value <= 5 && FormControlTextareaRestaurant.value && textareaAuthorNameRestaurant.value) {
@@ -417,6 +500,12 @@ class Restaurant {
       });
    }
 
+   /**
+    * Adds a new restaurant to the restaurant list when a user clicks the HTML "Save" button
+    * @param {number} lat - Latitude
+    * @param {number} lng - Longitude
+    * @param {object} map - Google Maps
+    */
    addNewRestaurantArray(lat, lng, map) {
       var self = this;
       let inputUserName = document.getElementById("inputUserName");
@@ -429,43 +518,14 @@ class Restaurant {
       $("#btnSaveAddRestaurant").click(function() {
          if (inputUserName.value && inputUserFirstName.value && inputRestaurantName.value && inputRestaurantAddress.value && commentRating.value) {
             if (starsRating.value >= 1 && starsRating.value <= 5) {
-               let reviewsList = [];
-               const newReview = new Review(
-                  inputUserName.value + " " + inputUserFirstName.value,
-                  "https://cdn3.iconfinder.com/data/icons/glyphicon/64/profil-512.png",
-                  parseInt(starsRating.value),
-                  commentRating.value,
-                  undefined,
-                  "A l'instant"
-               );
-                  reviewsList.push(newReview);
+               self.populateRestaurantsListByUser(inputUserName, inputUserFirstName, starsRating, commentRating, inputRestaurantName, inputRestaurantAddress, lat, lng);
+               self.refreshRestaurantsAndMarkers(map);
 
-               const newRestaurant = new Restaurant(
-                  restaurantsList.length + 1,
-                  inputRestaurantName.value,
-                  inputRestaurantAddress.value,
-                  "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
-                  lat,
-                  lng,
-                  undefined,
-                  Number,
-                  undefined,
-                  reviewsList
-               );
-
-               restaurantsList.push(newRestaurant);
-               self.clearListRestaurants();
-               self.displayResults(restaurantsList);
-               self.clearMarkers();
-               self.createMarkerResults(restaurantsList, map);
-               self.displayMarkersOnMap(map);
-               self.publishReview(restaurantsList, map);
                $("#btnSaveAddRestaurant").attr("disabled", "true");
                $("#addRestaurant").attr("disabled", "true");
                $('<p>').appendTo($("#form-addRestaurant")).html("Le restaurant a bien été enregitré, merci de fermer").addClass("alertMessage text-center animate__animated animate__flash").css({color:"red", fontWeight:"bolder", fontSize:"small"});
+               $("#removeMarker").attr("disabled", "true");
             }
-            //$("#buttonUpdate").removeAttr("disabled");
-            //$('<p>').insertAfter($("#addRestaurant")).addClass("alertUpdate animate__animated animate__flash").html("Merci de cliquer sur Mettre à jour dessous la carte");
          } else {
             alert("Merci de renseigner tous les champs obligatoires *");
          }
@@ -473,6 +533,65 @@ class Restaurant {
       this.clearFormAddNewRestaurant(inputRestaurantName, inputRestaurantAddress, starsRating, commentRating);
    }
 
+   /**
+    * Populates the restaurant list table when a user clicks the HTML "Save" button
+    * @param {string} inputUserName - User name
+    * @param {string} inputUserFirstName - User first name
+    * @param {string} starsRating - User rating
+    * @param {string} commentRating - User comment
+    * @param {string} inputRestaurantName - Restaurant name
+    * @param {string} inputRestaurantAddress - Restaurant address
+    * @param {number} lat - Latitude 
+    * @param {number} lng - Longitude
+    */
+   populateRestaurantsListByUser(inputUserName, inputUserFirstName, starsRating, commentRating, inputRestaurantName, inputRestaurantAddress, lat, lng) {
+      let reviewsList = [];
+      const newReview = new Review(
+         inputUserName.value + " " + inputUserFirstName.value,
+         "https://cdn3.iconfinder.com/data/icons/glyphicon/64/profil-512.png",
+         parseInt(starsRating.value),
+         commentRating.value,
+         undefined,
+         "A l'instant"
+      );
+      reviewsList.push(newReview);
+
+      const newRestaurant = new Restaurant(
+         restaurantsList.length + 1,
+         inputRestaurantName.value,
+         inputRestaurantAddress.value,
+         "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         lat,
+         lng,
+         undefined,
+         Number,
+         undefined,
+         reviewsList
+      );
+
+      restaurantsList.push(newRestaurant);
+   }
+
+   /**
+    * refreshes the list of restaurants and the markers of the Google Maps map on the HTML page
+    * @param {object} map - Google Maps
+    */
+   refreshRestaurantsAndMarkers(map) {
+      this.clearListRestaurants();
+      this.displayResults(restaurantsList);
+      this.clearMarkers();
+      this.createMarkerResults(restaurantsList, map);
+      this.displayMarkersOnMap(map);
+      this.publishReview(restaurantsList, map);
+   }
+
+   /**
+    * Empty the form used to add a new restaurant when a user clicks the HTML "Close" button
+    * @param {string} inputRestaurantName - Restaurant name
+    * @param {*} inputRestaurantAddress - Restaurant address
+    * @param {*} starsRating - User rating
+    * @param {*} commentRating - User comment
+    */
    clearFormAddNewRestaurant(inputRestaurantName, inputRestaurantAddress, starsRating, commentRating) {
       $("#btnCloseAddRestaurant").click(function(){
          inputRestaurantName.value = "";
@@ -482,6 +601,5 @@ class Restaurant {
       });
    }
 }
-
 let restaurantsList = [];
 let markersArray = [];

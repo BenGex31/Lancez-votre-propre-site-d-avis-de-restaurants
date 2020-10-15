@@ -117,6 +117,7 @@ class MyMap {
     /**
      * Creates the user's marker based on their position
      * @param {object} pos - Latitude and longitude
+     * @returns {object} - marker
      */
     createMarkerUser(pos) {
         return new google.maps.Marker({
@@ -137,6 +138,7 @@ class MyMap {
      * @param {object} listResults - Generic instance of the "Restaurant" class
      * @param {object} pos - Latitude and longitude
      * @param {object} map - Google Maps
+     * @returns {object} - filterRadius
      */
     filterRadiusRestaurants(listResults, pos, map) {
         let filterRadius = document.getElementById("filterRadius");
@@ -211,6 +213,7 @@ class MyMap {
     /**
      * Create the new restaurant marker
      * @param {object} latLng - Latitude and longitude
+     * @returns {object} - marker
      */
     createMarkerNewRestaurant(latLng) {
         return new google.maps.Marker({

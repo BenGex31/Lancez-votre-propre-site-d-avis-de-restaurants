@@ -1,0 +1,23 @@
+{
+  "name": "Avis-de-restaurants",
+  "version": "1.0.0",
+  "description": "Site web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenGex31/Projet-7-OpenClassRooms-Lancez-votre-propre-site-d-avis-de-restaurants.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BenGex31/Projet-7-OpenClassRooms-Lancez-votre-propre-site-d-avis-de-restaurants/issues"
+  },
+  "homepage": "https://github.com/BenGex31/Projet-7-OpenClassRooms-Lancez-votre-propre-site-d-avis-de-restaurants#readme",
+  "devDependencies": {
+    "jsdoc": "^3.6.6"
+  }
+}

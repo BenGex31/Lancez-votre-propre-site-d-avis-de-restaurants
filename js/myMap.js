@@ -100,7 +100,7 @@ class MyMap {
      * @param {object} listResults - Generic instance of the "Restaurant" class
      * @param {object} map - Google Maps
      * @param {object} self - local variable
-     * @param {*} filterRadius - Filter radius restaurant
+     * @param {object} filterRadius - Filter radius restaurant
      */
     refreshListRestaurantsAndmarkers(listResults, map, self, filterRadius) {
         $("#titleListRestaurant").on("click", function () {
@@ -312,7 +312,7 @@ class MyMap {
     /**
      * Create the new marker information window allowing you to add a new restaurant by clicking on this marker
      * @param {object} marker - restaurant marker
-     * @param {*} map - Google Maps
+     * @param {object} map - Google Maps
      */
     createInfoWindowNewMarker(marker, map) {
         let contentString = 

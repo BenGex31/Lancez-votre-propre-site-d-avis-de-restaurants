@@ -52,6 +52,7 @@ header
 {
     display: block;
     padding: 0px 4px;
+    color: #0a3d62;
 }
 
 tt, code, kbd, samp {
@@ -72,8 +73,16 @@ tt, code, kbd, samp {
 #main {
     float: left;
     width: 70%;
-    background-color: #0a3d62;
-    margin-top: 2em;
+    color: #82ccdd;
+}
+
+h2 {
+    color: black;
+}
+
+#main h3 {
+    margin-left: 1em;
+    color: #82ccdd;
 }
 
 article dl {
@@ -87,11 +96,11 @@ article img {
 section
 {
     display: block;
-    background-color: #fff;
     padding: 12px 24px;
     border-bottom: 1px solid #ccc;
     margin-right: 30px;
-    background-color: #82ccdd
+    margin-bottom: 30px;
+    margin-left: 30px;
 }
 
 .variation {
@@ -109,12 +118,15 @@ nav
 {
     display: block;
     float: right;
-    margin-top: 28px;
     width: 30%;
+    height: 224px;
     box-sizing: border-box;
     border-left: 1px solid #ccc;
     padding-left: 16px;
     background-color: lightgrey;
+    text-align: center;
+    padding-bottom: 8px;
+    border-radius: 5px;
 }
 
 nav ul {
@@ -129,16 +141,24 @@ nav ul {
 nav ul a, nav ul a:visited, nav ul a:active {
     font-family: Consolas, Monaco, 'Andale Mono', monospace;
     line-height: 18px;
-    color: #4D4E53;
+    color: #0a3d62;
 }
 
 nav h3 {
     margin-top: 12px;
-    color: #0a3d62;
 }
 
 nav li {
     margin-top: 6px;
+}
+
+.githubLink {
+    float: right;
+    margin-right: 2em;
+}
+
+.githubLink:hover {
+    color: black;
 }
 
 footer {
@@ -160,16 +180,17 @@ h1
     font-size: 48px;
     letter-spacing: -2px;
     margin: 12px 24px 20px;
-    color: #82ccdd;
+    text-align: center;
+    background-color: #0a3d62;
+    border-radius: 5px;
 }
 
 h2, h3.subsection-title
 {
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 700;
     letter-spacing: -1px;
     margin-bottom: 12px;
-    color: #0a3d62;
 }
 
 h3
@@ -177,8 +198,6 @@ h3
     font-size: 24px;
     letter-spacing: -0.5px;
     margin-bottom: 12px;
-    color: whitesmoke;
-    margin-left: 1em;
 }
 
 h4
@@ -187,6 +206,8 @@ h4
     letter-spacing: -0.33px;
     margin-bottom: 12px;
     color: orangered;
+    border-top: 5px solid grey;
+    padding-top: 1em;
 }
 
 h5, .container-overview .subsection-title
@@ -195,6 +216,7 @@ h5, .container-overview .subsection-title
     font-weight: bold;
     letter-spacing: -0.01em;
     margin: 8px 0 3px 0;
+    color: #0a3d62;
 }
 
 h6
@@ -228,7 +250,7 @@ thead tr
     font-weight: bold;
 }
 
-th { border-right: 1px solid #aaa; }
+th { border-right: 1px solid #aaa; color: #0a3d62;}
 tr > th:last-child { border-right: 1px solid #ddd; }
 
 .ancestors, .attribs { color: #999; }
@@ -261,6 +283,10 @@ tr > th:last-child { border-right: 1px solid #ddd; }
     font-family: Consolas, Monaco, 'Andale Mono', monospace;
 }
 
+.name {
+    color: #0a3d62;
+}
+
 .details { margin-top: 14px; border-left: 2px solid #DDD; }
 .details dt { width: 120px; float: left; padding-left: 10px;  padding-top: 6px; }
 .details dd { margin-left: 70px; }
@@ -273,6 +299,7 @@ tr > th:last-child { border-right: 1px solid #ddd; }
 .description {
     margin-bottom: 1em;
     margin-top: 1em;
+    color: #0a3d62;
 }
 
 .code-caption

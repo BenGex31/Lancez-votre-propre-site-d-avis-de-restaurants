@@ -7,7 +7,7 @@ class Weather {
      * @param {string} city - city name
      * @param {string} country - country name
      * @param {string} date - date
-     * @param {string} hour 
+     * @param {string} hour - hour
      * @param {string} condition - weather condition
      * @param {string} icon - weather image condition
      * @param {number} temperature - weather temperature
@@ -54,12 +54,12 @@ class Weather {
 
     /**
      * Retrieves weather information from the weather API based on the user's geolocation
-     * @param {string} cityName 
-     * @param {string} currentDate 
-     * @param {string} currentHour 
-     * @param {string} currentCondition 
-     * @param {string} iconWeather 
-     * @param {number} currentTmp - current temperature
+     * @param {string} cityName - city name
+     * @param {string} currentDate - date
+     * @param {string} currentHour - hour
+     * @param {string} currentCondition - weather condition
+     * @param {string} iconWeather - icon weather
+     * @param {number} currentTmp - temperature
      */
     getLocalWeatherAndDisplay(cityName, currentDate, currentHour, currentCondition, iconWeather, currentTmp) {
         var self = this;
@@ -89,12 +89,12 @@ class Weather {
     /**
      * Display local weather information on the HTML page
      * @param {object} localWeather - New instance of the "Weather" class
-     * @param {string} cityName 
-     * @param {string} currentDate 
-     * @param {string} currentHour 
-     * @param {string} currentCondition 
-     * @param {string} iconWeather 
-     * @param {number} currentTmp - current temperature
+     * @param {string} cityName - city name
+     * @param {string} currentDate - date
+     * @param {string} currentHour - hour
+     * @param {string} currentCondition - weather condition
+     * @param {string} iconWeather - icon weather
+     * @param {number} currentTmp - temperature
      */
     displayLocalWeather(localWeather, cityName, currentDate, currentHour, currentCondition, iconWeather, currentTmp) {
         if (localWeather.city == "NA" && localWeather.country == "--") {
@@ -134,11 +134,11 @@ class Weather {
 
     /**
      * Retrieves weather information from the weather API based on the default location
-     * @param {string} cityName 
-     * @param {string} currentDate 
-     * @param {string} currentHour 
-     * @param {string} currentCondition 
-     * @param {string} iconWeather 
+     * @param {string} cityName - city name
+     * @param {string} currentDate - date
+     * @param {string} currentHour - hour
+     * @param {string} currentCondition - weather condition
+     * @param {string} iconWeather - icon weather
      * @param {number} currentTmp - current temperature
      */
     getDefaultWeatherAndDisplay(cityName, currentDate, currentHour, currentCondition, iconWeather, currentTmp) {
@@ -160,12 +160,12 @@ class Weather {
     /**
      * Display default weather information on the HTML page
      * @param {object} localWeather - New instance of the "Weather" class
-     * @param {string} cityName 
-     * @param {string} currentDate 
-     * @param {string} currentHour 
-     * @param {string} currentCondition 
-     * @param {string} iconWeather 
-     * @param {number} currentTmp - current temperature
+     * @param {string} cityName - city name
+     * @param {string} currentDate - date
+     * @param {string} currentHour - hour
+     * @param {string} currentCondition - weather condition
+     * @param {string} iconWeather - icon weather
+     * @param {number} currentTmp - temperature
      */
     displayDefaultWeather(cityName, defaultWeather, currentDate, currentHour, currentCondition, iconWeather, currentTmp) {
         cityName.innerHTML = "Météo sur " + defaultWeather.city + ", " + defaultWeather.country;

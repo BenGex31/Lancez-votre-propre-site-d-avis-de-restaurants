@@ -78,6 +78,8 @@ class Weather {
                         let localWeather = self.createLocalWeather(resultWeatherPosition);
 
                         self.displayLocalWeather(localWeather, cityName, currentDate, currentHour, currentCondition, iconWeather, currentTmp);
+                    } else {
+                        $("h4").appendTo("#infoWeather").html("Le service météo est indisponible").css({paddingBottom: "50px", color: "red", fontWeight: "bolder"}).addClass("animate__animated animate__flash")
                     }
                 };
                 requestWeatherLocation.open("GET", "https://www.prevision-meteo.ch/services/json/lat=" + pos.lat + "lng=" + pos.lng);
@@ -151,6 +153,8 @@ class Weather {
                 let defaultWeather = self.createDefaultWeather(resultWeather);
 
                 self.displayDefaultWeather(cityName, defaultWeather, currentDate, currentHour, currentCondition, iconWeather, currentTmp);
+            } else {
+                $("h4").appendTo("#infoWeather").html("Le service météo est indisponible").css({paddingBottom: "50px", color: "red", fontWeight: "bolder"}).addClass("animate__animated animate__flash")
             }
         };
         requestWeatherParis.open("GET", "https://www.prevision-meteo.ch/services/json/paris");

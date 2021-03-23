@@ -77,6 +77,13 @@ header h2 {
     border-radius: 5px;
 }
 
+@media all and (max-width: 768px) {
+    #infoWeather {
+        margin-left: 1px;
+        margin-bottom: inherit;
+    }
+}
+
 #infoWeather h4 {
     color: #0c2461;
 }
